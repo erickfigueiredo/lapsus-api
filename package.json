@@ -14,7 +14,7 @@
     "landslides",
     "management"
   ],
-  "author": "@erickfigueiredo",
+  "author": "@erickfigueiredo and @tavarescarlos",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/erickfigueiredo/lapsusvgi-api/issues"
@@ -33,6 +33,7 @@
     "knex-migrate": "^1.7.4",
     "knex-paginate": "^1.2.3",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.7",
+    "pg": "^8.5.1"
   }
 }
