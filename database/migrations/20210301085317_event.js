@@ -13,6 +13,7 @@ exports.up = function(knex) {
         table.string('status').references('status').inTable('event_status').onDelete('CASCADE');
         table.string('risk_assessmnt').references('risk_assessmnt').inTable('event_risk_assessmnt').onDelete('CASCADE');
         table.string('cause').references('cause').inTable('event_cause').onDelete('CASCADE');
+        table.timestamps(false, true);
     });
 };
 
