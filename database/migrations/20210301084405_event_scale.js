@@ -1,6 +1,6 @@
 exports.up = function (knex) {
     return knex.schema.createTable('event_scale', function (table) {
-        table.integer('scale').primary().notNullable();
+        table.integer('scale').unsigned().primary().notNullable();
         table.string('desc', 200);
         table.timestamps(false, true);
     });

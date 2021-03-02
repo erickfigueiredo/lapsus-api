@@ -20,6 +20,6 @@ app.use(morgan('dev'));
 app.use('/', router);
 
 app.listen(process.env.APP_PORT, (error) => {
-    Message.success('\nServidor rodando!\n')
+    Message.success(`\nServidor rodando na porta ${process.env.APP_PORT}\n`);
     if(error) Message.error('Servidor encerrado!\n');
 });

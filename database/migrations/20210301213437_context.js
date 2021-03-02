@@ -1,6 +1,6 @@
 exports.up = function (knex) {
     return knex.schema.createTable('context', function (table) {
-        table.increment().primary().notNullable();
+        table.string('id', 40).primary().notNullable();
         table.string('freetext', 500);
         table.string('urgency', 15);
         table.string('seclass', 7).references('seclass').inTable('context_seclass').onDelete('CASCADE');
