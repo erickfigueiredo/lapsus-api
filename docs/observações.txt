@@ -1,0 +1,10 @@
+Partes Presentes no Banco de dados:
+- Roxa;
+- Azul;
+- Cinza;
+
+Tabelas não deletadas:
+- Etype;
+- Weather;
+- Status;
+- Type;
