@@ -2,7 +2,7 @@
 
 exports.up = function (knex) {
     return knex.schema.createTable('etype_env', function (table) {
-        table.string('env', 45).primary().notNullable();
+        table.string('env', 10).primary().notNullable();
         table.string('desc', 100);
     });
 };
