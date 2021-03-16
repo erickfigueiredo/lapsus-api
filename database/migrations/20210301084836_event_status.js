@@ -1,6 +1,8 @@
+// Tabela Event_status
+
 exports.up = function (knex) {
     return knex.schema.createTable('event_status', function (table) {
-        table.string('status',10).primary().notNullable();
+        table.string('status', 10).primary().notNullable();
         table.string('desc', 100);
         table.timestamps(false, true);
     });

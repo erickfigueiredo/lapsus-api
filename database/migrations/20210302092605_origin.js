@@ -1,8 +1,11 @@
+// Tabela Origin
+
 exports.up = function (knex) {
     return knex.schema.createTable('origin', function (table) {
         table.string('org_id', 40).notNullable();
         table.string('name', 80);
-        table.string('context_id', 40).notNullable().references('id').inTable('context');
+        table.integer('id_user').unsigned().references('id').inTable('user');   //Gestor
+        table.string('id_context', 40).notNullable().references('id').inTable('context');
     });
 };
 

@@ -1,3 +1,5 @@
+// Tabela Context_level
+
 exports.up = function (knex) {
     return knex.schema.createTable('context_level', function (table) {
         table.string('level', 10).primary().notNullable();

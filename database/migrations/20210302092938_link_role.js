@@ -1,8 +1,10 @@
+// Tabela Link_role
+
 exports.up = function (knex) {
     return knex.schema.createTable('link_role', function (table) {
         table.string('role', 10).primary().notNullable();
         table.string('desc', 100);
-        table.timestamp(false, true);
+        table.timestamps(false, true);
     });
 };
 

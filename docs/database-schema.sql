@@ -18,7 +18,7 @@ USE `lapsusVGI` ;
 -- Table `lapsusVGI`.`usuario`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lapsusVGI`.`usuario` (
-  `idUsuario` INT NOT NULL AUTO_INCREMENT,
+  `idUsuario` INT NOT NULL AUTO_increments,
   PRIMARY KEY (`idUsuario`))
 ENGINE = InnoDB;
 
@@ -43,7 +43,7 @@ ENGINE = InnoDB;
 -- Table `lapsusVGI`.`instituicao`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lapsusVGI`.`instituicao` (
-  `idInstituicao` INT NOT NULL AUTO_INCREMENT,
+  `idInstituicao` INT NOT NULL AUTO_increments,
   `nome` VARCHAR(50) NULL,
   `telefone` VARCHAR(20) NULL,
   `administradora` TINYINT NULL,
@@ -65,7 +65,7 @@ ENGINE = InnoDB;
 -- Table `lapsusVGI`.`gestor`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lapsusVGI`.`gestor` (
-  `idUsuario` INT NOT NULL AUTO_INCREMENT,
+  `idUsuario` INT NOT NULL AUTO_increments,
   `idInstituicao` INT NOT NULL,
   `Administrador` TINYINT NULL,
   `nome` VARCHAR(50) NULL,
@@ -342,7 +342,7 @@ ENGINE = InnoDB;
 -- Table `lapsusVGI`.`EVAC`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lapsusVGI`.`EVAC` (
-  `evac_id` INT NOT NULL AUTO_INCREMENT,
+  `evac_id` INT NOT NULL AUTO_increments,
   `EVENT_ID` VARCHAR(40) NOT NULL,
   `DATIME` DATETIME NULL,
   `DISPLACED` INT NULL,
@@ -370,7 +370,7 @@ ENGINE = InnoDB;
 -- Table `lapsusVGI`.`CASUALTIES`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lapsusVGI`.`CASUALTIES` (
-  `casualties_id` INT NOT NULL AUTO_INCREMENT,
+  `casualties_id` INT NOT NULL AUTO_increments,
   `EVENT_ID` VARCHAR(40) NOT NULL,
   `CONTEXT` VARCHAR(15) NOT NULL,
   `DATIME` DATETIME NULL,
@@ -490,7 +490,7 @@ ENGINE = InnoDB;
 -- Table `lapsusVGI`.`EXTERNAL_INFO`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lapsusVGI`.`EXTERNAL_INFO` (
-  `external_info_id` INT NOT NULL AUTO_INCREMENT,
+  `external_info_id` INT NOT NULL AUTO_increments,
   `CONTEXT_ID` VARCHAR(40) NOT NULL,
   `FREE_TEXT` VARCHAR(500) NULL,
   `URI` VARCHAR(200) NOT NULL,
@@ -555,7 +555,7 @@ ENGINE = InnoDB;
 -- Table `lapsusVGI`.`EGEO`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lapsusVGI`.`EGEO` (
-  `ID` INT NOT NULL AUTO_INCREMENT,
+  `ID` INT NOT NULL AUTO_increments,
   `DATIME` DATETIME NULL,
   `FREETEXT` VARCHAR(500) NULL,
   `EVENT_ID` VARCHAR(40) NOT NULL,
@@ -640,7 +640,7 @@ ENGINE = InnoDB;
 -- Table `lapsusVGI`.`POSITION`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lapsusVGI`.`POSITION` (
-  `LOC_ID` INT NOT NULL AUTO_INCREMENT,
+  `LOC_ID` INT NOT NULL AUTO_increments,
   `NAME` VARCHAR(80) NULL,
   `COORD` GEOMETRY NULL,
   `EGEO_ID` INT NOT NULL,
@@ -659,7 +659,7 @@ ENGINE = InnoDB;
 -- Table `lapsusVGI`.`ADDRESS`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lapsusVGI`.`ADDRESS` (
-  `address_id` INT NOT NULL AUTO_INCREMENT,
+  `address_id` INT NOT NULL AUTO_increments,
   `ADDRESS` VARCHAR(256) NOT NULL,
   `LOC_ID` INT NOT NULL,
   PRIMARY KEY (`address_id`),
@@ -926,7 +926,7 @@ ENGINE = InnoDB;
 -- Table `lapsusVGI`.`categoria`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lapsusVGI`.`categoria` (
-  `idcategoria` INT NOT NULL AUTO_INCREMENT,
+  `idcategoria` INT NOT NULL AUTO_increments,
   `descricao` VARCHAR(500) NULL,
   PRIMARY KEY (`idcategoria`))
 ENGINE = InnoDB;
@@ -936,7 +936,7 @@ ENGINE = InnoDB;
 -- Table `lapsusVGI`.`contribuicao`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lapsusVGI`.`contribuicao` (
-  `idContribuicao` INT NOT NULL AUTO_INCREMENT,
+  `idContribuicao` INT NOT NULL AUTO_increments,
   `ocorrencia` DATETIME NULL,
   `riscoDano` TINYINT NULL,
   `vitima` TINYINT NULL,
@@ -975,7 +975,7 @@ ENGINE = InnoDB;
 -- Table `lapsusVGI`.`contato`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lapsusVGI`.`contato` (
-  `idContato` INT NOT NULL AUTO_INCREMENT,
+  `idContato` INT NOT NULL AUTO_increments,
   `nome` VARCHAR(50) NULL,
   `assunto` VARCHAR(50) NULL,
   `email` VARCHAR(50) NULL,
@@ -989,7 +989,7 @@ ENGINE = InnoDB;
 -- Table `lapsusVGI`.`shapefile`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lapsusVGI`.`shapefile` (
-  `idShapefile` INT NOT NULL AUTO_INCREMENT,
+  `idShapefile` INT NOT NULL AUTO_increments,
   `uri` VARCHAR(50) NULL,
   `data` DATE NULL,
   `idUsuario` INT NOT NULL,
@@ -1009,7 +1009,7 @@ ENGINE = InnoDB;
 -- Table `lapsusVGI`.`anexo`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lapsusVGI`.`anexo` (
-  `idanexo` INT NOT NULL AUTO_INCREMENT,
+  `idanexo` INT NOT NULL AUTO_increments,
   `URI` VARCHAR(200) NULL,
   `idContribuicao` INT NOT NULL,
   PRIMARY KEY (`idanexo`),

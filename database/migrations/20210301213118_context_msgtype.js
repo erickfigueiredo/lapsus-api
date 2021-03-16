@@ -1,3 +1,5 @@
+// Tabela Context_msgtype
+
 exports.up = function (knex) {
     return knex.schema.createTable('context_msgtype', function (table) {
         table.string('msgtype', 10).primary().notNullable();

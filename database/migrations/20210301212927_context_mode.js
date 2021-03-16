@@ -1,3 +1,5 @@
+// Tabela Context_mode
+
 exports.up = function (knex) {
     return knex.schema.createTable('context_mode', function (table) {
         table.string('mode', 10).primary().notNullable();

@@ -1,8 +1,10 @@
+// Tabela Casualties
+
 exports.up = function (knex) {
     return knex.schema.createTable('casualties', function (table) {
-        table.increment('id').primary().notNullable();
-        table.string('event_id', 40).notNullable().references('id').inTable('event');
-        table.string('context').notNullable().references('context').inTable('casualties_context');
+        table.increments('id').primary().notNullable();
+        table.string('id_event', 40).notNullable().references('id').inTable('event');
+        table.string('context').notNullable().references('context').inTable('casualties_context').onDelete('CASCADE');
         table.integer('decont').unsigned();
         table.integer('triagered').unsigned();
         table.integer('triageyellow').unsigned();

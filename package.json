@@ -4,7 +4,9 @@
   "description": "LapsusVGI-API for disaster information management linked to landslides.",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "migrate": "npx knex migrate:latest",
+    "rollback": "npx knex migrate:rollback"
   },
   "repository": {
     "type": "git",
