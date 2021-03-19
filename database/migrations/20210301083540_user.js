@@ -11,6 +11,7 @@ exports.up = function (knex) {
         table.integer('added_by').unsigned().references('id').inTable('user');
         table.integer('id_institution').unsigned().references('id').inTable('institution');
         table.string('type', 1).notNullable();
+        table.boolean('is_active').notNullable().defaultTo(true);
         table.timestamps(false, true);
     }).alterTable('institution', function(table) {
         table.integer('id_adm').unsigned().notNullable().references('id').inTable('user');

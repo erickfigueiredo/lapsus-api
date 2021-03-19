@@ -53,6 +53,9 @@ Essa resposta significa que o servidor não entendeu a requisição pois está c
 - __401 Unauthorized__: 
 Embora o padrão HTTP especifique "unauthorized", semanticamente, essa resposta significa "unauthenticated". Ou seja, o cliente deve se autenticar para obter a resposta solicitada.
 
+- __403 Forbidden__:
+Embora o servidor tenha recebido e entendido a requisição o acesso foi negado.
+
 - __404 Not Found__: 
 O servidor não pode encontrar o recurso solicitado. Este código de resposta talvez seja o mais famoso devido à frequência com que acontece na web.
 

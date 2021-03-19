@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const {Message} = require('./utils/Tools');
+const {Message} = require('./utils/Message');
 
 const express = require('express');
 const morgan = require('morgan');
