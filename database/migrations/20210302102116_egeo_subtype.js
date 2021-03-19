@@ -6,7 +6,7 @@ exports.up = function (knex) {
         table.string('type', 10).notNullable().references('type').inTable('egeo_type');
         table.string('desc', 100).notNullable();
         table.timestamps(false, true);
-        table.primary(['type', 'subtype']);
+        table.primary(['subtype', 'type']);
     });
 };
 

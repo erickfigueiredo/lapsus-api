@@ -2,9 +2,10 @@
 
 exports.up = function (knex) {
     return knex.schema.createTable('subenv', function (table) {
-        table.string('subenv', 10).primary().notNullable();
-        table.string('desc', 100).notNullable();
-        table.string('env', 10).references('env').inTable('etype_env');
+        table.string('subenv', 10).notNullable();
+        table.string('env', 10).notNullable().references('env').inTable('etype_env');
+        table.string('desc', 100);
+        table.primary(['subenv', 'env']);
         table.timestamps(false, true);
     });
 };
