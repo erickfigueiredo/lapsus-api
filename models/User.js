@@ -43,7 +43,7 @@ class User {
             return user[0] ? { success: true, user } : { success: false, message: 'Não foi possível recuperar os usuários / Usuários inexistentes!' }
         } catch (e) {
             Message.warning(e);
-            return { success: false, message: 'Houve um erro ao recuperar o usuário' };
+            return { success: false, message: 'Houve um erro ao recuperar o usuário!' };
         }
     }
 
@@ -61,7 +61,7 @@ class User {
             return user[0] ? { success: true, user } : { success: false, message: 'Não foi possível recuperar os usuários / Usuários inexistentes!' }
         } catch (e) {
             Message.warning(e);
-            return { success: false, message: 'Houve um erro ao recuperar o usuário' };
+            return { success: false, message: 'Houve um erro ao recuperar o usuário!' };
         }
     }
 
@@ -70,6 +70,7 @@ class User {
             const user = await knex
                 .select('*')
                 .from('user')
+                .where({ "is_active": true })
                 .orderBy(['type', 'institution', 'name'])
                 .paginate({
                     perPage: 20,
@@ -113,7 +114,7 @@ class User {
             return { success: true, user };
         } catch (e) {
             Message.warning(e);
-            return { success: false, message: 'Usuário não atualizado' };
+            return { success: false, message: 'Usuário não atualizado!' };
         }
     }
 
