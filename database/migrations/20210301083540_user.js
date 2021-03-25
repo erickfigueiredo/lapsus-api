@@ -6,8 +6,7 @@ exports.up = function (knex) {
         table.string('name', 50).notNullable();
         table.string('surname', 50).notNullable();
         table.string('email', 100).notNullable().unique();
-        table.string('password', 100).notNullable();
-        table.date('birthdate').notNullable();
+        table.string('password', 256).notNullable();
         table.integer('added_by').unsigned().references('id').inTable('user');
         table.integer('id_institution').unsigned().references('id').inTable('institution');
         table.string('type', 1).notNullable();
@@ -27,6 +26,6 @@ exports.down = function (knex) {
  * A - Administrator
  * T - Technician
  * R - registered (Anonymous);
- * M - Moderator
+ * M - Moderator (registered);
  *
  **/
