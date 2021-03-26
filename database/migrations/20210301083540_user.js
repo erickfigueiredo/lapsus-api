@@ -1,7 +1,9 @@
 // Tabela de Usuários
 
-exports.up = function (knex) {
-    return knex.schema.createTable('user', function (table) {
+const tableName = 'user';
+
+exports.up = async function (knex) {
+    await knex.schema.createTable(tableName, function (table) {
         table.increments('id').primary().notNullable();
         table.string('name', 50).notNullable();
         table.string('surname', 50).notNullable();
@@ -12,13 +14,21 @@ exports.up = function (knex) {
         table.string('type', 1).notNullable();
         table.boolean('is_active').notNullable().defaultTo(true);
         table.timestamps(false, true);
-    }).alterTable('institution', function(table) {
-        table.integer('id_adm').unsigned().notNullable().references('id').inTable('user');
+    }).alterTable('institution', function (table) {
+        table.integer('id_adm').unsigned().notNullable().references('id').inTable(tableName);
     });
+
+    await knex.raw(`
+        CREATE TRIGGER update_timestamp
+        BEFORE UPDATE
+        ON "${tableName}"
+        FOR EACH ROW
+        EXECUTE PROCEDURE update_timestamp();
+    `);
 };
 
 exports.down = function (knex) {
-    return knex.schema.dropTable('user');
+    return knex.schema.dropTable(tableName);
 };
 
 /**

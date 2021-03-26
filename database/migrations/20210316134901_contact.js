@@ -1,7 +1,9 @@
 // Tabela Contact
 
-exports.up = function (knex) {
-    return knex.schema.createTable('contact', function (table) {
+const tableName = 'contact';
+
+exports.up = async function (knex) {
+    await knex.schema.createTable(tableName, function (table) {
         table.increments('id').notNullable().primary();
         table.string('sender', 50).notNullable();
         table.string('subject', 50).notNullable();
@@ -9,8 +11,16 @@ exports.up = function (knex) {
         table.string('body', 500).notNullable();
         table.timestamps(false, true);
     });
+
+    await knex.raw(`
+        CREATE TRIGGER update_timestamp
+        BEFORE UPDATE
+        ON ${tableName}
+        FOR EACH ROW
+        EXECUTE PROCEDURE update_timestamp();
+    `);
 };
 
 exports.down = function (knex) {
-    knex.increments.drop_table('contact');
+    return knex.schema.dropTable(tableName);
 };

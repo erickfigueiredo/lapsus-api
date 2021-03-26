@@ -77,7 +77,6 @@ class User {
                     currentPage: page
                 });
             
-                console.log(user.data.length);
             return user.data[0] ? { success: true, user } : { success: false, message: 'Não foi possível recuperar os usuários / Usuários inexistentes!' }
         } catch (e) {
             Message.warning(e);
@@ -88,7 +87,6 @@ class User {
     static async create(data) {
         try {
 
-            console.log(data)
             const type = data.type;
 
             const id = await knex.insert(data)

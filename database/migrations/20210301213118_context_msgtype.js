@@ -1,13 +1,23 @@
 // Tabela Context_msgtype
 
-exports.up = function (knex) {
-    return knex.schema.createTable('context_msgtype', function (table) {
+const tableName = 'context_msgtype';
+
+exports.up = async function (knex) {
+    await knex.schema.createTable(tableName, function (table) {
         table.string('msgtype', 10).primary().notNullable();
         table.string('desc', 100);
         table.timestamps(false, true);
     });
+
+    await knex.raw(`
+        CREATE TRIGGER update_timestamp
+        BEFORE UPDATE
+        ON ${tableName}
+        FOR EACH ROW
+        EXECUTE PROCEDURE update_timestamp();
+    `);
 };
 
 exports.down = function (knex) {
-    knex.schema.dropTable('context_msgtype');
+    return knex.schema.dropTable(tableName);
 };

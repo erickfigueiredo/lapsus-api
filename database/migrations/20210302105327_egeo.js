@@ -1,7 +1,9 @@
 // Tabela Egeo
 
-exports.up = function (knex) {
-    return knex.schema.createTable('egeo', function (table) {
+const tableName = 'egeo';
+
+exports.up = async function (knex) {
+    await knex.schema.createTable(tableName, function (table) {
         table.increments('id').primary().notNullable();
         table.string('freetext', 500);
         table.string('id_event', 40).notNullable().references('id').inTable('event');
@@ -11,8 +13,16 @@ exports.up = function (knex) {
         table.foreign(['subtype', 'type']).references(['subtype', 'type']).on('egeo_subtype');
         table.timestamps(false, true);
     });
+
+    await knex.raw(`
+        CREATE TRIGGER update_timestamp
+        BEFORE UPDATE
+        ON ${tableName}
+        FOR EACH ROW
+        EXECUTE PROCEDURE update_timestamp();
+    `);
 };
 
 exports.down = function (knex) {
-    knex.schema.dropTable('egeo');
+    return knex.schema.dropTable(tableName);
 };

@@ -1,13 +1,22 @@
 // Tabela Casualties_context
 
-exports.up = function (knex) {
-    return knex.schema.createTable('casualties_context', function (table) {
+const tableName = 'casualties_context';
+
+exports.up = async function (knex) {
+    await knex.schema.createTable(tableName, function (table) {
         table.string('context', 15).primary().notNullable();
         table.string('desc', 100);
-        table.timestamps(false, true);
     });
+
+    await knex.raw(`
+        CREATE TRIGGER update_timestamp
+        BEFORE UPDATE
+        ON ${tableName}
+        FOR EACH ROW
+        EXECUTE PROCEDURE update_timestamp();
+    `);
 };
 
 exports.down = function (knex) {
-    knex.schema.dropTable('casualties_context');
+    return knex.schema.dropTable(tableName);
 };

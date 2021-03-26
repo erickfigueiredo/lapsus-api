@@ -1,13 +1,22 @@
 // Tabela Event_cause
 
-exports.up = function (knex) {
-    return knex.schema.createTable('event_cause', function (table) {
+const tableName = 'event_cause';
+
+exports.up = async function (knex) {
+    await knex.schema.createTable(tableName, function (table) {
         table.string('cause', 10).primary().notNullable();
         table.string('desc', 100);
-        table.timestamps(false, true);
     });
+
+    await knex.raw(`
+        CREATE TRIGGER update_timestamp
+        BEFORE UPDATE
+        ON ${tableName}
+        FOR EACH ROW
+        EXECUTE PROCEDURE update_timestamp();
+    `);
 };
 
 exports.down = function (knex) {
-    knex.schema.dropTable('event_cause')
+    return knex.schema.dropTable(tableName);
 };
