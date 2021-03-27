@@ -9,7 +9,6 @@ exports.up = async function (knex) {
         table.string('email', 100).notNullable().unique();
         table.string('phone', 11).notNullable().unique();
         table.string('address', 256).notNullable();
-        table.number('added_by').integer().notNullable();
         table.timestamps(false, true);
     });
 

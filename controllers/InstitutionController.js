@@ -21,15 +21,6 @@ class InstitutionController {
         return institutions.success ? res.send(institution) : res.status(404).send(institutions);
     }
 
-    static async indexByAdder(req, res) {
-        const id = req.params.id;
-
-        if(isNaN(parseInt(id)))
-            return res.status(400).send({success: false, message: 'Id inválido!'});
-        
-        // Verificar se o ADM existe
-    }
-
     static async create(req, res) {
         const valid = InstitutionValidator.createValidate();
         const { error } = valid.validate(req.body);

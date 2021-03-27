@@ -29,12 +29,6 @@ const createValidate = () => {
             'string.min': 'Senha deve conter no mínimo 10 caracteres!',
             'string.max': 'Senha deve conter no máximo 50 caracteres!',
         }),
-        added_by: Joi.number().integer().min(1).required().messages({
-            'number.integer': 'Id deve ser um número inteiro!',
-            'number.min': 'Id não pode ser menor que 1!',
-            'number.empty': 'É necessário informar um Id!',
-            'any.required': 'Id é obrigatório!'
-        }),
     });
 }
 

@@ -99,6 +99,17 @@ class User {
         }
     }
 
+    static async countByType(type) {
+        try {
+            const count = await knex('user').count('id').where({ type, 'is_active': true });
+            
+            return count[0].count;
+        } catch (e) {
+            Message.warning(e);
+            return { success: false, message: 'Houve um erro ao recuperar a contagem!' };
+        }
+    }
+
     static async create(data) {
         try {
 
@@ -137,7 +148,7 @@ class User {
                 .table('user')
                 .where({ id, type, 'is_active': true })
                 .returning('is_active');
-        
+
 
             return active[0] ? { success: false, message: 'Usuário não deletado!' } : { success: true, message: 'Usuário deletado!' };
         } catch (e) {

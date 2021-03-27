@@ -28,23 +28,6 @@ class Institution {
         }
     }
 
-    async findByAdmAdder(id_adm, page) {
-        try {
-            const institutions = knex.select('*')
-                .from('instituition')
-                .where({ id_adm })
-                .paginate({
-                    perPage: 20,
-                    current: page
-                });
-
-            return institutions.data[0] ? { success: true, institutions } : { success: false, message: 'Não foi possível recuperar a instituição / Instituição inexistente!' };
-        } catch (e) {
-            Message.warning(e);
-            return { success: false, message: 'Houve um erro ao recuperar a instituição!' };
-        }
-    }
-
     async findAll(page) {
         try {
             const institutions = knex.select('*')
