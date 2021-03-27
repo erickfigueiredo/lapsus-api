@@ -1,10 +1,10 @@
 const router = require('express').Router();
 
-const Registered = require('../controllers/Registered');
-
 // -> Rotas de Registered
+const Registered = require('../controllers/RegisteredController');
+
+router.get('/registered/all', Registered.index);
 router.get('/registered/:id', Registered.show);
-router.get('/registered', Registered.index);
 router.post('/registered', Registered.create);
 router.put('/registered', Registered.update);
 router.delete('/registered/:id', Registered.delete);

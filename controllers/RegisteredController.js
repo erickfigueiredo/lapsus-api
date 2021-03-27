@@ -32,13 +32,13 @@ class RegisteredController {
         if (error) 
             return res.status(400).send({ success: false, message: error.details[0].message });
 
-
+            
         const { name, surname, email, password } = req.body;
 
         const registered = { name, surname, email, password };
 
         const existEmail = await User.findByEmail(registered.email);
-        if (existEmail.success && Object.keys(existEmail.user).length) 
+        if (existEmail.success) 
             return res.status(409).send({ success: false, message: 'E-mail já cadastrado!' });
         
 
@@ -65,13 +65,13 @@ class RegisteredController {
 
         const registered = await User.findOneByType(form.id, 'R');
 
-        if (registered.success && Object.keys(registered.user).length && registered.user.is_active) {
+        if (registered.success && registered.user.is_active) {
             const toUpdate = {};
 
             if (form.email && registered.user.email != form.email) {
                 
-                existEmail = await User.findByEmail(form.email);
-                if (existEmail.success && Object.keys(existEmail.user).length) 
+                const existEmail = await User.findByEmail(form.email);
+                if (existEmail.success) 
                     return res.status(409).send({ success: false, message: 'E-mail já cadastrado!' });
 
 
@@ -103,19 +103,14 @@ class RegisteredController {
     static async delete(req, res) {
         const id = req.params.id;
 
-        if (isNaN(parseInt(id))) {
-            res.status(400).send({ success: false, message: 'Id inválido!' });
-            return;
-        }
+        if (isNaN(parseInt(id))) 
+            return res.status(400).send({ success: false, message: 'Id inválido!' });
+
 
         const registered = await User.findOneByType(id, 'R');
-
-        if (!registered.success ||
-            (registered.success && !Object.keys(registered.user).length) ||
-            (registered.success && Object.keys(registered.user).length && !registered.user.is_active)) {
-                res.status(404).send({success: false, message: 'Usuário inexistente!'});
-                return;
-            }
+        if (!(registered.success && registered.user.is_active))
+            return res.status(404).send({success: false, message: 'Usuário inexistente!'});
+            
 
         const result = await User.delete(id, 'R');
         return result.success ? res.send(result) : res.status(400).send(result);

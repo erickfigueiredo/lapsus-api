@@ -4,8 +4,8 @@ const createValidate = () => {
     return Joi.object().keys({
         name: Joi.string().regex(/^[A-Za-z-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).required().messages({
             'string.pattern.base': 'Nome deve conter apenas letras!',
-            'string.min': 'Nome deve conter no mínimo duas letras!',
-            'string.max': 'Nome deve conter no máximo cinquenta letras!',
+            'string.min': 'Nome deve conter no mínimo 2 letras!',
+            'string.max': 'Nome deve conter no máximo 50 letras!',
             'string.empty': 'É necessário informar um nome!',
             'any.required': 'Nome é obrigatório!'
         }),
@@ -41,8 +41,8 @@ const updateValidate = () => {
         }),
         name: Joi.string().regex(/^[A-Za-z-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).messages({
             'string.pattern.base': 'Nome deve conter apenas letras!',
-            'string.min': 'Nome deve conter no mínimo duas letras!',
-            'string.max': 'Nome deve conter no máximo cinquenta letras!',
+            'string.min': 'Nome deve conter no mínimo 2 letras!',
+            'string.max': 'Nome deve conter no máximo 50 letras!',
         }),
         surname: Joi.string().regex(/^[A-Za-z-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).messages({
             'string.pattern.base': 'Sobrenome deve conter apenas letras!',

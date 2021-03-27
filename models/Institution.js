@@ -28,13 +28,17 @@ class Institution {
         }
     }
 
-    async findByAdmAdder(idAdm) {
+    async findByAdmAdder(id_adm, page) {
         try {
-            const institution = knex.select('*')
+            const institutions = knex.select('*')
                 .from('instituition')
-                .where({ "id_adm": idAdm });
+                .where({ id_adm })
+                .paginate({
+                    perPage: 20,
+                    current: page
+                });
 
-            return institution[0] ? { success: true, institution: institution[0] } : { success: false, message: 'Não foi possível recuperar a instituição / Instituição inexistente!' };
+            return institutions.data[0] ? { success: true, institutions } : { success: false, message: 'Não foi possível recuperar a instituição / Instituição inexistente!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar a instituição!' };
@@ -43,7 +47,7 @@ class Institution {
 
     async findAll(page) {
         try {
-            const institution = knex.select('*')
+            const institutions = knex.select('*')
                 .from('institution')
                 .orderBy(['name', 'created_at'])
                 .where({ "is_active": true })
@@ -52,7 +56,7 @@ class Institution {
                     current: page
                 });
 
-            return institution[0] ? { success: true, institution: institution[0] } : { success: false, message: 'Não foi possível recuperar as instituições / Instituições inexistentes!' };
+            return institutions.data[0] ? { success: true, institutions } : { success: false, message: 'Não foi possível recuperar as instituições / Instituições inexistentes!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar as instituições!' };
@@ -61,13 +65,13 @@ class Institution {
 
     async create(data) {
         try {
-            const id = await knex.insert(data)
+            const institution = await knex.insert(data)
                 .table('institution')
-                .returning('id');
+                .returning('id')
+                .retuning('*');
 
-            const institution = await this.findOne(id[0]);
 
-            return institution.success ? { success: true, institution: institution.institution } : { success: false, message: 'Não foi possível cadastrar a instituição!' };
+            return institution[0] ? { success: true, institution: institution[0] } : { success: false, message: 'Não foi possível cadastrar a instituição!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Falha ao inserir instituição!' };
@@ -80,25 +84,29 @@ class Institution {
 
             delete data['id'];
 
-            await knex.update(data)
+            const institution = await knex.update(data)
                 .table('institution')
-                .where({ id });
+                .where({ id })
+                .returning('*');
 
-            const institution = await this.findOne(id);
-
-            return { success: true, institution };
+            return institution[0] ? { success: true, institution: institution[0] } : { success: false, message: 'Não foi possível atualiza a instituição!' };
         } catch (e) {
             Message.warning(e);
-            return { success: false, message: 'Instituição não atualizada!' };
+            return { success: false, message: 'Falha ao atualizar instituição!' };
         }
     }
 
     async delete(id) {
         try {
+            const active = await knex.update({ 'is_active': false })
+                .table('user')
+                .where({ id, 'is_active': true })
+                .returning('is_active');
 
+            return active[0] ? { success: false, message: 'Instituição não deletada!' } : { message: true, message: 'Instituição deletada!' }
         } catch (e) {
             Message.warning(e);
-            return { success: false, message: 'Instituição não deletada!' };
+            return { success: false, message: 'Falha ao deletar instituição!' };
         }
     }
 }

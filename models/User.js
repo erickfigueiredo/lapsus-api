@@ -3,11 +3,24 @@ const Message = require('../utils/Message');
 
 class User {
 
+    static async findOneByType(id) {
+        try {
+            const user = await knex.select('*')
+                .from('user')
+                .where({ id });
+
+            return user[0] ? { success: true, user: user[0] } : { success: false, message: 'Não foi possível recuperar o usuário / Usuário inexistente!' };
+        } catch (e) {
+            Message.warning(e);
+            return { success: false, message: 'Houve um erro ao recuperar o usuário!' };
+        }
+    }
+
     static async findOneByType(id, type) {
         try {
             const user = await knex.select('*')
                 .from('user')
-                .where({ id, type});
+                .where({ id, type });
 
             return user[0] ? { success: true, user: user[0] } : { success: false, message: 'Não foi possível recuperar o usuário / Usuário inexistente!' };
         } catch (e) {
@@ -28,7 +41,7 @@ class User {
             return { success: false, message: 'Houve um erro ao recuperar o usuário!' };
         }
     }
-    
+
     static async findByInstitution(idInstitution, page) {
         try {
             const user = await knex.select('*')
@@ -59,6 +72,7 @@ class User {
                     currentPage: page
                 });
 
+
             return user.data[0] ? { sucess: true, user } : { success: false, message: 'Não foi possível recuperar os usuários / Usuários inexistentes!' };
         } catch (e) {
             Message.warning(e);
@@ -76,7 +90,8 @@ class User {
                     perPage: 20,
                     currentPage: page
                 });
-            
+
+
             return user.data[0] ? { success: true, user } : { success: false, message: 'Não foi possível recuperar os usuários / Usuários inexistentes!' }
         } catch (e) {
             Message.warning(e);
@@ -87,14 +102,12 @@ class User {
     static async create(data) {
         try {
 
-            const type = data.type;
-
-            const id = await knex.insert(data)
+            const user = await knex.insert(data)
                 .table('user')
-                .returning('id');
+                .returning('*');
 
-            const user = await this.findOneByType(id[0], type);
-            return user.success ? { success: true, user: user.user } : { success: false, message: 'Não foi possível cadastrar o usuário' };
+
+            return user[0] ? { success: true, user: user[0] } : { success: false, message: 'Não foi possível cadastrar o usuário' };
         } catch (e) {
             Message.error(e);
             return { success: false, message: 'Falha ao inserir usuário!' }
@@ -104,33 +117,32 @@ class User {
     static async update(data) {
         try {
             const id = data.id;
-            const type = data.type;
-
             delete data['id'];
 
-            await knex.update(data)
+            const user = await knex.update(data)
                 .table('user')
-                .where({ id });
+                .where({ id })
+                .returning('*');
 
-            const user = await this.findOneByType(id, type);
-
-            return { success: true, user: user.user };
+            return user[0] ? { success: true, user: user[0] } : { success: false, message: 'Não foi possível atualizar o usuário' };
         } catch (e) {
             Message.warning(e);
-            return { success: false, message: 'Usuário não atualizado!' };
+            return { success: false, message: 'Falha ao atualizar usuário!' };
         }
     }
 
     static async delete(id, type) {
         try {
-            await knex.update({ is_active: false })
+            const active = await knex.update({ is_active: false })
                 .table('user')
-                .where({ id, type, 'is_active': true });
+                .where({ id, type, 'is_active': true })
+                .returning('is_active');
+        
 
-            return { success: true, message: 'Usuário deletado!' };
+            return active[0] ? { success: false, message: 'Usuário não deletado!' } : { success: true, message: 'Usuário deletado!' };
         } catch (e) {
             Message.warning(e);
-            return { success: false, message: 'Usuário não deletado!' };
+            return { success: false, message: 'Falha ao deletar usuário!' };
         }
     }
 }
