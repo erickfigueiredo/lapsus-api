@@ -1,6 +1,10 @@
 const c = require('ansi-colors');
 
 class Message {
+    static release(msg) {
+        console.log(c.bgBlue.underline.white(msg));
+    }
+
     static success(msg) {
         console.log(c.bgGreen.black(msg));
     }

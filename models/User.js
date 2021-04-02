@@ -3,7 +3,7 @@ const Message = require('../utils/Message');
 
 class User {
 
-    static async findOneByType(id) {
+    static async findOne(id) {
         try {
             const user = await knex.select('*')
                 .from('user')

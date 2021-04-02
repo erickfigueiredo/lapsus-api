@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const AdminValidator = require('../validators/UserValidator');
+const UserValidator = require('../validators/UserValidator');
 
 const bcrypt = require('bcrypt');
 const saltRounds = parseInt(process.env.BCRYPT_SALT);
@@ -26,7 +26,7 @@ class AdminController {
     }
 
     static async create(req, res) {
-        const valid = AdminValidator.createValidate();
+        const valid = UserValidator.createValidate();
         const { error } = valid.validate(req.body);
 
         if (error)
@@ -35,15 +35,21 @@ class AdminController {
 
         const { name, surname, email, password, added_by } = req.body;
 
-        const admin = { name, surname, email, password };
+        const admin = { name, surname, email, password, added_by };
 
         const existEmail = await User.findByEmail(admin.email);
         if (existEmail.success)
             return res.status(409).send({ success: false, message: 'E-mail já cadastrado!' });
 
+        if (admin.added_by) {
+            const existAdder = await User.findOneByType(admin.added_by, 'A');
+            if (!existAdder.success)
+                return res.status(404).send({ success: false, message: 'Usuário adicionador inexistente!' });
+        } else delete admin['added_by'];
+
 
         const salt = bcrypt.genSaltSync(saltRounds);
-        admin.password = bcrypt.hashSync(password, salt);
+        admin.password = bcrypt.hashSync(admin.password, salt);
 
         admin.type = 'A';
 
@@ -52,7 +58,7 @@ class AdminController {
     }
 
     static async update(req, res) {
-        const valid = AdminValidator.updateValidate();
+        const valid = UserValidator.updateValidate();
         const { error } = valid.validate(req.body);
 
         if (error)
@@ -69,7 +75,6 @@ class AdminController {
             const toUpdate = {};
 
             if (form.email && admin.user.email != form.email) {
-
                 const existEmail = await User.findByEmail(form.email);
                 if (existEmail.success)
                     return res.status(409).send({ success: false, message: 'E-mail já cadastrado!' });

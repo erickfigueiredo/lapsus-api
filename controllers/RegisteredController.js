@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const RegisteredValidator = require('../validators/RegisteredValidator');
+const UserValidator = require('../validators/RegisteredValidator');
 
 const bcrypt = require('bcrypt');
 const saltRounds = parseInt(process.env.BCRYPT_SALT);
@@ -10,8 +10,8 @@ class RegisteredController {
 
         if (isNaN(parseInt(id)))
             return res.status(400).send({ success: false, message: 'Id inválido!' });
-        
-        
+
+
         const registered = await User.findOneByType(id, 'R');
         return registered.success ? res.send(registered) : res.status(404).send(registered);
     }
@@ -26,21 +26,27 @@ class RegisteredController {
     }
 
     static async create(req, res) {
-        const valid = RegisteredValidator.createValidate();
+        const valid = UserValidator.createValidate();
         const { error } = valid.validate(req.body);
 
-        if (error) 
+        if (error)
             return res.status(400).send({ success: false, message: error.details[0].message });
 
-            
-        const { name, surname, email, password } = req.body;
 
-        const registered = { name, surname, email, password };
+        const { name, surname, email, password, added_by } = req.body;
+
+        const registered = { name, surname, email, password, added_by };
 
         const existEmail = await User.findByEmail(registered.email);
-        if (existEmail.success) 
+        if (existEmail.success)
             return res.status(409).send({ success: false, message: 'E-mail já cadastrado!' });
-        
+
+        if (registered.added_by) {
+            const existAdder = await User.findOneByType(registered.added_by, 'A');
+            if (!existAdder.success)
+                return res.status(404).send({ success: false, message: 'Usuário adicionador inexistente!' });
+        } else delete registered['added_by'];
+
 
         const salt = bcrypt.genSaltSync(saltRounds);
         registered.password = bcrypt.hashSync(password, salt);
@@ -52,12 +58,12 @@ class RegisteredController {
     }
 
     static async update(req, res) {
-        const valid = RegisteredValidator.updateValidate();
+        const valid = UserValidator.updateValidate();
         const { error } = valid.validate(req.body);
 
-        if (error) 
+        if (error)
             return res.status(400).send({ success: false, message: error.details[0].message });
-            
+
 
         const { id, name, surname, email, password } = req.body;
 
@@ -69,9 +75,9 @@ class RegisteredController {
             const toUpdate = {};
 
             if (form.email && registered.user.email != form.email) {
-                
+
                 const existEmail = await User.findByEmail(form.email);
-                if (existEmail.success) 
+                if (existEmail.success)
                     return res.status(409).send({ success: false, message: 'E-mail já cadastrado!' });
 
 
@@ -103,14 +109,14 @@ class RegisteredController {
     static async delete(req, res) {
         const id = req.params.id;
 
-        if (isNaN(parseInt(id))) 
+        if (isNaN(parseInt(id)))
             return res.status(400).send({ success: false, message: 'Id inválido!' });
 
 
         const registered = await User.findOneByType(id, 'R');
         if (!(registered.success && registered.user.is_active))
-            return res.status(404).send({success: false, message: 'Usuário inexistente!'});
-            
+            return res.status(404).send({ success: false, message: 'Usuário inexistente!' });
+
 
         const result = await User.delete(id, 'R');
         return result.success ? res.send(result) : res.status(400).send(result);

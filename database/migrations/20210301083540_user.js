@@ -14,7 +14,8 @@ exports.up = async function (knex) {
         table.string('type', 1).notNullable();
         table.boolean('is_active').notNullable().defaultTo(true);
         table.timestamps(false, true);
-    }).alterTable('institution', function (table) {
+    })
+    .alterTable('institution', function (table) {
         table.integer('id_adm').unsigned().notNullable().references('id').inTable(tableName);
     });
 
