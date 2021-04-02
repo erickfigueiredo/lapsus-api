@@ -1,7 +1,8 @@
 const Joi = require('joi');
 
-const createValidate = () => {
-    return Joi.object().keys({
+const createValidate = (isTech = false) => {
+
+    const params = {
         name: Joi.string().regex(/^[A-Za-z-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).required().messages({
             'string.pattern.base': 'Nome deve conter apenas letras!',
             'string.min': 'Nome deve conter no mínimo 2 letras!',
@@ -27,12 +28,28 @@ const createValidate = () => {
             'string.max': 'Senha deve conter no máximo 50 caracteres!',
             'string.empty': 'É necessário informar uma senha!',
             'any.required': 'Senha é obrigatória!'
+        }),
+        added_by: Joi.number().integer().min(1).messages({
+            'number.integer': 'Id deve ser um número inteiro!',
+            'number.min': 'Id não pode ser menor que 1!',
         })
-    });
+    };
+
+    if (isTech)
+        params.id_institution = Joi.number().integer().min(1).required().messages({
+            'number.integer': 'Id deve ser um número inteiro!',
+            'number.min': 'Id não pode ser menor que 1!',
+            'number.empty': 'É necessário informar um Id!',
+            'any.required': 'Id é obrigatório!'
+        });
+
+
+    return Joi.object().keys(params);
 }
 
-const updateValidate = () => {
-    return Joi.object().keys({
+const updateValidate = (isTech = false) => {
+
+    const params = {
         id: Joi.number().integer().min(1).required().messages({
             'number.integer': 'Id deve ser um número inteiro!',
             'number.min': 'Id não pode ser menor que 1!',
@@ -57,7 +74,16 @@ const updateValidate = () => {
             'string.min': 'Senha deve conter no mínimo 10 caracteres!',
             'string.max': 'Senha deve conter no máximo 50 caracteres!',
         })
-    });
+    };
+
+    if (isTech)
+        params.id_institution = Joi.number().integer().min(1).messages({
+            'number.integer': 'Id deve ser um número inteiro!',
+            'number.min': 'Id não pode ser menor que 1!',
+        });
+
+
+    return Joi.object().keys(params);
 }
 
 module.exports = { createValidate, updateValidate };

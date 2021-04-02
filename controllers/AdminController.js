@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const AdminValidator = require('../validators/AdminValidator');
+const AdminValidator = require('../validators/UserValidator');
 
 const bcrypt = require('bcrypt');
 const saltRounds = parseInt(process.env.BCRYPT_SALT);
@@ -19,12 +19,10 @@ class AdminController {
     static async index(req, res) {
         let page = req.query.page;
 
-        await User.countByType('A');
-
         if (isNaN(parseInt(page))) page = 1;
 
-        const registereds = await User.findAllByType('A', page);
-        return registereds.success ? res.send(registereds) : res.status(404).send(registereds);
+        const admins = await User.findAllByType('A', page);
+        return admins.success ? res.send(admins) : res.status(404).send(admins);
     }
 
     static async create(req, res) {
@@ -35,7 +33,7 @@ class AdminController {
             return res.status(400).send({ success: false, message: error.details[0].message });
 
 
-        const { name, surname, email, password } = req.body;
+        const { name, surname, email, password, added_by } = req.body;
 
         const admin = { name, surname, email, password };
 
