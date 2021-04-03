@@ -61,3 +61,6 @@ O servidor não pode encontrar o recurso solicitado. Este código de resposta ta
 
 - __409 Conflict__: 
 Esta resposta será enviada quando uma requisição conflitar com o estado atual do servidor.
+
+- __500 Internal Server Error__: 
+Esta resposta será enviada quando ocorrer um error não especificado no servidor.

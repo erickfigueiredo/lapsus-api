@@ -1,5 +1,10 @@
 const router = require('express').Router();
 
+// -> Rotas de Login
+const Login = require('../controllers/LoginController');
+
+router.post('/login', Login.login);
+
 // -> Rotas de Administrator
 const Administrator = require('../controllers/AdminController');
 

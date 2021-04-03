@@ -35,7 +35,7 @@ class User {
                 .from('user')
                 .where({ email })
 
-            return user[0] ? { success: true, user } : { success: false, message: 'Não foi possível recuperar o usuário / Usuário inexistente!' }
+            return user[0] ? { success: true, user: user[0] } : { success: false, message: 'Não foi possível recuperar o usuário / Usuário inexistente!' }
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar o usuário!' };

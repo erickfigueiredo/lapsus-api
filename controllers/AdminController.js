@@ -29,6 +29,8 @@ class AdminController {
         const valid = UserValidator.createValidate();
         const { error } = valid.validate(req.body);
 
+        console.log(error);
+
         if (error)
             return res.status(400).send({ success: false, message: error.details[0].message });
 
