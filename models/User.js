@@ -112,7 +112,6 @@ class User {
 
     static async create(data) {
         try {
-
             const user = await knex.insert(data)
                 .table('user')
                 .returning('*');

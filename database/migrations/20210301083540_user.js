@@ -16,7 +16,7 @@ exports.up = async function (knex) {
         table.timestamps(false, true);
     })
     .alterTable('institution', function (table) {
-        table.integer('id_adm').unsigned().notNullable().references('id').inTable(tableName);
+        table.integer('added_by').unsigned().notNullable().references('id').inTable(tableName);
     });
 
     await knex.raw(`

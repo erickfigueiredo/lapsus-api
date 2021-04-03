@@ -2,7 +2,6 @@ const User = require('../models/User');
 const Institution = require('../models/Institution');
 const UserValidator = require('../validators/UserValidator');
 
-
 const bcrypt = require('bcrypt');
 const saltRounds = parseInt(process.env.BCRYPT_SALT);
 
@@ -33,6 +32,7 @@ class TechnicianController {
         if (error)
             return res.status(400).send({ success: false, message: error.details[0].message });
 
+        
         const { name, surname, email, password, added_by, id_institution } = req.body;
         const tech = { name, surname, email, password, added_by, id_institution };
 
@@ -40,8 +40,8 @@ class TechnicianController {
         if (!existAdder.success)
             return res.status(404).send({ success: false, message: 'Usuário adicionador inexistente!' });
 
-        const existInstitution = await Institution.findOne(tech.idInstitution);
-        if (!(existInstitution.success && existInstitution.is_active))
+        const existInstitution = await Institution.findOne(tech.id_institution);
+        if (!existInstitution.success)
             return res.status(404).send({ success: false, message: 'Instituição inexistente!' });
 
         const existEmail = await User.findByEmail(tech.email);
@@ -83,7 +83,7 @@ class TechnicianController {
 
             if (form.id_institution && tech.user.id_institution != form.id_institution) {
                 const existInstitution = await Institution.findOne(form.id_institution);
-                if (!(existInstitution.success && existInstitution.is_active))
+                if (!existInstitution.success)
                     return res.status(404).send({ success: false, message: 'Instituição inexistente!' });
 
                 toUpdate.id_institution = form.id_institution;
@@ -111,13 +111,13 @@ class TechnicianController {
         return res.status(404).send({ success: false, message: 'Usuário inexistente!' });
     }
 
-    static delete(req, res) {
+    static async delete(req, res) {
         const id = req.params.id;
 
         if (isNaN(parseInt(id)))
             return res.status(400).send({ success: false, message: 'Id inválido!' });
 
-        
+
         const tech = await User.findOneByType(id, 'T');
         if (!(tech.success && tech.user.is_active))
             return res.status(404).send({ success: false, message: 'Usuário inexistente!' });

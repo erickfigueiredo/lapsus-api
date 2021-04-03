@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const UserValidator = require('../validators/RegisteredValidator');
+const UserValidator = require('../validators/UserValidator');
 
 const bcrypt = require('bcrypt');
 const saltRounds = parseInt(process.env.BCRYPT_SALT);

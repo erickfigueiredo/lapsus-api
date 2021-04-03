@@ -29,18 +29,20 @@ const createValidate = (isTech = false) => {
             'string.empty': 'É necessário informar uma senha!',
             'any.required': 'Senha é obrigatória!'
         }),
-        added_by: Joi.number().integer().min(1).messages({
-            'number.integer': 'Id deve ser um número inteiro!',
-            'number.min': 'Id não pode ser menor que 1!',
-        })
+        added_by: Joi.number().integer().min(1).required().messages({
+            'number.integer': 'Id adicionador deve ser um número inteiro!',
+            'number.min': 'Id adicionador não pode ser menor que 1!',
+            'number.empty': 'É necessário informar um Id adicionador!',
+            'any.required': 'Id adicionador é obrigatório!'
+        }),
     };
 
     if (isTech)
         params.id_institution = Joi.number().integer().min(1).required().messages({
-            'number.integer': 'Id deve ser um número inteiro!',
-            'number.min': 'Id não pode ser menor que 1!',
-            'number.empty': 'É necessário informar um Id!',
-            'any.required': 'Id é obrigatório!'
+            'number.integer': 'Id instituição instituição deve ser um número inteiro!',
+            'number.min': 'Id instituição instituição não pode ser menor que 1!',
+            'number.empty': 'É necessário informar um Id instituição!',
+            'any.required': 'Id instituição instituição é obrigatório!'
         });
 
 

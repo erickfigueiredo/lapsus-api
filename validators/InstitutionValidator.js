@@ -9,12 +9,12 @@ const createValidate = () => {
             'string.empty': 'É necessário informar um nome!',
             'any.required': 'Nome é obrigatório!'
         }),
-        tel: Joi.string().regex(/^[0-9]{11,12}$/).required().messages({
+        phone: Joi.string().regex(/^[0-9]{10,11}$/).required().messages({
             'string.empty': 'Telefone não pode ser nulo!',
             'string.pattern.base': 'Telefone deve ter 12-13 caracteres numéricos!',
             'any.required': 'Telefone é obrigatório!'
         }),
-        address: Joi.string().regex(/^[0-9A-Za-z-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(10).max(256).required().messages({
+        address: Joi.string().regex(/^[0-9A-Za-z-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ, ]+$/).min(10).max(256).required().messages({
             'string.pattern.base': 'Endereço deve conter apenas letras e números!',
             'string.min': 'Endereço deve conter no mínimo 10 caracteres!',
             'string.max': 'Endereço deve conter no máximo 256 caracteres!',
@@ -24,11 +24,12 @@ const createValidate = () => {
         email: Joi.string().email().messages({
             'string.email': 'E-mail inválido!',
         }),
-        password: Joi.string().regex(/^(?=.*\d)(?=.* [a - z])(?=.* [A - Z])(?=.* [$ *&@#])[0 - 9a - zA - Z$ *&@#]$ /).messages({
-            'string.pattern.base': 'A senha deve conter no mínimo 10 caracteres, sendo pelo menos uma letra minúscula, uma maiúscula, um dígito e um caractere especial!',
-            'string.min': 'Senha deve conter no mínimo 10 caracteres!',
-            'string.max': 'Senha deve conter no máximo 50 caracteres!',
-        }),
+        added_by: Joi.number().integer().min(1).required().messages({
+            'number.integer': 'Id adicionador deve ser um número inteiro!',
+            'number.min': 'Id adicionador não pode ser menor que 1!',
+            'number.empty': 'É necessário informar um Id adicionador!',
+            'any.required': 'Id adicionador adicionador é obrigatório!'
+        })
     });
 }
 
@@ -47,7 +48,7 @@ const updateValidate = () => {
             'string.empty': 'É necessário informar um nome!',
             'any.required': 'Nome é obrigatório!'
         }),
-        tel: Joi.string().regex(/^[0-9]{11,12}$/).required().messages({
+        phone: Joi.string().regex(/^[0-9]{10,11}$/).required().messages({
             'string.empty': 'Telefone não pode ser nulo!',
             'string.pattern.base': 'Telefone deve ter 12-13 caracteres numéricos!',
             'any.required': 'Telefone é obrigatório!'
@@ -61,12 +62,7 @@ const updateValidate = () => {
         }),
         email: Joi.string().email().messages({
             'string.email': 'E-mail inválido!',
-        }),
-        password: Joi.string().regex(/^(?=.*\d)(?=.* [a - z])(?=.* [A - Z])(?=.* [$ *&@#])[0 - 9a - zA - Z$ *&@#]$ /).messages({
-            'string.pattern.base': 'A senha deve conter no mínimo 10 caracteres, sendo pelo menos uma letra minúscula, uma maiúscula, um dígito e um caractere especial!',
-            'string.min': 'Senha deve conter no mínimo 10 caracteres!',
-            'string.max': 'Senha deve conter no máximo 50 caracteres!',
-        }),
+        })
     });
 }
 

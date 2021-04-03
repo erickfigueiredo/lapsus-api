@@ -19,7 +19,23 @@ router.put('/registered', Registered.update);
 router.delete('/registered/:id', Registered.delete);
 
 // -> Rotas de Technician
+const Technician = require('../controllers/TechnicianController');
 
+router.get('/technician/all', Technician.index);
+router.get('/technician/:id', Technician.show);
+router.post('/technician', Technician.create);
+router.put('/technician', Technician.update);
+router.delete('/technician/:id', Technician.delete);
+
+// -> Rotas de Institution
+const Institution = require('../controllers/InstitutionController');
+
+router.get('/institution/all', Institution.index);
+router.get('/institution/:id', Institution.show);
+router.post('/institution', Institution.create);
+router.put('/institution', Institution.update);
+
+// -> 
 
 // -> Rotas de Erro 404
 
