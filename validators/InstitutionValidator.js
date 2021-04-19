@@ -21,8 +21,11 @@ const createValidate = () => {
             'string.empty': 'É necessário informar um endereço!',
             'any.required': 'Endereço é obrigatório!'
         }),
-        email: Joi.string().email().messages({
+        email: Joi.string().email().max(100).required().messages({
             'string.email': 'E-mail inválido!',
+            'string.max': 'E-mail não pode ter mais de 100 caracteres!',
+            'string.empty': 'É necessário informar um e-mail!',
+            'any.required': 'E-mail é obrigatório!'
         }),
         added_by: Joi.number().integer().min(1).required().messages({
             'number.integer': 'Id adicionador deve ser um número inteiro!',

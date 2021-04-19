@@ -40,7 +40,14 @@ router.get('/institution/:id', Institution.show);
 router.post('/institution', Institution.create);
 router.put('/institution', Institution.update);
 
-// -> 
+// -> Rotas de Contact
+const Contact = require('../controllers/ContactController');
+
+router.get('/contact/all', Contact.index);
+router.get('/contact/:id', Contact.show);
+router.post('/contact/:id', Contact.create);
+router.patch('/contact/:id', Contact.toggleVisualize);
+router.delete('/contact/:id', Contact.delete);
 
 // -> Rotas de Erro 404
 

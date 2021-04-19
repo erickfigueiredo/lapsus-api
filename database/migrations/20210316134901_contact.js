@@ -9,6 +9,8 @@ exports.up = async function (knex) {
         table.string('subject', 50).notNullable();
         table.string('email', 100).notNullable();
         table.string('body', 500).notNullable();
+        //table.integer('id_user').references('id').inTable('user')
+        table.boolean('is_visualized').defaultTo(false).notNullable();
         table.timestamps(false, true);
     });
 

@@ -23,7 +23,7 @@ class LoginController {
             if (validPassword) {
                 try {
                     const JWTToken = {
-                        iss: 'lapsusvgi-api',
+                        iss: 'lapsusVGI-api',
                         sub: {
                             userId: existEmail.id,
                             userType: existEmail.type,

@@ -17,8 +17,9 @@ const createValidate = (isTech = false) => {
             'string.empty': 'É necessário informar um sobrenome!',
             'any.required': 'Sobrenome é obrigatório!'
         }),
-        email: Joi.string().email().required().messages({
+        email: Joi.string().email().max(100).required().messages({
             'string.email': 'E-mail inválido!',
+            'string.max': 'E-mail não pode ter mais de 100 caracteres!',
             'string.empty': 'É necessário informar um e-mail!',
             'any.required': 'E-mail é obrigatório!'
         }),
@@ -68,8 +69,9 @@ const updateValidate = (isTech = false) => {
             'string.min': 'Sobrenome deve conter no mínimo duas letras!',
             'string.max': 'Sobrenome deve conter no máximo cinquenta letras!',
         }),
-        email: Joi.string().email().messages({
+        email: Joi.string().email().max(100).messages({
             'string.email': 'E-mail inválido!',
+            'string.max': 'E-mail não pode ter mais de 100 caracteres!'
         }),
         password: Joi.string().regex(/^(?=.*\d)(?=.* [a - z])(?=.* [A - Z])(?=.* [$ *&@#])[0 - 9a - zA - Z$ *&@#]$ /).messages({
             'string.pattern.base': 'A senha deve conter no mínimo 10 caracteres, sendo pelo menos uma letra minúscula, uma maiúscula, um dígito e um caractere especial!',

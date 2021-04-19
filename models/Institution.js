@@ -65,7 +65,7 @@ class Institution {
                 .returning('*');
 
 
-            return inst[0] ? { success: true, instituition: inst[0] } : { success: false, message: 'Não foi possível cadastrar a instituição' };
+            return inst[0] ? { success: true, institution: inst[0] } : { success: false, message: 'Não foi possível cadastrar a instituição' };
         } catch (e) {
             Message.error(e);
             return { success: false, message: 'Falha ao inserir instituição!' }
@@ -78,11 +78,11 @@ class Institution {
             delete data['id'];
 
             const inst = await knex.update(data)
-                .table('instituition')
+                .table('institution')
                 .where({ id })
                 .returning('*');
 
-            return inst[0] ? { success: true, instituition: inst[0] } : { success: false, message: 'Não foi possível atualizar a instituição!' };
+            return inst[0] ? { success: true, institution: inst[0] } : { success: false, message: 'Não foi possível atualizar a instituição!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Falha ao atualizar instituição!' };

@@ -30,6 +30,7 @@
     "express": "^4.17.1",
     "helmet": "^4.4.1",
     "joi": "^17.4.0",
+    "js2xmlparser": "^4.0.1",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.18",
     "knex-migrate": "^1.7.4",

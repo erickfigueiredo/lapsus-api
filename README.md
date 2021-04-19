@@ -29,8 +29,13 @@ LapsusVGI - API para Gerenciamento de informações de Desastres ligados à desl
 
 ### Funcionalidades prontas :dart:
 
+- [X] Validação Login
+- [X] CRUD Administrador
+- [X] CRUD Técnico
+- [ ] CRUD Registrado
+- [ ] CRUD Moderador
+- [X] CRUD Instituição
 - [ ] Adicionar
-
 
 
 ### Status de Requisição 💻
