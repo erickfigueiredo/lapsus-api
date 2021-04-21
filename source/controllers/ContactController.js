@@ -18,7 +18,7 @@ class ContactController {
 
         if (isNaN(parseInt(page))) page = 1;
 
-        const cnts = Contact.findAll(page);
+        const cnts = await Contact.findAll(page);
         return cnts.success ? res.send(cnts) : res.status(404).send(cnts);
     }
 
@@ -48,7 +48,7 @@ class ContactController {
 
         const is_visualized = !existMessage.contact.is_visualized ;
 
-        const result = Contact.update({id, is_visualized});
+        const result = await Contact.update({id, is_visualized});
         return result.success ? res.send(result) : res.status(400).send(result);
     }
 
@@ -64,7 +64,7 @@ class ContactController {
             return res.status(404).send(existMessage);
 
         
-        const result = Contact.delete(id);
+        const result = await Contact.delete(id);
         return result.success ? res.send(result) : res.status(400).send(result);
     }
 }

@@ -1,0 +1,5 @@
+# System shapefiles
+.shapefiles/
+
+# Temporary files
+.tmp/

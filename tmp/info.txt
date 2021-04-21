@@ -1,0 +1,1 @@
+Arquivos temporários são direcionados para essa pasta!

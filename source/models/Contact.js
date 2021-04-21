@@ -10,7 +10,7 @@ class Contact {
 
             return cnt[0] ? { success: true, contact: cnt[0] } : { success: false, message: 'Não foi possível recuperar a mensagem / Mensagem inexistente!' };
         } catch (e) {
-            Message.error(e);
+            Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar a mensagem!' };
         }
     }
@@ -27,7 +27,7 @@ class Contact {
 
             return cnt.data[0] ? { success: true, contact: cnt } : { success: false, message: 'Não foi possível recuperar as mensagens / Mensagens inexistentes!' };
         } catch (e) {
-            Message.error(e);
+            Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar as mensagens!' };
         }
     }
@@ -40,7 +40,7 @@ class Contact {
 
             return cnt[0] ? { success: true, contact: cnt[0] } : { success: false, message: 'Não foi possível cadastrar o mensagem!' };
         } catch (e) {
-            Message.error(e);
+            Message.warning(e);
             return { success: false, message: 'Falha ao inserir mensagem!' };
         }
     }
@@ -57,7 +57,7 @@ class Contact {
 
             return cnt[0] ? { success: true, contact: cnt[0] } : { success: false, message: 'Não foi possível atualizar a mensagem!' };
         } catch (e) {
-            Message.error(e);
+            Message.warning(e);
             return { success: false, message: 'Falha ao atualizar a mensagem!' };
         }
     }
@@ -68,11 +68,11 @@ class Contact {
                 .where({ id })
                 .del();
 
-            existContact = await this.findOne(id);
+            const existContact = await this.findOne(id);
 
             return existContact.success ? { success: false, message: 'Houve um erro ao deletar a mensagem!' } : { success: true, message: 'Mensagem deletada com sucesso!' };
         } catch (e) {
-            Message.error(e);
+            Message.warning(e);
             return { success: false, message: 'Falha ao deletar mensagem!' };
         }
     }

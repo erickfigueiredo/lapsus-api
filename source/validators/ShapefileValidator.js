@@ -23,4 +23,25 @@ const createValidate = () => {
     })
 }
 
-module.exports = { createValidate };
+const updateValidate = () => {
+    return Joi.object().keys({
+        id: Joi.number().integer().min(1).required().messages({
+            'number.integer': 'Id deve ser um número inteiro!',
+            'number.min': 'Id não pode ser menor que 1!',
+            'number.empty': 'É necessário informar um Id!',
+            'any.required': 'Id é obrigatório!'
+        }),
+        title: Joi.string().regex(/^[0-9A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(3).max(50).messages({
+            'string.pattern.base': 'Descrição deve conter apenas letras e números!',
+            'string.min': 'Descrição deve conter no mínimo 3 caracteres!',
+            'string.max': 'Descrição deve conter no máximo 50 caracteres!',
+        }),
+        desc: Joi.string().regex(/^[0-9A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(3).max(100).messages({
+            'string.pattern.base': 'Descrição deve conter apenas letras e números!',
+            'string.min': 'Descrição deve conter no mínimo 3 caracteres!',
+            'string.max': 'Descrição deve conter no máximo 100 caracteres!'
+        })
+    })
+}
+
+module.exports = { createValidate, updateValidate};
