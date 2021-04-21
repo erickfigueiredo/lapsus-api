@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-const createValidate = (isTech = false) => {
+const createValidate = (type = 'T') => {
 
     const params = {
         name: Joi.string().regex(/^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).required().messages({
@@ -29,21 +29,31 @@ const createValidate = (isTech = false) => {
             'string.max': 'Senha deve conter no máximo 30 caracteres!',
             'string.empty': 'É necessário informar uma senha!',
             'any.required': 'Senha é obrigatória!'
-        }),
-        added_by: Joi.number().integer().min(1).messages({
-            'number.integer': 'Id adicionador deve ser um número inteiro!',
-            'number.min': 'Id adicionador não pode ser menor que 1!',
-        }),
+        })
     };
 
-    if (isTech)
-        params.id_institution = Joi.number().integer().min(1).required().messages({
-            'number.integer': 'Id instituição instituição deve ser um número inteiro!',
-            'number.min': 'Id instituição instituição não pode ser menor que 1!',
+    switch (type) {
+        case 'T': params.id_institution = Joi.number().integer().min(1).required().messages({
+            'number.integer': 'Id instituição deve ser um número inteiro!',
+            'number.min': 'Id instituição não pode ser menor que 1!',
             'number.empty': 'É necessário informar um Id instituição!',
-            'any.required': 'Id instituição instituição é obrigatório!'
+            'any.required': 'Id da instituição é obrigatório!',
         });
+        
+        case 'A': params.added_by = Joi.number().integer().min(1).required().messages({
+            'number.integer': 'Id adicionador deve ser um número inteiro!',
+            'number.min': 'Id adicionador não pode ser menor que 1!',
+            'number.empty': 'É necessário informar um Id adicionador!',
+            'any.required': 'Id adicionador é obrigatório!'
+        });
+        break;
 
+        case 'R': params.added_by = Joi.number().integer().min(1).messages({
+            'number.integer': 'Id adicionador deve ser um número inteiro!',
+            'number.min': 'Id adicionador não pode ser menor que 1!',
+        });
+        break;
+    }
 
     return Joi.object().keys(params);
 }

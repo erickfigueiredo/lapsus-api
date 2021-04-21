@@ -26,7 +26,7 @@ class TechnicianController {
     }
 
     static async create(req, res) {
-        const valid = UserValidator.createValidate(true);
+        const valid = UserValidator.createValidate();
         const { error } = valid.validate(req.body);
 
         if (error)

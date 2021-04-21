@@ -2,10 +2,12 @@ const Joi = require('joi');
 
 const createValidate = () => {
     return Joi.object().keys({
-        title: Joi.string().regex(/^[0-9A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(3).max(50).messages({
+        title: Joi.string().regex(/^[0-9A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(3).max(50).required().messages({
             'string.pattern.base': 'Descrição deve conter apenas letras e números!',
             'string.min': 'Descrição deve conter no mínimo 3 caracteres!',
-            'string.max': 'Descrição deve conter no máximo 50 caracteres!'
+            'string.max': 'Descrição deve conter no máximo 50 caracteres!',
+            'string.empty': 'É necessário informar um título!',
+            'any.required': 'Título é obrigatório!'
         }),
         desc: Joi.string().regex(/^[0-9A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(3).max(100).messages({
             'string.pattern.base': 'Descrição deve conter apenas letras e números!',
@@ -16,7 +18,7 @@ const createValidate = () => {
             'number.integer': 'Id adicionador deve ser um número inteiro!',
             'number.min': 'Id adicionador não pode ser menor que 1!',
             'number.empty': 'É necessário informar um Id adicionador!',
-            'any.required': 'Id adicionador adicionador é obrigatório!'
+            'any.required': 'Id adicionador é obrigatório!'
         })
     })
 }

@@ -31,7 +31,7 @@ const createValidate = () => {
             'number.integer': 'Id adicionador deve ser um número inteiro!',
             'number.min': 'Id adicionador não pode ser menor que 1!',
             'number.empty': 'É necessário informar um Id adicionador!',
-            'any.required': 'Id adicionador adicionador é obrigatório!'
+            'any.required': 'Id adicionador é obrigatório!'
         })
     });
 }

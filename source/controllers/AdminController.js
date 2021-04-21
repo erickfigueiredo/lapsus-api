@@ -26,7 +26,7 @@ class AdminController {
     }
 
     static async create(req, res) {
-        const valid = UserValidator.createValidate();
+        const valid = UserValidator.createValidate('A');
         const { error } = valid.validate(req.body);
 
         console.log(error);

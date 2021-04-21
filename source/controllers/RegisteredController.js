@@ -26,7 +26,7 @@ class RegisteredController {
     }
 
     static async create(req, res) {
-        const valid = UserValidator.createValidate();
+        const valid = UserValidator.createValidate('R');
         const { error } = valid.validate(req.body);
 
         if (error)
@@ -86,7 +86,7 @@ class RegisteredController {
 
             if (form.name && registered.user.name != form.name) toUpdate.name = form.name;
 
-            if (form.surname && registered.user.surname != form.surname) toUpdate.name = form.surname;
+            if (form.surname && registered.user.surname != form.surname) toUpdate.surname = form.surname;
 
             if (form.password) {
                 const salt = bcrypt.genSaltSync(saltRounds);

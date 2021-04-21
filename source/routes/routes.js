@@ -52,10 +52,15 @@ router.delete('/contact/:id', Contact.delete);
 // -> Rotas de Shapefile
 const Shapefile = require('../controllers/ShapefileController');
 
+router.get('/shapefile/all', Shapefile.index);
+router.get('/shapefile/:id', Shapefile.show);
 router.post('/shapefile', Shapefile.create);
+router.put('/shapefile', Shapefile.update);
+router.delete('/shapefile/:id', Shapefile.delete);
+
+// -> Rotas de ...
 
 // -> Rotas de Erro 404
-
 router.get('/ops', (req, res) => {
     res.status(404).send('ERRO 404 | A rota solicitada não existe!');
 })

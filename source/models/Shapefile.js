@@ -68,8 +68,15 @@ class Shapefile {
 
     static async update(data) {
         try {
+            const id = data.id;
+            delete data['id'];
 
-            //
+            const shp = await knex.update(data)
+                .table('shapefile')
+                .where({id})
+                .returning('*');
+
+            return shp[0] ? {success: true, shapefile: shp[0]}: {success: false, message: 'Não foi possível atualizar o shapefile!'};
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Falha ao atualizar shapefile!' };
@@ -82,13 +89,12 @@ class Shapefile {
                 .where({ id })
                 .del();
 
-            existShp = await this.findOne(id);
-
+            const existShp = await this.findOne(id);
             if (existShp.success)
                 return { success: true, message: 'Houve um erro ao deletar o Shapefile!' };
 
 
-            fs.rmdirSync(path.resolve(__dirname, '..', 'shapefiles', uri), { recursive: true });
+            fs.rmdirSync(path.resolve(__dirname, '..', '..', 'shapefiles', uri), { recursive: true });
 
             return { success: true, message: 'Shapefile deletado com sucesso!' };
         } catch (e) {
