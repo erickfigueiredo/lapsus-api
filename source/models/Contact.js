@@ -70,8 +70,7 @@ class Contact {
 
             existContact = await this.findOne(id);
 
-            existContact.success ? { success: false, message: 'Houve um erro ao deletar a mensagem!' } : { success: true, message: 'Mensagem deletada com sucesso!' };
-
+            return existContact.success ? { success: false, message: 'Houve um erro ao deletar a mensagem!' } : { success: true, message: 'Mensagem deletada com sucesso!' };
         } catch (e) {
             Message.error(e);
             return { success: false, message: 'Falha ao deletar mensagem!' };

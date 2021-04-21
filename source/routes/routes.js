@@ -45,9 +45,14 @@ const Contact = require('../controllers/ContactController');
 
 router.get('/contact/all', Contact.index);
 router.get('/contact/:id', Contact.show);
-router.post('/contact/:id', Contact.create);
+router.post('/contact', Contact.create);
 router.patch('/contact/:id', Contact.toggleVisualize);
 router.delete('/contact/:id', Contact.delete);
+
+// -> Rotas de Shapefile
+const Shapefile = require('../controllers/ShapefileController');
+
+router.post('/shapefile', Shapefile.create);
 
 // -> Rotas de Erro 404
 

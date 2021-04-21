@@ -3,14 +3,14 @@ const { max } = require('../database/knex');
 
 const createValidate = () => {
     return Joi.object().keys({
-        sender: Joi.string().regex(/^[A-Za-z-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).required().messages({
+        sender: Joi.string().regex(/^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).required().messages({
             'string.pattern.base': 'Remetente deve conter apenas letras!',
             'string.min': 'Remetente deve conter no mínimo 2 letras!',
             'string.max': 'Remetente deve conter no máximo 50 letras!',
             'string.empty': 'É necessário informar um remetente!',
             'any.required': 'Remetente é obrigatório!'
         }),
-        subject: Joi.string().regex(/^[A-Za-z-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(3).max(50).required().messages({
+        subject: Joi.string().regex(/^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(3).max(50).required().messages({
             'string.pattern.base': 'Remetente deve conter apenas letras!',
             'string.min': 'Remetente deve conter no mínimo 3 letras!',
             'string.max': 'Remetente deve conter no máximo 50 letras!',
@@ -27,8 +27,7 @@ const createValidate = () => {
             'string.min': 'A mensagem deve ter no mínimo 10 caracteres!',
             'string.max': 'A mensagem deve ter no máximo 255 caracteres!',
             'string.empty': 'É necessário conter uma mensagem!',
-            'string.required': 'Mensagem é obrigatória!',
-
+            'any.required': 'Mensagem é obrigatória!',
         })
     })
 }

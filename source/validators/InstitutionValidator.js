@@ -2,7 +2,7 @@ const Joi = require('joi');
 
 const createValidate = () => {
     return Joi.object().keys({
-        name: Joi.string().regex(/^[A-Za-z-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).required().messages({
+        name: Joi.string().regex(/^[A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).required().messages({
             'string.pattern.base': 'Nome deve conter apenas letras!',
             'string.min': 'Nome deve conter no mínimo 2 letras!',
             'string.max': 'Nome deve conter no máximo 50 letras!',
@@ -14,7 +14,7 @@ const createValidate = () => {
             'string.pattern.base': 'Telefone deve ter 12-13 caracteres numéricos!',
             'any.required': 'Telefone é obrigatório!'
         }),
-        address: Joi.string().regex(/^[0-9A-Za-z-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ, ]+$/).min(10).max(256).required().messages({
+        address: Joi.string().regex(/^[0-9A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ, ]+$/).min(10).max(256).required().messages({
             'string.pattern.base': 'Endereço deve conter apenas letras e números!',
             'string.min': 'Endereço deve conter no mínimo 10 caracteres!',
             'string.max': 'Endereço deve conter no máximo 256 caracteres!',
