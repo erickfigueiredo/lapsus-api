@@ -12,8 +12,7 @@ class LoginController {
         if (error)
             return res.status(400).send({ success: false, message: error.details[0].message });
 
-        const { email, password } = req.body;
-        const login = { email, password };
+        const login = req.body;
 
         const existEmail = await User.findByEmail(login.email);
 

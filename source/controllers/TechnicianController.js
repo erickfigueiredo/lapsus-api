@@ -33,8 +33,7 @@ class TechnicianController {
             return res.status(400).send({ success: false, message: error.details[0].message });
 
         
-        const { name, surname, email, password, added_by, id_institution } = req.body;
-        const tech = { name, surname, email, password, added_by, id_institution };
+        const tech = req.body;
 
         const existAdder = await User.findOneByType(tech.added_by, 'A');
         if (!existAdder.success)
@@ -64,9 +63,7 @@ class TechnicianController {
         if (error)
             return res.status(400).send({ success: false, message: error.details[0].message });
 
-        const { id, name, surname, email, password, id_institution } = req.body;
-
-        const form = { id, name, surname, email, password, id_institution };
+        const form = req.body;
 
         const tech = await User.findOneByType(form.id, 'T');
 

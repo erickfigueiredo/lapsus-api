@@ -33,9 +33,7 @@ class RegisteredController {
             return res.status(400).send({ success: false, message: error.details[0].message });
 
 
-        const { name, surname, email, password, added_by } = req.body;
-
-        const registered = { name, surname, email, password, added_by };
+        const registered = req.body;
 
         const existEmail = await User.findByEmail(registered.email);
         if (existEmail.success)
@@ -65,9 +63,7 @@ class RegisteredController {
             return res.status(400).send({ success: false, message: error.details[0].message });
 
 
-        const { id, name, surname, email, password } = req.body;
-
-        const form = { id, name, surname, email, password };
+        const form = req.body;
 
         const registered = await User.findOneByType(form.id, 'R');
 

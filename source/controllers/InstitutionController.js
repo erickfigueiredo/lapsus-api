@@ -30,9 +30,7 @@ class InstitutionController {
             return res.status(400).send({ success: false, message: error.details[0].message });
 
 
-        const { name, address, email, phone, added_by } = req.body;
-
-        const inst = { name, address, email, phone, added_by };
+        const inst = req.body;
 
         const existEmail = await Institution.findByEmail(inst.email);
         if (existEmail.success)
@@ -58,7 +56,6 @@ class InstitutionController {
             return res.status(400).send({ success: false, message: error.details[0].message });
 
         const form = req.body;
-
         const inst = await Institution.findOne(form.id);
 
         if (inst.success) {

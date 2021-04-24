@@ -88,9 +88,7 @@ class ShapefileController {
             return res.status(400).send({ success: false, message: error.details[0].message });
 
 
-        const { id, title, desc } = req.body;
-
-        const form = { id, title, desc };
+        const form = req.body;
 
         const shp = await Shapefile.findOne(form.id);
 

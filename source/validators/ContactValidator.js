@@ -1,5 +1,4 @@
 const Joi = require('joi');
-const { max } = require('../database/knex');
 
 const createValidate = () => {
     return Joi.object().keys({
