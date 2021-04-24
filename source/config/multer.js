@@ -3,30 +3,33 @@ const path = require('path');
 
 const multer = require('multer');
 
-module.exports = {
-    dest: path.resolve(__dirname, '..', '..', 'shapefiles'),
-    storage: multer.diskStorage({
-        destination: (req, file, callback) => {
-            callback(null, path.resolve(__dirname, '..', '..', 'shapefiles'));
-        },
-        filename: (req, file, callback) => {
-            const ext = file.mimetype.split('/');
+const multerConfig = (dir, allowedMimes) => {
 
-            const date = new Date();
+    return {
+        dest: path.resolve(__dirname, '..', '..', 'upload', dir),
+        storage: multer.diskStorage({
+            destination: (req, file, callback) => {
+                callback(null, path.resolve(__dirname, '..', '..', 'upload', dir)); 
+            },
+            filename: (req, file, callback) => {
+                const ext = file.mimetype.split('/');
 
-            file.key = crypto.createHash('sha256').update(file.originalname + date).digest('hex');
-            file.key += `.${ext[1]}`;
+                const date = new Date();
 
-            callback(null, file.key);
-        }
-    }),
-    fileFilter: (req, file, callback) => {
-        const allowedMimes = ['application/zip'];
+                file.key = crypto.createHash('sha256').update(file.originalname + date).digest('hex');
+                file.key += `.${ext[1]}`;
 
-        if (allowedMimes.includes(file.mimetype)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Tipo inválido de arquivo!'));
+                callback(null, file.key);
+            }
+        }),
+        fileFilter: (req, file, callback) => {
+
+            if (allowedMimes.includes(file.mimetype)) 
+                callback(null, true);
+            else 
+                callback(new Error('Tipo inválido de arquivo!'));
         }
     }
-};
+}
+
+module.exports = multerConfig;

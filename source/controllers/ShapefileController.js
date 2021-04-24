@@ -2,7 +2,7 @@ const Shapefile = require('../models/Shapefile');
 const ShapefileValidator = require('../validators/ShapefileValidator');
 
 const multer = require('multer');
-const multerConfig = require('../config/multer');
+const multerConfig = require('../config/Multer');
 
 const extract = require('extract-zip');
 const fs = require('fs');
@@ -31,7 +31,7 @@ class ShapefileController {
     //! Espera receber o added_by do middleware, ja validado
     static async create(req, res) {
 
-        const upload = multer(multerConfig).single('file');
+        const upload = multer(multerConfig('shapefiles', 'application/zip')).single('file');
         upload(req, res, async (fail) => {
             
             if (fail instanceof multer.MulterError)
