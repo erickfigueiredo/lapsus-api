@@ -57,9 +57,7 @@ class InstitutionController {
         if (error)
             return res.status(400).send({ success: false, message: error.details[0].message });
 
-        const { id, name, address, email, phone } = req.body;
-
-        const form = { id, name, address, email, phone };
+        const form = req.body;
 
         const inst = await Institution.findOne(form.id);
 

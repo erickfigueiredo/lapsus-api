@@ -1,13 +1,19 @@
 const router = require('express').Router();
 
-// -> Rotas de Login
-const Login = require('../controllers/LoginController');
+//const Auth = require('../middleware/Auth');
 
+const Login = require('../controllers/LoginController');
+const Administrator = require('../controllers/AdminController');
+const Registered = require('../controllers/RegisteredController');
+const Technician = require('../controllers/TechnicianController');
+const Institution = require('../controllers/InstitutionController');
+const Contact = require('../controllers/ContactController');
+const Shapefile = require('../controllers/ShapefileController');
+
+// -> Rotas de Login
 router.post('/login', Login.login);
 
 // -> Rotas de Administrator
-const Administrator = require('../controllers/AdminController');
-
 router.get('/admin/all', Administrator.index);
 router.get('/admin/:id', Administrator.show);
 router.post('/admin', Administrator.create);
@@ -15,8 +21,6 @@ router.put('/admin', Administrator.update);
 router.delete('/admin/:id', Administrator.delete);
 
 // -> Rotas de Registered
-const Registered = require('../controllers/RegisteredController');
-
 router.get('/registered/all', Registered.index);
 router.get('/registered/:id', Registered.show);
 router.post('/registered', Registered.create);
@@ -24,8 +28,6 @@ router.put('/registered', Registered.update);
 router.delete('/registered/:id', Registered.delete);
 
 // -> Rotas de Technician
-const Technician = require('../controllers/TechnicianController');
-
 router.get('/technician/all', Technician.index);
 router.get('/technician/:id', Technician.show);
 router.post('/technician', Technician.create);
@@ -33,16 +35,12 @@ router.put('/technician', Technician.update);
 router.delete('/technician/:id', Technician.delete);
 
 // -> Rotas de Institution
-const Institution = require('../controllers/InstitutionController');
-
 router.get('/institution/all', Institution.index);
 router.get('/institution/:id', Institution.show);
 router.post('/institution', Institution.create);
 router.put('/institution', Institution.update);
 
 // -> Rotas de Contact
-const Contact = require('../controllers/ContactController');
-
 router.get('/contact/all', Contact.index);
 router.get('/contact/:id', Contact.show);
 router.post('/contact', Contact.create);
@@ -50,8 +48,6 @@ router.patch('/contact/:id', Contact.toggleVisualize);
 router.delete('/contact/:id', Contact.delete);
 
 // -> Rotas de Shapefile
-const Shapefile = require('../controllers/ShapefileController');
-
 router.get('/shapefile/all', Shapefile.index);
 router.get('/shapefile/:id', Shapefile.show);
 router.post('/shapefile', Shapefile.create);
