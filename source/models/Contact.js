@@ -4,11 +4,11 @@ const Message = require('../utils/Message');
 class Contact {
     static async findOne(id) {
         try {
-            const cnt = await knex.select('*')
+            const ctt = await knex.select('*')
                 .from('contact')
                 .where({ id });
 
-            return cnt[0] ? { success: true, contact: cnt[0] } : { success: false, message: 'Não foi possível recuperar a mensagem / Mensagem inexistente!' };
+            return ctt[0] ? { success: true, contact: ctt[0] } : { success: false, message: 'Não foi possível recuperar a mensagem / Mensagem inexistente!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar a mensagem!' };
@@ -17,7 +17,7 @@ class Contact {
 
     static async findAll(page) {
         try {
-            const cnt = await knex.select('*')
+            const ctt = await knex.select('*')
                 .from('contact')
                 .orderBy(['is_visualized', 'created_at'])
                 .paginate({
@@ -25,7 +25,7 @@ class Contact {
                     currentPage: page
                 });
 
-            return cnt.data[0] ? { success: true, contact: cnt } : { success: false, message: 'Não foi possível recuperar as mensagens / Mensagens inexistentes!' };
+            return ctt.data[0] ? { success: true, contact: ctt } : { success: false, message: 'Não foi possível recuperar as mensagens / Mensagens inexistentes!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar as mensagens!' };
@@ -34,11 +34,11 @@ class Contact {
 
     static async create(data) {
         try {
-            const cnt = await knex.insert(data)
+            const ctt = await knex.insert(data)
                 .table('contact')
                 .returning('*');
 
-            return cnt[0] ? { success: true, contact: cnt[0] } : { success: false, message: 'Não foi possível cadastrar o mensagem!' };
+            return ctt[0] ? { success: true, contact: ctt[0] } : { success: false, message: 'Não foi possível cadastrar o mensagem!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Falha ao inserir mensagem!' };
@@ -50,12 +50,12 @@ class Contact {
             const id = data.id;
             delete data['id'];
 
-            const cnt = await knex.update(data)
+            const ctt = await knex.update(data)
                 .table('contact')
                 .where({ id })
                 .returning('*');
 
-            return cnt[0] ? { success: true, contact: cnt[0] } : { success: false, message: 'Não foi possível atualizar a mensagem!' };
+            return ctt[0] ? { success: true, contact: ctt[0] } : { success: false, message: 'Não foi possível atualizar a mensagem!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Falha ao atualizar a mensagem!' };
@@ -70,7 +70,7 @@ class Contact {
 
             const existContact = await this.findOne(id);
 
-            return existContact.success ? { success: false, message: 'Houve um erro ao deletar a mensagem!' } : { success: true, message: 'Mensagem deletada com sucesso!' };
+            return existContact.success ? { success: false, message: 'Não foi possível deletar a mensagem!' } : { success: true, message: 'Mensagem deletada com sucesso!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Falha ao deletar mensagem!' };

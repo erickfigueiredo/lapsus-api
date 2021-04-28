@@ -7,7 +7,7 @@ exports.up = async function (knex) {
         table.increments('id').primary().notNullable();
         table.string('name', 50).notNullable();
         table.string('email', 100).notNullable().unique();
-        table.string('phone', 11).notNullable().unique();
+        table.string('phone', 12).notNullable().unique();
         table.string('address', 256).notNullable();
         table.timestamps(false, true);
     });

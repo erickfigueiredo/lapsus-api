@@ -12,8 +12,8 @@ exports.up = async function (knex) {
         table.string('desc', 500);
         table.specificType('local', 'Geometry');
         table.integer('category').unsigned().notNullable().references('id').inTable('category');
-        table.integer('user').unsigned().references('id').inTable('user');
         table.integer('collaborator').unsigned().notNullable().references('id').inTable('user');
+        table.integer('user').unsigned().references('id').inTable('user');
         table.timestamps(false, true);
     });
 

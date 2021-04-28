@@ -2,6 +2,7 @@ const Joi = require('joi');
 
 const createValidate = () => {
     return Joi.object().keys({
+        // 50: Obrigatorio
         name: Joi.string().regex(/^[A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).required().messages({
             'string.pattern.base': 'Nome deve conter apenas letras!',
             'string.min': 'Nome deve conter no mínimo 2 letras!',
@@ -9,11 +10,13 @@ const createValidate = () => {
             'string.empty': 'É necessário informar um nome!',
             'any.required': 'Nome é obrigatório!'
         }),
+        // 12: obrigatorio
         phone: Joi.string().regex(/^[0-9]{10,11}$/).required().messages({
             'string.empty': 'Telefone não pode ser nulo!',
             'string.pattern.base': 'Telefone deve ter 12-13 caracteres numéricos!',
             'any.required': 'Telefone é obrigatório!'
         }),
+        //256: obrigatório
         address: Joi.string().regex(/^[0-9A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ, ]+$/).min(10).max(256).required().messages({
             'string.pattern.base': 'Endereço deve conter apenas letras e números!',
             'string.min': 'Endereço deve conter no mínimo 10 caracteres!',
@@ -21,12 +24,14 @@ const createValidate = () => {
             'string.empty': 'É necessário informar um endereço!',
             'any.required': 'Endereço é obrigatório!'
         }),
+        //100: obrigatorio
         email: Joi.string().email().max(100).required().messages({
             'string.email': 'E-mail inválido!',
             'string.max': 'E-mail não pode ter mais de 100 caracteres!',
             'string.empty': 'É necessário informar um e-mail!',
             'any.required': 'E-mail é obrigatório!'
         }),
+        // Obrigatorio
         added_by: Joi.number().integer().min(1).required().messages({
             'number.integer': 'Id adicionador deve ser um número inteiro!',
             'number.min': 'Id adicionador não pode ser menor que 1!',

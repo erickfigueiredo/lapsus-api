@@ -72,7 +72,7 @@ class User {
                     currentPage: page
                 });
 
-
+                
             return user.data[0] ? { sucess: true, user } : { success: false, message: 'Não foi possível recuperar os usuários / Usuários inexistentes!' };
         } catch (e) {
             Message.warning(e);

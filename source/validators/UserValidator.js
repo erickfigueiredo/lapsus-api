@@ -67,12 +67,12 @@ const updateValidate = (isTech = false) => {
             'number.empty': 'É necessário informar um Id!',
             'any.required': 'Id é obrigatório!'
         }),
-        name: Joi.string().regex(/^[A-Za-z-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).messages({
+        name: Joi.string().regex(/^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).messages({
             'string.pattern.base': 'Nome deve conter apenas letras!',
             'string.min': 'Nome deve conter no mínimo 2 letras!',
             'string.max': 'Nome deve conter no máximo 50 letras!',
         }),
-        surname: Joi.string().regex(/^[A-Za-z-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).messages({
+        surname: Joi.string().regex(/^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).messages({
             'string.pattern.base': 'Sobrenome deve conter apenas letras!',
             'string.min': 'Sobrenome deve conter no mínimo duas letras!',
             'string.max': 'Sobrenome deve conter no máximo cinquenta letras!',

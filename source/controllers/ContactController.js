@@ -9,8 +9,8 @@ class ContactController {
             return res.status(400).send({ success: false, message: 'Id inválido!' });
 
 
-        const cnt = await Contact.findOne(id);
-        return cnt.success ? res.send(cnt) : res.status(404).send(cnt);
+        const ctt = await Contact.findOne(id);
+        return ctt.success ? res.send(ctt) : res.status(404).send(ctt);
     }
 
     static async index(req, res) {
@@ -18,8 +18,8 @@ class ContactController {
 
         if (isNaN(parseInt(page))) page = 1;
 
-        const cnts = await Contact.findAll(page);
-        return cnts.success ? res.send(cnts) : res.status(404).send(cnts);
+        const ctts = await Contact.findAll(page);
+        return ctts.success ? res.send(ctts) : res.status(404).send(ctts);
     }
 
     static async create(req, res) {

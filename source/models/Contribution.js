@@ -1,6 +1,8 @@
 const knex = require('../database/knex');
 const Message = require('../utils/Message');
 
+const fs = require('fs');
+
 class Contribution {
     static async findOne(id) {
         try {
@@ -13,12 +15,13 @@ class Contribution {
                     .from('annex')
                     .where({ id_contribution: id });
 
-                ctb[0].annex = annex;
+
+                if (annex[0]) ctb[0].annex = annex;
 
                 return { success: true, contribution: ctb[0] };
             }
 
-            return { success: false, message: 'Houve um erro ao recuperar a contribuição / Contribuição inexistente!' };
+            return { success: false, message: 'Não foi possível recuperar a contribuição / Contribuição inexistente!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar a contribuição!' };
@@ -70,21 +73,30 @@ class Contribution {
                 fs.unlinkSync(`${file.path}`);
 
             Message.warning(e);
-            return {success: false, message: 'Falha ao inserir contribuição!'}
+            return { success: false, message: 'Falha ao inserir contribuição!' }
         }
     }
 
-    static async update() {
+    static async update(data) {
         try {
+            const id = data.id;
+            delete data['id'];
 
+            const ctb = await knex.update(data)
+                .table('contribution')
+                .where({ id })
+                .returning('*');
+
+            return ctb[0] ? { success: true, contribution: ctb[0] } : { success: false, message: 'Não foi possível atualizar a contribuição!' };
         } catch (e) {
-
+            Message.warning(e);
+            return { success: false, message: 'Falha ao atualizar a contribuição!' }
         }
-
     }
 
-    static async delete() {
+    static async delete(id) {
         try {
+            
 
         } catch (e) {
 

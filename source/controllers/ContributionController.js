@@ -14,6 +14,7 @@ class ContributionController {
         if (isNaN(parseInt(id)))
             return res.status(400).send({ success: false, message: 'Id inválido!' });
 
+
         const ctb = await Contribution.findOne(id);
         return ctn.success ? res.send(ctb) : res.status(404).send(ctb);
     }
@@ -75,8 +76,15 @@ class ContributionController {
     }
 
     static async update(req, res) {
-        
+        const valid = ContributionValidator.updateValidate();
+        const {error} = valid.validate(req.body);
 
+        if(error)
+            return res.status(400).send({ success: false, message: error.details[0].message });
+
+        
+        const result = await Contribution.update(req.body);
+        return result.success ? res.send(result) : res.status(400).send(result);
     }
 
     static async delete(req, res) {
@@ -90,7 +98,7 @@ class ContributionController {
             return res.status(404).send(existContribution);
 
 
-        const result = await Contribution.findOne(id);
+        const result = await Contribution.delete(id);
         return result.success ? res.send(result) : res.status(400).send(result);
     }
 }

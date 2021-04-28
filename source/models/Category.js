@@ -2,13 +2,14 @@ const knex = require('../database/knex');
 const Message = require('../utils/Message');
 
 class Category {
+
     static async findOne(id) {
         try {
             const ctg = await knex.select('*')
                 .from('category')
                 .where({ id });
 
-            return ctg[0] ? { success: true, category: ctg[0] } : { success: false, message: 'Houve um erro ao recuperar a categoria / Categoria inexistente!' };
+            return ctg[0] ? { success: true, category: ctg[0] } : { success: false, message: 'Não foi possível recuperar a categoria / Categoria inexistente!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar a categoria!' };
@@ -21,7 +22,7 @@ class Category {
                 .from('category')
                 .where({ name });
 
-            return ctg[0] ? { success: true, category: ctg[0] } : { success: false, message: 'Houve um erro ao recuperar a categoria / Categoria inexistente!' };
+            return ctg[0] ? { success: true, category: ctg[0] } : { success: false, message: 'Não foi possível recuperar a categoria / Categoria inexistente!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar a categoria!' };
@@ -56,7 +57,6 @@ class Category {
             Message.warning(e);
             return { success: false, message: 'Falha ao inserir categoria!' };
         }
-
     }
 
     static async update(data) {
@@ -65,30 +65,29 @@ class Category {
             delete data['id'];
 
             const ctg = await knex.update(data)
-            .table('category')
-            .where({id})
-            .returning('*');
+                .table('category')
+                .where({ id })
+                .returning('*');
 
-            return ctg[0] ? {success: true, category: ctg[0]} : {success: false, message: 'Não foi possível atualizar a categoria!'};
+            return ctg[0] ? { success: true, category: ctg[0] } : { success: false, message: 'Não foi possível atualizar a categoria!' };
         } catch (e) {
             Message.warning(e);
-            return { success: false, message: '' };
+            return { success: false, message: 'Falha ao atualizar a categoria!' };
         }
-
     }
 
     static async delete(id) {
         try {
             await knex('category')
-            .where({id})
-            .del();
+                .where({ id })
+                .del();
 
             const existCategory = await this.findOne(id);
 
-            return existCategory.success ? {success: false, message: 'Houve um erro ao deletar a categoria!'}:{success: true, message: 'Categoria deletada com successo!'};
+            return existCategory.success ? { success: false, message: 'Não foi possível deletar a categoria!' } : { success: true, message: 'Categoria deletada com successo!' };
         } catch (e) {
             Message.warning(e);
-            return { success: false, message: '' };
+            return { success: false, message: 'Falha ao deletar a categoria!' };
         }
     }
 }
