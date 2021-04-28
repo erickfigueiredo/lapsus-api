@@ -5,7 +5,7 @@ const tableName = 'category';
 exports.up = async function (knex) {
     await knex.schema.createTable(tableName, function (table) {
         table.increments('id').notNullable().primary();
-        table.string('name', 40).unique().notNullable();
+        table.string('name', 50).unique().notNullable();
         table.string('desc', 500);
         table.timestamps(false, true);
     });

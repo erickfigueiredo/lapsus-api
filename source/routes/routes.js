@@ -9,6 +9,7 @@ const Technician = require('../controllers/TechnicianController');
 const Institution = require('../controllers/InstitutionController');
 const Contact = require('../controllers/ContactController');
 const Shapefile = require('../controllers/ShapefileController');
+const Contribution = require('../controllers/ContributionController');
 
 // -> Rotas de Login
 router.post('/login', Login.login);
@@ -54,7 +55,8 @@ router.post('/shapefile', Shapefile.create);
 router.put('/shapefile', Shapefile.update);
 router.delete('/shapefile/:id', Shapefile.delete);
 
-// -> Rotas de ...
+// -> Rotas de Contribution
+router.post('/contribution', Contribution.create);
 
 // -> Rotas de Erro 404
 router.get('/ops', (req, res) => {

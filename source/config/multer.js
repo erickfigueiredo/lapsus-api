@@ -3,15 +3,14 @@ const path = require('path');
 
 const multer = require('multer');
 
-const multerConfig = (dir, allowedMimes) => {
-
+const multerConfig = (dir, fileProps) => {
     return {
         dest: path.resolve(__dirname, '..', '..', 'upload', dir),
         storage: multer.diskStorage({
-            destination: (req, file, callback) => {
-                callback(null, path.resolve(__dirname, '..', '..', 'upload', dir)); 
+            destination(req, file, callback) {
+                callback(null, path.resolve(__dirname, '..', '..', 'upload', dir));
             },
-            filename: (req, file, callback) => {
+            filename(req, file, callback) {
                 const ext = file.mimetype.split('/');
 
                 const date = new Date();
@@ -22,14 +21,17 @@ const multerConfig = (dir, allowedMimes) => {
                 callback(null, file.key);
             }
         }),
-        fileFilter: (req, file, callback) => {
-
-            if (allowedMimes.includes(file.mimetype)) 
+        limits: {
+            files: fileProps.numFiles
+        },
+        fileFilter(req, file, callback) {
+            if (fileProps.allowedMimes.includes(file.mimetype))
                 callback(null, true);
-            else 
-                callback(new Error('Tipo inválido de arquivo!'));
+
+            else
+                callback(new multer.MulterError('LIMIT_UNEXPECTED_FILE'), false);
         }
     }
-}
+};
 
 module.exports = multerConfig;

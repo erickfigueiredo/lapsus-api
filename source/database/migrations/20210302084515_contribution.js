@@ -6,14 +6,14 @@ exports.up = async function (knex) {
     await knex.schema.createTable(tableName, function (table) {
         table.increments('id').primary().notNullable();
         table.datetime('occurrence', { precision: 6 });
-        table.integer('risk_damage').unsigned();
-        table.integer('victims').unsigned();
+        table.boolean('risk_damage').defaultTo('false').notNullable();
+        table.boolean('victims').defaultTo('false').notNullable();
+        table.string('published', 1).defaultTo('P').notNullable(); // Aprovado, Reprovado, Pendente
         table.string('desc', 500);
-        table.integer('published').unsigned();
         table.specificType('local', 'Geometry');
         table.integer('category').unsigned().notNullable().references('id').inTable('category');
-        table.integer('user').unsigned().notNullable().references('id').inTable('user');
-        table.integer('colaborator').unsigned().notNullable().references('id').inTable('user');
+        table.integer('user').unsigned().references('id').inTable('user');
+        table.integer('collaborator').unsigned().notNullable().references('id').inTable('user');
         table.timestamps(false, true);
     });
 

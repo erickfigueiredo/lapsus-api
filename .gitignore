@@ -1,5 +1,9 @@
 # System shapefiles
 .upload/
 
+# Tests files
+.tests/
+
 # Temporary files
 .tmp/
+

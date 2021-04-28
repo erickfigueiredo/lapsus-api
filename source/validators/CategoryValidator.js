@@ -2,10 +2,10 @@ const Joi = require('joi');
 
 const createValidate = () => {
     return Joi.object().keys({
-        name: Joi.string().regex(/^[0-9A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(40).required().messages({
+        name: Joi.string().regex(/^[0-9A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).required().messages({
             'string.pattern.base': 'Remetente deve conter apenas letras!',
             'string.min': 'Remetente deve conter no mínimo 2 letras!',
-            'string.max': 'Remetente deve conter no máximo 40 letras!',
+            'string.max': 'Remetente deve conter no máximo 50 letras!',
             'string.empty': 'É necessário informar um remetente!',
             'any.required': 'Remetente é obrigatório!'
         }),
@@ -25,10 +25,10 @@ const updateValidate = () => {
             'number.empty': 'É necessário informar um Id!',
             'any.required': 'Id é obrigatório!'
         }),
-        name: Joi.string().regex(/^[0-9A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(40).messages({
+        name: Joi.string().regex(/^[0-9A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).messages({
             'string.pattern.base': 'Remetente deve conter apenas letras!',
             'string.min': 'Remetente deve conter no mínimo 2 letras!',
-            'string.max': 'Remetente deve conter no máximo 40 letras!'
+            'string.max': 'Remetente deve conter no máximo 50 letras!'
         }),
         desc: Joi.string().regex(/^[0-9A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(3).max(500).messages({
             'string.pattern.base': 'Remetente deve conter apenas letras!',

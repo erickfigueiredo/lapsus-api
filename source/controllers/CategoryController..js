@@ -1,8 +1,7 @@
-const { exist } = require('joi');
 const Category = require('../models/Category');
 const CategoryValidator = require('../validators/CategoryValidator');
 
-class categoryController {
+class CategoryController {
     static async show(req, res) {
         const id = req.params.id;
 

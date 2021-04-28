@@ -32,9 +32,12 @@ LapsusVGI - API para Gerenciamento de informações de Desastres ligados à desl
 - [X] Validação Login
 - [X] CRUD Administrador
 - [X] CRUD Técnico
-- [ ] CRUD Registrado
+- [X] CRUD Registrado
 - [ ] CRUD Moderador
 - [X] CRUD Instituição
+- [X] CRUD Shapefile
+- [ ] Adicionar
+- [ ] Adicionar
 - [ ] Adicionar
 
 

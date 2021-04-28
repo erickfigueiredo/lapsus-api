@@ -30,12 +30,14 @@ class ShapefileController {
 
     //! Espera receber o added_by do middleware, ja validado
     static async create(req, res) {
+        const fileProps = { allowedMimes: 'application/zip', numFiles: 1};
 
-        const upload = multer(multerConfig('shapefiles', 'application/zip')).single('file');
+        const upload = multer(multerConfig('shapefiles', fileProps)).single('file');
         upload(req, res, async (fail) => {
             
             if (fail instanceof multer.MulterError)
                 return res.status(400).send({ success: false, message: 'Extensão de arquivo inválida!' });
+            
 
             if (!req.file)
                 return res.send({ success: false, message: 'É necessário submeter um arquivo!' });
@@ -46,7 +48,6 @@ class ShapefileController {
             const valid = ShapefileValidator.createValidate();
 
             const { error } = valid.validate(req.body);
-
 
 
             if (error) {
@@ -123,7 +124,7 @@ class ShapefileController {
         if (isNaN(parseInt(id)))
             return res.status(400).send({ success: false, message: 'Id inválido!' });
 
-        // Verificar se o shapefile existe
+
         const shp = await Shapefile.findOne(id);
         if (!shp.success)
             return res.status(404).send({ success: false, message: 'Shapefile inexistente!' });

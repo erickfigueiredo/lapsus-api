@@ -24,7 +24,7 @@ const createValidate = () => {
         }),
         body: Joi.string().min(10).max(500).required().messages({
             'string.min': 'A mensagem deve ter no mínimo 10 caracteres!',
-            'string.max': 'A mensagem deve ter no máximo 255 caracteres!',
+            'string.max': 'A mensagem deve ter no máximo 500 caracteres!',
             'string.empty': 'É necessário conter uma mensagem!',
             'any.required': 'Mensagem é obrigatória!',
         })

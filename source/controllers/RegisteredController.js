@@ -47,7 +47,7 @@ class RegisteredController {
 
 
         const salt = bcrypt.genSaltSync(saltRounds);
-        registered.password = bcrypt.hashSync(password, salt);
+        registered.password = bcrypt.hashSync(registered.password, salt);
 
         registered.type = 'R';
 
