@@ -55,7 +55,7 @@ class ContributionController {
             if (req.body.id_collaborator) {
                 const existCollaborator = User.findOneByType(req.body.id_collaborator, 'R');
 
-                if (!existCollaborator.success) {
+                if (!existCollaborator.success)
                     if (req.files) this.deleteFiles(req.files);
                 
                 return res.status(404).send({ success: false, message: 'Colaborador inexistente!' });
