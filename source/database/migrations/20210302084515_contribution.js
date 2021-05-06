@@ -11,9 +11,9 @@ exports.up = async function (knex) {
         table.string('published', 1).defaultTo('P').notNullable(); // Aprovado, Reprovado, Pendente
         table.string('desc', 500);
         table.specificType('local', 'Geometry');
-        table.integer('category').unsigned().notNullable().references('id').inTable('category');
-        table.integer('collaborator').unsigned().notNullable().references('id').inTable('user');
-        table.integer('user').unsigned().references('id').inTable('user');
+        table.integer('id_category').unsigned().notNullable().references('id').inTable('category');
+        table.integer('id_collaborator').unsigned().references('id').inTable('user');
+        table.integer('id_manager').unsigned().references('id').inTable('user');
         table.timestamps(false, true);
     });
 

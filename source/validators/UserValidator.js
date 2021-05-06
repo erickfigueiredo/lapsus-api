@@ -81,11 +81,6 @@ const updateValidate = (isTech = false) => {
             'string.email': 'E-mail inválido!',
             'string.max': 'E-mail não pode ter mais de 100 caracteres!'
         }),
-        password: Joi.string().regex(/^(?=.*\d)(?=.* [a - z])(?=.* [A-Z])(?=.* [$ *&@#])[0-9a-zA-Z$*&@#]$ /).messages({
-            'string.pattern.base': 'A senha deve conter no mínimo 10 caracteres, sendo pelo menos uma letra minúscula, uma maiúscula, um dígito e um caractere especial!',
-            'string.min': 'Senha deve conter no mínimo 10 caracteres!',
-            'string.max': 'Senha deve conter no máximo 50 caracteres!',
-        }),
         password: Joi.string().regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$/).min(8).max(30).messages({
             'string.pattern.base': 'A senha deve conter pelo menos uma letra minúscula, uma maiúscula, um dígito e um caractere especial!',
             'string.min': 'Senha deve conter no mínimo 8 caracteres!',

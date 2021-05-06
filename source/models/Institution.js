@@ -4,11 +4,11 @@ const Message = require('../utils/Message');
 class Institution {
     static async findOne(id) {
         try {
-            const inst = await knex.select('*')
+            const institution = await knex.select('*')
                 .from('institution')
                 .where({ id });
 
-            return inst[0] ? { success: true, institution: inst[0] } : { success: false, message: 'Não foi possível recuperar o instituição / Instituição inexistente!' };
+            return institution[0] ? { success: true, institution: institution[0] } : { success: false, message: 'Não foi possível recuperar o instituição / Instituição inexistente!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar a instituição!' };
@@ -17,7 +17,7 @@ class Institution {
 
     static async findAll(page) {
         try {
-            const inst = await knex.select('*')
+            const institution = await knex.select('*')
                 .from('institution')
                 .orderBy(['name', 'created_at'])
                 .paginate({
@@ -25,7 +25,7 @@ class Institution {
                     currentPage: page
                 });
 
-            return inst.data[0] ? { success: true, institution: inst } : { success: false, message: 'Não foi possível recuperar as instituições / Instituições inexistentes!' };
+            return institution.data[0] ? { success: true, institution } : { success: false, message: 'Não foi possível recuperar as instituições / Instituições inexistentes!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar as instituições!' };
@@ -34,11 +34,11 @@ class Institution {
 
     static async findByEmail(email) {
         try {
-            const inst = await knex.select('*')
+            const institution = await knex.select('*')
                 .from('institution')
                 .where({ email });
 
-            return inst[0] ? { success: true, institution: inst[0] } : { success: false, message: 'Não foi possível recuperar o instituição / Instituição inexistente!' };
+            return institution[0] ? { success: true, institution: institution[0] } : { success: false, message: 'Não foi possível recuperar o instituição / Instituição inexistente!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar a instituição!' };
@@ -47,11 +47,11 @@ class Institution {
 
     static async findByPhone(phone) {
         try {
-            const inst = await knex.select('*')
+            const institution = await knex.select('*')
                 .from('institution')
                 .where({ phone });
 
-            return inst[0] ? { success: true, institution: inst[0] } : { success: false, message: 'Não foi possível recuperar o instituição / Instituição inexistente!' };
+            return institution[0] ? { success: true, institution: institution[0] } : { success: false, message: 'Não foi possível recuperar o instituição / Instituição inexistente!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar a instituição!' };
@@ -60,12 +60,12 @@ class Institution {
 
     static async create(data) {
         try {
-            const inst = await knex.insert(data)
+            const institution = await knex.insert(data)
                 .table('institution')
                 .returning('*');
 
 
-            return inst[0] ? { success: true, institution: inst[0] } : { success: false, message: 'Não foi possível cadastrar a instituição' };
+            return institution[0] ? { success: true, institution: institution[0] } : { success: false, message: 'Não foi possível cadastrar a instituição' };
         } catch (e) {
             Message.error(e);
             return { success: false, message: 'Falha ao inserir instituição!' }
@@ -77,12 +77,12 @@ class Institution {
             const id = data.id;
             delete data['id'];
 
-            const inst = await knex.update(data)
+            const institution = await knex.update(data)
                 .table('institution')
                 .where({ id })
                 .returning('*');
 
-            return inst[0] ? { success: true, institution: inst[0] } : { success: false, message: 'Não foi possível atualizar a instituição!' };
+            return institution[0] ? { success: true, institution: institution[0] } : { success: false, message: 'Não foi possível atualizar a instituição!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Falha ao atualizar instituição!' };

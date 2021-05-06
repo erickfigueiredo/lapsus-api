@@ -5,11 +5,11 @@ class Category {
 
     static async findOne(id) {
         try {
-            const ctg = await knex.select('*')
+            const category = await knex.select('*')
                 .from('category')
                 .where({ id });
 
-            return ctg[0] ? { success: true, category: ctg[0] } : { success: false, message: 'Não foi possível recuperar a categoria / Categoria inexistente!' };
+            return category[0] ? { success: true, category: category[0] } : { success: false, message: 'Não foi possível recuperar a categoria / Categoria inexistente!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar a categoria!' };
@@ -18,11 +18,11 @@ class Category {
 
     static async findByName(name) {
         try {
-            const ctg = await knex.select('*')
+            const category = await knex.select('*')
                 .from('category')
                 .where({ name });
 
-            return ctg[0] ? { success: true, category: ctg[0] } : { success: false, message: 'Não foi possível recuperar a categoria / Categoria inexistente!' };
+            return category[0] ? { success: true, category: category[0] } : { success: false, message: 'Não foi possível recuperar a categoria / Categoria inexistente!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar a categoria!' };
@@ -31,7 +31,7 @@ class Category {
 
     static async findAll(page) {
         try {
-            const ctg = await knex.select('*')
+            const category = await knex.select('*')
                 .from('category')
                 .orderBy(['name', 'created_at'])
                 .paginate({
@@ -39,7 +39,7 @@ class Category {
                     currentPage: page
                 });
 
-            return ctg.data[0] ? { success: true, category: ctg } : { success: false, message: 'Não foi possível recuperar as categorias / Categorias inexistentes!' }
+            return category.data[0] ? { success: true, category } : { success: false, message: 'Não foi possível recuperar as categorias / Categorias inexistentes!' }
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar as categorias!' };
@@ -48,11 +48,11 @@ class Category {
 
     static async create(data) {
         try {
-            const ctg = await knex.insert(data)
+            const category = await knex.insert(data)
                 .table('category')
                 .returning('*');
 
-            return ctg[0] ? { success: true, category: ctg[0] } : { success: false, message: 'Não foi possível cadastrar a categoria!' };
+            return category[0] ? { success: true, category: category[0] } : { success: false, message: 'Não foi possível cadastrar a categoria!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Falha ao inserir categoria!' };
@@ -64,15 +64,15 @@ class Category {
             const id = data.id;
             delete data['id'];
 
-            const ctg = await knex.update(data)
+            const category = await knex.update(data)
                 .table('category')
                 .where({ id })
                 .returning('*');
 
-            return ctg[0] ? { success: true, category: ctg[0] } : { success: false, message: 'Não foi possível atualizar a categoria!' };
+            return category[0] ? { success: true, category: category[0] } : { success: false, message: 'Não foi possível atualizar a categoria!' };
         } catch (e) {
             Message.warning(e);
-            return { success: false, message: 'Falha ao atualizar a categoria!' };
+            return { success: false, message: 'Falha ao atualizar categoria!' };
         }
     }
 
@@ -87,7 +87,7 @@ class Category {
             return existCategory.success ? { success: false, message: 'Não foi possível deletar a categoria!' } : { success: true, message: 'Categoria deletada com successo!' };
         } catch (e) {
             Message.warning(e);
-            return { success: false, message: 'Falha ao deletar a categoria!' };
+            return { success: false, message: 'Falha ao deletar categoria!' };
         }
     }
 }

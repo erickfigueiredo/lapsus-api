@@ -9,8 +9,7 @@ const createValidate = () => {
             'string.empty': 'É necessário informar um título!',
             'any.required': 'Título é obrigatório!'
         }),
-        desc: Joi.string().regex(/^[0-9A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(3).max(100).messages({
-            'string.pattern.base': 'Descrição deve conter apenas letras e números!',
+        desc: Joi.string().min(3).max(100).messages({
             'string.min': 'Descrição deve conter no mínimo 3 caracteres!',
             'string.max': 'Descrição deve conter no máximo 100 caracteres!'
         }),
@@ -36,8 +35,7 @@ const updateValidate = () => {
             'string.min': 'Descrição deve conter no mínimo 3 caracteres!',
             'string.max': 'Descrição deve conter no máximo 50 caracteres!',
         }),
-        desc: Joi.string().regex(/^[0-9A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(3).max(100).messages({
-            'string.pattern.base': 'Descrição deve conter apenas letras e números!',
+        desc: Joi.string().min(3).max(100).messages({
             'string.min': 'Descrição deve conter no mínimo 3 caracteres!',
             'string.max': 'Descrição deve conter no máximo 100 caracteres!'
         })

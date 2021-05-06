@@ -1,6 +1,8 @@
+require('dotenv').config();
+
 const JWT = require('jsonwebtoken');
 
-const validateLogin = (req, res, next) => {
+const authenticate = (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader)
@@ -21,11 +23,12 @@ const validateLogin = (req, res, next) => {
     JWT.verify(token, process.env.JWT_SECRET, (error, decoded)=> {
         if(error) res.status(401).send({success: false, message: 'Erro de token inválido!'});
 
-        req.userId = decoded.id;
+        req.locals = decoded;
 
         return next();
     });
 }
 
-
-module.exports = {validateLogin};
+module.exports = {
+    authenticate
+};

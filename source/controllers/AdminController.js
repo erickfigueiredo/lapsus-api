@@ -39,11 +39,10 @@ class AdminController {
         if (existEmail.success)
             return res.status(409).send({ success: false, message: 'E-mail já cadastrado!' });
 
-        if (admin.added_by) {
-            const existAdder = await User.findOneByType(admin.added_by, 'A');
-            if (!existAdder.success)
-                return res.status(404).send({ success: false, message: 'Usuário adicionador inexistente!' });
-        } else delete admin['added_by'];
+            
+        const existAdder = await User.findOneByType(admin.added_by, 'A');
+        if (!existAdder.success)
+            return res.status(404).send({ success: false, message: 'Usuário adicionador inexistente!' });
 
 
         const salt = bcrypt.genSaltSync(saltRounds);
@@ -64,7 +63,7 @@ class AdminController {
 
 
         const form = req.body;
-        
+
         const admin = await User.findOneByType(form.id, 'A');
 
         if (admin.success && admin.user.is_active) {

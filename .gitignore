@@ -7,3 +7,6 @@
 # Temporary files
 .tmp/
 
+# Diretórios da IDE
+.vscode/
+.metals/

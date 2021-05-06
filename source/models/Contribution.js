@@ -1,24 +1,22 @@
 const knex = require('../database/knex');
 const Message = require('../utils/Message');
 
-const fs = require('fs');
-
 class Contribution {
     static async findOne(id) {
         try {
-            const ctb = await knex.select('*')
+            const contrib = await knex.select('*')
                 .from('category')
                 .where({ id });
 
-            if (ctg[0]) {
+            if (contrib[0]) {
                 const annex = await knex.select('uri')
                     .from('annex')
                     .where({ id_contribution: id });
 
 
-                if (annex[0]) ctb[0].annex = annex;
+                if (annex[0]) contrib[0].annex = annex;
 
-                return { success: true, contribution: ctb[0] };
+                return { success: true, contribution: contrib[0] };
             }
 
             return { success: false, message: 'Não foi possível recuperar a contribuição / Contribuição inexistente!' };
@@ -30,7 +28,7 @@ class Contribution {
 
     static async findAll(page) {
         try {
-            const ctb = await knex.select('*')
+            const contrib = await knex.select('*')
                 .from('contribution')
                 .orderBy('published')
                 .paginate({
@@ -38,7 +36,7 @@ class Contribution {
                     currentPage: page
                 });
 
-            return ctb.data[0] ? { success: true, contribution: ctb } : { success: false, message: 'Não foi possível recuperar as contribuições / Contribuições inexistentes!' };
+            return contrib.data[0] ? { success: true, contribution: contrib } : { success: false, message: 'Não foi possível recuperar as contribuições / Contribuições inexistentes!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar as contribuições!' };
@@ -49,31 +47,31 @@ class Contribution {
         try {
             if (files) {
                 return await knex.transaction(async trx => {
-                    const ctb = await trx('contribution').insert(data, '*');
+                    const contrib = await trx('contribution').insert(data, '*');
 
-                    const id_contribution = ctb[0].id;
+                    const id_contribution = contrib[0].id;
 
                     for (file of files) {
-                        const f = await trx('annex').insert({ uri: file.uri, id_contribution }, 'uri');
+                        const f = await trx('annex').insert({
+                            uri: file.uri,
+                            id_contribution
+                        }, 'uri');
 
-                        ctb[0].annexes.push(f);
+                        contrib[0].annexes.push(f);
                     }
 
-                    return { success: true, contribution: ctb[0] };
+                    return { success: true, contribution: contrib[0] };
                 })
             } else {
-                const ctb = await knex.insert(data)
+                const contrib = await knex.insert(data)
                     .table('contribution')
                     .returning('*');
 
-                return ctb[0] ? { success: true, contribution: ctb[0] } : { success: false, message: 'Não foi possível cadastrar a contribuição!' };
+                return contrib[0] ? { success: true, contribution: contrib[0] } : { success: false, message: 'Não foi possível cadastrar a contribuição!' };
             }
         } catch (e) {
-            for (file of files)
-                fs.unlinkSync(`${file.path}`);
-
             Message.warning(e);
-            return { success: false, message: 'Falha ao inserir contribuição!' }
+            return { success: false, message: 'Falha ao inserir contribuição!' };
         }
     }
 
@@ -82,23 +80,41 @@ class Contribution {
             const id = data.id;
             delete data['id'];
 
-            const ctb = await knex.update(data)
+            const contrib = await knex.update(data)
                 .table('contribution')
                 .where({ id })
                 .returning('*');
 
-            return ctb[0] ? { success: true, contribution: ctb[0] } : { success: false, message: 'Não foi possível atualizar a contribuição!' };
+            return contrib[0] ? { success: true, contribution: contrib[0] } : { success: false, message: 'Não foi possível atualizar a contribuição!' };
         } catch (e) {
             Message.warning(e);
-            return { success: false, message: 'Falha ao atualizar a contribuição!' }
+            return { success: false, message: 'Falha ao atualizar a contribuição!' };
         }
     }
 
     static async delete(id) {
         try {
-            
+            const uriAnnexes = await knex.select('uri').from('annex').where({ id_contribution: id });
 
+            const result = await knex.transaction(async trx => {
+
+                if (uriAnnexes[0])
+                    await trx('annex')
+                        .where({ id_contribution: id })
+                        .del();
+
+
+                await trx('contribution').where({ id }).del();
+
+                return { success: true, message: 'Contribuição deletada com sucesso!' };
+            });
+
+            if(uriAnnexes[0]) result.uriAnnexes = uriAnnexes;
+
+            return result;
         } catch (e) {
+            Message.warning(e);
+            return { success: false, message: 'Falha ao deletar a contribuição!' };
 
         }
     }

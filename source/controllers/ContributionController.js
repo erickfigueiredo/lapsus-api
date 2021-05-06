@@ -1,11 +1,13 @@
 const Category = require('../models/Category');
 const Contribution = require('../models/Contribution');
+const User = require('../models/User');
 const ContributionValidator = require('../validators/CategoryValidator');
 
 const multer = require('multer');
 const multerConfig = require('../config/Multer');
 
 const fs = require('fs');
+const path = require('path');
 
 class ContributionController {
     static async show(req, res) {
@@ -16,7 +18,7 @@ class ContributionController {
 
 
         const ctb = await Contribution.findOne(id);
-        return ctn.success ? res.send(ctb) : res.status(404).send(ctb);
+        return ctb.success ? res.send(ctb) : res.status(404).send(ctb);
     }
 
     static async index(req, res) {
@@ -44,24 +46,29 @@ class ContributionController {
             const { error } = valid.validate(req.body);
 
             if (error) {
-                if (req.files)
-                    for (file of req.files)
-                        fs.unlinkSync(`${file.path}`);
+                if (req.files) this.deleteFiles(req.files);
 
 
                 return res.status(400).send({ success: false, message: error.details[0].message });
             }
 
+            if (req.body.id_collaborator) {
+                const existCollaborator = User.findOneByType(req.body.id_collaborator, 'R');
+
+                if (!existCollaborator.success) {
+                    if (req.files) this.deleteFiles(req.files);
+                
+                return res.status(404).send({ success: false, message: 'Colaborador inexistente!' });
+            }
+            
+
             const existCategory = Category.findOne(req.body.id_category);
             if (!existCategory.success) {
-                if (req.files)
-                    for (file of req.files)
-                        fs.unlinkSync(`${file.path}`);
+                if (req.files) this.deleteFiles(req.files);
 
 
                 return res.status(404).send({ success: false, message: 'Categoria inexistente!' });
             }
-
 
             let result = null;
             if (req.files) {
@@ -70,19 +77,26 @@ class ContributionController {
             } else
                 result = await Contribution.create(req.body);
 
+            if (!result.success) {
+                if (req.files) this.deleteFiles(req.files);
 
-            return result.success ? res.send(result) : res.status(400).send(result);
+                return res.status(400).send(result);
+            }
+            return res.send(result);
         });
     }
 
-    static async update(req, res) {
+    static async alterStatus(req, res) {
         const valid = ContributionValidator.updateValidate();
-        const {error} = valid.validate(req.body);
+        const { error } = valid.validate(req.body);
 
-        if(error)
+        if (error)
             return res.status(400).send({ success: false, message: error.details[0].message });
 
-        
+
+        // Verificar se o id_manager existe
+
+
         const result = await Contribution.update(req.body);
         return result.success ? res.send(result) : res.status(400).send(result);
     }
@@ -99,7 +113,20 @@ class ContributionController {
 
 
         const result = await Contribution.delete(id);
-        return result.success ? res.send(result) : res.status(400).send(result);
+        if (result.success) {
+            if(result.uriAnnexes[0]) this.deleteFiles(result.uriAnnexes, false);
+
+            return res.send(result);
+        }
+
+        return res.status(400).send(result);
+    }
+
+    static deleteFiles(files, hasPath = true) {
+        if(hasPath) for (const file of files) fs.unlinkSync(`${file.path}`);
+        
+        // Ajustar
+        else for (const uri of files) fs.unlinkSync(path.resolve(__dirname, '..', '..', 'upload', 'annexes', uri));
     }
 }
 

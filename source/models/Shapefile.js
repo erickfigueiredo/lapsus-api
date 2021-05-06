@@ -58,9 +58,6 @@ class Shapefile {
 
             return shp[0] ? { success: true, shapefile: shp[0] } : { success: false, message: 'Não foi possível recuperar o shapefile / Shapefile inexistente!' };
         } catch (e) {
-            // Remove pastas e sub-pastas de forma recursiva e síncrona 
-            fs.rmdirSync(path.resolve(__dirname, '..', '..', 'shapefiles', data.uri), { recursive: true });
-
             Message.warning(e);
             return { success: false, message: 'Falha ao inserir shapefile!' };
         }
@@ -73,17 +70,17 @@ class Shapefile {
 
             const shp = await knex.update(data)
                 .table('shapefile')
-                .where({id})
+                .where({ id })
                 .returning('*');
 
-            return shp[0] ? {success: true, shapefile: shp[0]}: {success: false, message: 'Não foi possível atualizar o shapefile!'};
+            return shp[0] ? { success: true, shapefile: shp[0] } : { success: false, message: 'Não foi possível atualizar o shapefile!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Falha ao atualizar shapefile!' };
         }
     }
 
-    static async delete(id, uri) {
+    static async delete(id) {
         try {
             await knex('shapefile')
                 .where({ id })
@@ -91,10 +88,8 @@ class Shapefile {
 
             const existShp = await this.findOne(id);
             if (existShp.success)
-                return { success: true, message: 'Houve um erro ao deletar o Shapefile!' };
+                return { success: false, message: 'Houve um erro ao deletar o Shapefile!' };
 
-
-            fs.rmdirSync(path.resolve(__dirname, '..', '..', 'shapefiles', uri), { recursive: true });
 
             return { success: true, message: 'Shapefile deletado com sucesso!' };
         } catch (e) {

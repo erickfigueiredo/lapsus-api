@@ -30,14 +30,14 @@ class ShapefileController {
 
     //! Espera receber o added_by do middleware, ja validado
     static async create(req, res) {
-        const fileProps = { allowedMimes: 'application/zip', numFiles: 1};
+        const fileProps = { allowedMimes: 'application/zip', numFiles: 1 };
 
         const upload = multer(multerConfig('shapefiles', fileProps)).single('file');
         upload(req, res, async (fail) => {
-            
+
             if (fail instanceof multer.MulterError)
                 return res.status(400).send({ success: false, message: 'Extensão de arquivo inválida!' });
-            
+
 
             if (!req.file)
                 return res.send({ success: false, message: 'É necessário submeter um arquivo!' });
@@ -77,7 +77,13 @@ class ShapefileController {
             req.body.uri = newKey[0];
 
             const result = await Shapefile.create(req.body);
-            return result.success ? res.send(result) : res.status(400).send(result);
+            if (!result.success) {
+                fs.rmdirSync(path.resolve(__dirname, '..', '..', 'upload', 'shapefiles', req.body.uri), { recursive: true });
+
+                return res.status(400).send(result);
+            }
+
+            return res.send(result);
         });
     }
 
@@ -130,8 +136,15 @@ class ShapefileController {
             return res.status(404).send({ success: false, message: 'Shapefile inexistente!' });
 
 
-        const result = await Shapefile.delete(id, shp.shapefile.uri);
-        result.success ? res.send(result) : res.status(400).send(result)
+        const result = await Shapefile.delete(id);
+
+        if (!result.success) {
+            fs.rmdirSync(path.resolve(__dirname, '..', '..', 'shapefiles', shp.shapefile.uri), { recursive: true });
+
+            return res.status(400).send(result);
+        }
+
+        return res.send(result);
     }
 }
 

@@ -45,7 +45,7 @@ router.put('/institution', Institution.update);
 router.get('/contact/all', Contact.index);
 router.get('/contact/:id', Contact.show);
 router.post('/contact', Contact.create);
-router.patch('/contact/:id', Contact.toggleVisualize);
+router.get('/contact/toggle_check/:id', Contact.toggleVisualize);
 router.delete('/contact/:id', Contact.delete);
 
 // -> Rotas de Shapefile
@@ -56,7 +56,13 @@ router.put('/shapefile', Shapefile.update);
 router.delete('/shapefile/:id', Shapefile.delete);
 
 // -> Rotas de Contribution
+router.get('/contribution/all', Contribution.index);
+router.get('/contribution/:id', Contribution.show);
 router.post('/contribution', Contribution.create);
+router.put('/contribution', Contribution.create);
+router.delete('/contribution/:id', Contribution.delete);
+
+// -> Rotas de 
 
 // -> Rotas de Erro 404
 router.get('/ops', (req, res) => {

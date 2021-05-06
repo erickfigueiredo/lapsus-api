@@ -56,7 +56,7 @@ class InstitutionController {
             return res.status(400).send({ success: false, message: error.details[0].message });
 
         const form = req.body;
-        
+
         const inst = await Institution.findOne(form.id);
         if (inst.success) {
             const toUpdate = {};
