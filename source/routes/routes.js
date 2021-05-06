@@ -1,7 +1,6 @@
 const router = require('express').Router();
 
 //const Auth = require('../middlewares/Auth');
-
 const Administrator = require('../controllers/AdminController');
 const Category = require('../controllers/CategoryController');
 const Contact = require('../controllers/ContactController');
@@ -12,8 +11,7 @@ const Registered = require('../controllers/RegisteredController');
 const Shapefile = require('../controllers/ShapefileController');
 const Technician = require('../controllers/TechnicianController');
 
-// -> Rotas de Login
-router.post('/login', Login.login);
+// DEFINIÇÃO DE ROTAS
 
 // -> Rotas de Administrator
 router.get('/admin/all', Administrator.index);
@@ -21,6 +19,24 @@ router.get('/admin/:id', Administrator.show);
 router.post('/admin', Administrator.create);
 router.put('/admin', Administrator.update);
 router.delete('/admin/:id', Administrator.delete);
+
+// -> Rotas de Category
+router.get('/category/all', Category.index);
+router.get('/category/:id', Category.show);
+router.post('/category', Category.create);
+router.put('/category', Category.update);
+router.delete('/category/:id', Category.delete);
+
+// -> Rotas de Contact
+router.get('/contact/all', Contact.index);
+router.get('/contact/:id', Contact.show);
+router.post('/contact', Contact.create);
+router.get('/contact/toggle_check/:id', Contact.toggleVisualize);
+router.delete('/contact/:id', Contact.delete);
+
+// -> Rotas de Login
+router.post('/login', Login.login);
+
 
 // -> Rotas de Registered
 router.get('/registered/all', Registered.index);
@@ -42,19 +58,6 @@ router.get('/institution/:id', Institution.show);
 router.post('/institution', Institution.create);
 router.put('/institution', Institution.update);
 
-// -> Rotas de Category
-router.get('/category/all', Category.index);
-router.get('/category/:id', Category.show);
-router.post('/category', Category.create);
-router.put('/category', Category.update);
-router.delete('/category/:id', Category.delete);
-
-// -> Rotas de Contact
-router.get('/contact/all', Contact.index);
-router.get('/contact/:id', Contact.show);
-router.post('/contact', Contact.create);
-router.get('/contact/toggle_check/:id', Contact.toggleVisualize);
-router.delete('/contact/:id', Contact.delete);
 
 // -> Rotas de Shapefile
 router.get('/shapefile/all', Shapefile.index);

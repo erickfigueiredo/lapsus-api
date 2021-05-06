@@ -1,4 +1,8 @@
 
+//Fazer um hash de senha
+
+
+
 exports.seed = function(knex) {
   return knex('user').del()
     .then(function () {

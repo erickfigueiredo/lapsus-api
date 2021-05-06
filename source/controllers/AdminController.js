@@ -80,7 +80,7 @@ class AdminController {
 
             if (form.name && admin.user.name != form.name) toUpdate.name = form.name;
 
-            if (form.surname && admin.user.surname != form.surname) toUpdate.name = form.surname;
+            if (form.surname && admin.user.surname != form.surname) toUpdate.surname = form.surname;
 
             if (form.password) {
                 const salt = bcrypt.genSaltSync(saltRounds);
