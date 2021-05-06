@@ -2,14 +2,15 @@ const router = require('express').Router();
 
 //const Auth = require('../middlewares/Auth');
 
-const Login = require('../controllers/LoginController');
 const Administrator = require('../controllers/AdminController');
-const Registered = require('../controllers/RegisteredController');
-const Technician = require('../controllers/TechnicianController');
-const Institution = require('../controllers/InstitutionController');
+const Category = require('../controllers/CategoryController');
 const Contact = require('../controllers/ContactController');
-const Shapefile = require('../controllers/ShapefileController');
 const Contribution = require('../controllers/ContributionController');
+const Institution = require('../controllers/InstitutionController');
+const Login = require('../controllers/LoginController');
+const Registered = require('../controllers/RegisteredController');
+const Shapefile = require('../controllers/ShapefileController');
+const Technician = require('../controllers/TechnicianController');
 
 // -> Rotas de Login
 router.post('/login', Login.login);
@@ -40,6 +41,13 @@ router.get('/institution/all', Institution.index);
 router.get('/institution/:id', Institution.show);
 router.post('/institution', Institution.create);
 router.put('/institution', Institution.update);
+
+// -> Rotas de Category
+router.get('/category/all', Category.index);
+router.get('/category/:id', Category.show);
+router.post('/category', Category.create);
+router.put('/category', Category.update);
+router.delete('/category/:id', Category.delete);
 
 // -> Rotas de Contact
 router.get('/contact/all', Contact.index);
