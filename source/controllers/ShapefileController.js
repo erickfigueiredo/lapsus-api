@@ -6,6 +6,7 @@ const multerConfig = require('../config/Multer');
 
 const extract = require('extract-zip');
 const fs = require('fs');
+const path = require('path');
 
 class ShapefileController {
     static async show(req, res) {
@@ -138,11 +139,11 @@ class ShapefileController {
 
         const result = await Shapefile.delete(id);
 
-        if (!result.success) {
-            fs.rmdirSync(path.resolve(__dirname, '..', '..', 'shapefiles', shp.shapefile.uri), { recursive: true });
-
+        if (!result.success) 
             return res.status(400).send(result);
-        }
+    
+
+        fs.rmdirSync(path.resolve(__dirname, '..', '..', 'upload', 'shapefiles', shp.shapefile.uri), { recursive: true });
 
         return res.send(result);
     }
