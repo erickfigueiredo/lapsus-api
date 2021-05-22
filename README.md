@@ -29,16 +29,21 @@ LapsusVGI - API para Gerenciamento de informações de Desastres ligados à desl
 
 ### Funcionalidades prontas :dart:
 
-- [X] Validação Login
-- [X] CRUD Administrador
-- [X] CRUD Técnico
-- [X] CRUD Registrado
-- [ ] CRUD Moderador
-- [X] CRUD Instituição
+- [X] Login Validation
+- [X] CRUD Administrator 
+- [X] CRUD Technician
+- [X] CRUD Registered
+- [X] CRUD Moderator
+- [X] CRUD Institution
+- [X] CRUD Contact
 - [X] CRUD Shapefile
-- [ ] Adicionar
-- [ ] Adicionar
-- [ ] Adicionar
+- [X] CRUD Contribution
+- [ ] Initial Database population
+- [ ] Backup options
+- [ ] Middleware routes
+- [ ] Return only data required for requisition
+- [ ] Limit access to the API
+- [ ] ...
 
 
 ### Status de Requisição 💻
