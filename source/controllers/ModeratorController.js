@@ -35,16 +35,13 @@ class ModeratorController {
 
         const moderator = req.body;
 
+        const existAdder = await User.findOneByType(moderator.added_by, 'A');
+        if(!existAdder.success)
+            return res.status(404).send({success: false, message: 'Usuário adicionador inexistente! '});
+
         const existEmail = await User.findByEmail(moderator.email);
         if (existEmail.success)
             return res.status(409).send({ success: false, message: 'E-mail já cadastrado!' });
-
-        if (moderator.added_by) {
-            const existAdder = await User.findOneByType(moderator.added_by, 'A');
-            if (!existAdder.success)
-                return res.status(404).send({ success: false, message: 'Usuário adicionador inexistente!' });
-        } else delete moderator['added_by'];
-
 
         const salt = bcrypt.genSaltSync(saltRounds);
         moderator.password = bcrypt.hashSync(moderator.password, salt);

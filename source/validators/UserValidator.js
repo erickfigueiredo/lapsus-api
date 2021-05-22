@@ -40,17 +40,17 @@ const createValidate = (type = 'T') => {
             'any.required': 'Id da instituição é obrigatório!',
         });
         
-        case 'A': params.added_by = Joi.number().integer().min(1).required().messages({
+        case 'R': params.added_by = Joi.number().integer().min(1).messages({
+            'number.integer': 'Id adicionador deve ser um número inteiro!',
+            'number.min': 'Id adicionador não pode ser menor que 1!',
+        });
+        break;
+
+        default: params.added_by = Joi.number().integer().min(1).required().messages({
             'number.integer': 'Id adicionador deve ser um número inteiro!',
             'number.min': 'Id adicionador não pode ser menor que 1!',
             'number.empty': 'É necessário informar um Id adicionador!',
             'any.required': 'Id adicionador é obrigatório!'
-        });
-        break;
-
-        case 'R': params.added_by = Joi.number().integer().min(1).messages({
-            'number.integer': 'Id adicionador deve ser um número inteiro!',
-            'number.min': 'Id adicionador não pode ser menor que 1!',
         });
         break;
     }

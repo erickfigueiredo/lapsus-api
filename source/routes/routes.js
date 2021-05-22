@@ -7,6 +7,7 @@ const Contact = require('../controllers/ContactController');
 const Contribution = require('../controllers/ContributionController');
 const Institution = require('../controllers/InstitutionController');
 const Login = require('../controllers/LoginController');
+const Moderator = require('../controllers/ModeratorController');
 const Registered = require('../controllers/RegisteredController');
 const Shapefile = require('../controllers/ShapefileController');
 const Technician = require('../controllers/TechnicianController');
@@ -44,6 +45,13 @@ router.get('/registered/:id', Registered.show);
 router.post('/registered', Registered.create);
 router.put('/registered', Registered.update);
 router.delete('/registered/:id', Registered.delete);
+
+// -> Rotas de Moderator
+router.get('/moderator/all', Moderator.index);
+router.get('/moderator/:id', Moderator.show);
+router.post('/moderator', Moderator.create);
+router.put('/moderator', Moderator.update);
+router.delete('/moderator/:id', Moderator.delete);
 
 // -> Rotas de Technician
 router.get('/technician/all', Technician.index);
