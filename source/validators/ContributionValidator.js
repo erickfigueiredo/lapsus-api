@@ -15,7 +15,7 @@ const createValidate = () => {
             'boolean.empty': 'É necessário informar se há vítimas!',
             'boolean.required': 'É obrigatório informar se há vítimas!'
         }),
-        desc: Joi.string().min(3).max(500).messages({
+        desc: Joi.string().trim().min(3).max(500).messages({
             'string.min': 'Remetente deve conter no mínimo 3 letras!',
             'string.max': 'Remetente deve conter no máximo 500 letras!'
         }),

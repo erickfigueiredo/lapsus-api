@@ -3,15 +3,15 @@ const Joi = require('joi');
 const createValidate = (type = 'T') => {
 
     const params = {
-        name: Joi.string().regex(/^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).required().messages({
-            'string.pattern.base': 'Nome deve conter apenas letras!',
+        name: Joi.string().regex(/^(?!\s)(?!.*\s$)[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).required().messages({
+            'string.pattern.base': 'Nome deve conter apenas letras e não deve iniciar ou terminar com espaços!',
             'string.min': 'Nome deve conter no mínimo 2 letras!',
             'string.max': 'Nome deve conter no máximo 50 letras!',
             'string.empty': 'É necessário informar um nome!',
             'any.required': 'Nome é obrigatório!'
         }),
-        surname: Joi.string().regex(/^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).required().messages({
-            'string.pattern.base': 'Sobrenome deve conter apenas letras!',
+        surname: Joi.string().regex(/^(?!\s)(?!.*\s$)[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).required().messages({
+            'string.pattern.base': 'Sobrenome deve conter apenas letras e não deve iniciar ou terminar com espaços!',
             'string.min': 'Sobrenome deve conter no mínimo duas letras!',
             'string.max': 'Sobrenome deve conter no máximo cinquenta letras!',
             'string.empty': 'É necessário informar um sobrenome!',
@@ -67,17 +67,17 @@ const updateValidate = (isTech = false) => {
             'number.empty': 'É necessário informar um Id!',
             'any.required': 'Id é obrigatório!'
         }),
-        name: Joi.string().regex(/^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).messages({
-            'string.pattern.base': 'Nome deve conter apenas letras!',
+        name: Joi.string().regex(/^(?!\s)(?!.*\s$)[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).messages({
+            'string.pattern.base': 'Nome deve conter apenas letras e não deve iniciar ou terminar com espaços!',
             'string.min': 'Nome deve conter no mínimo 2 letras!',
             'string.max': 'Nome deve conter no máximo 50 letras!',
         }),
-        surname: Joi.string().regex(/^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).messages({
-            'string.pattern.base': 'Sobrenome deve conter apenas letras!',
+        surname: Joi.string().regex(/^(?!\s)(?!.*\s$)[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).messages({
+            'string.pattern.base': 'Sobrenome deve conter apenas letras e não deve iniciar ou terminar com espaços!',
             'string.min': 'Sobrenome deve conter no mínimo duas letras!',
             'string.max': 'Sobrenome deve conter no máximo cinquenta letras!',
         }),
-        email: Joi.string().email().max(100).messages({
+        email: Joi.string().trim().email().max(100).messages({
             'string.email': 'E-mail inválido!',
             'string.max': 'E-mail não pode ter mais de 100 caracteres!'
         }),

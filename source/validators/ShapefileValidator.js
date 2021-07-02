@@ -2,14 +2,14 @@ const Joi = require('joi');
 
 const createValidate = () => {
     return Joi.object().keys({
-        title: Joi.string().regex(/^[0-9A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(3).max(50).required().messages({
+        title: Joi.string().regex(/^(?!\s)(?!.*\s$)[0-9A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(3).max(50).required().messages({
             'string.pattern.base': 'Descrição deve conter apenas letras e números!',
             'string.min': 'Descrição deve conter no mínimo 3 caracteres!',
             'string.max': 'Descrição deve conter no máximo 50 caracteres!',
             'string.empty': 'É necessário informar um título!',
             'any.required': 'Título é obrigatório!'
         }),
-        desc: Joi.string().min(3).max(100).messages({
+        desc: Joi.string().trim().min(3).max(100).messages({
             'string.min': 'Descrição deve conter no mínimo 3 caracteres!',
             'string.max': 'Descrição deve conter no máximo 100 caracteres!'
         }),
@@ -30,12 +30,12 @@ const updateValidate = () => {
             'number.empty': 'É necessário informar um Id!',
             'any.required': 'Id é obrigatório!'
         }),
-        title: Joi.string().regex(/^[0-9A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(3).max(50).messages({
+        title: Joi.string().regex(/^(?!\s)(?!.*\s$)[0-9A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(3).max(50).messages({
             'string.pattern.base': 'Descrição deve conter apenas letras e números!',
             'string.min': 'Descrição deve conter no mínimo 3 caracteres!',
             'string.max': 'Descrição deve conter no máximo 50 caracteres!',
         }),
-        desc: Joi.string().min(3).max(100).messages({
+        desc: Joi.string().trim().min(3).max(100).messages({
             'string.min': 'Descrição deve conter no mínimo 3 caracteres!',
             'string.max': 'Descrição deve conter no máximo 100 caracteres!'
         })

@@ -2,7 +2,7 @@ const Joi = require('joi');
 
 const loginValidate = () => {
     return Joi.object().keys({
-        email: Joi.string().email().required().messages({
+        email: Joi.string().trim().email().required().messages({
             'string.email': 'E-mail inválido!',
             'string.empty': 'É necessário informar um e-mail!',
             'any.required': 'E-mail é obrigatório!'

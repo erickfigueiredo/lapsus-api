@@ -35,6 +35,8 @@ class RegisteredController {
 
         const registered = req.body;
 
+        console.log(registered);
+
         const existEmail = await User.findByEmail(registered.email);
         if (existEmail.success)
             return res.status(409).send({ success: false, message: 'E-mail já cadastrado!' });
