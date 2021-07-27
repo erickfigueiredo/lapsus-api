@@ -19,7 +19,7 @@ router.get('/admin/all', Administrator.index);
 router.get('/admin/:id', Administrator.show);
 router.post('/admin', Administrator.create);
 router.put('/admin', Administrator.update);
-router.delete('/admin/:id', Administrator.delete);
+router.delete('/admin/:id', Administrator.deactivate);
 
 // -> Rotas de Category
 router.get('/category/all', Category.index);
@@ -44,21 +44,21 @@ router.get('/registered/all', Registered.index);
 router.get('/registered/:id', Registered.show);
 router.post('/registered', Registered.create);
 router.put('/registered', Registered.update);
-router.delete('/registered/:id', Registered.delete);
+router.delete('/registered/:id', Registered.deactivate);
 
 // -> Rotas de Moderator
 router.get('/moderator/all', Moderator.index);
 router.get('/moderator/:id', Moderator.show);
 router.post('/moderator', Moderator.create);
 router.put('/moderator', Moderator.update);
-router.delete('/moderator/:id', Moderator.delete);
+router.delete('/moderator/:id', Moderator.deactivate);
 
 // -> Rotas de Technician
 router.get('/technician/all', Technician.index);
 router.get('/technician/:id', Technician.show);
 router.post('/technician', Technician.create);
 router.put('/technician', Technician.update);
-router.delete('/technician/:id', Technician.delete);
+router.delete('/technician/:id', Technician.deactivate);
 
 // -> Rotas de Institution
 router.get('/institution/all', Institution.index);
