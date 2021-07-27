@@ -14,7 +14,7 @@ class Contribution {
                     .where({ id_contribution: id });
 
 
-                if (annex[0]) { contrib[0].annex = annex; }
+                if (annex[0]) { contrib[0].annexes = annex; }
 
                 return { success: true, contribution: contrib[0] };
             }

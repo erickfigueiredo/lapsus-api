@@ -35,9 +35,6 @@ class ContributionController {
         const upload = multer(multerConfig('annexes', fileProps)).array('file', 5);
         upload(req, res, async (fail) => {
 
-            // Verificar o número de anexos enviados
-            console.log(req.files);
-
             if (fail instanceof multer.MulterError) {
                 return res.status(400).send({ success: false, message: 'Os arquivos não atendem aos requisitos necessários!' });
             }
@@ -74,7 +71,7 @@ class ContributionController {
 
             if (req.files) {
                 const files = req.files.map(file => { return { uri: file.path } });
-                console.log('Entrou')
+                
                 result = await Contribution.create(req.body, files);
             } else {
                 result = await Contribution.create(req.body);
@@ -96,6 +93,11 @@ class ContributionController {
 
         if (error) {
             return res.status(400).send({ success: false, message: error.details[0].message });
+        }
+
+        const existContribution = await Contribution.findOne(req.body.id);
+        if(!existContribution.success) {
+            return res.status(404).send(existContribution);
         }
 
         const existManager = await User.findOneManager(req.body.id_manager);

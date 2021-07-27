@@ -39,6 +39,12 @@ const createValidate = () => {
 
 const updateValidate = () => {
     return Joi.object().keys({
+        id: Joi.number().integer().min(1).required().messages({
+            'number.integer': 'Id deve ser um número inteiro!',
+            'number.min': 'Id não pode ser menor que 1!',
+            'number.empty': 'É necessário informar um Id!',
+            'any.required': 'Id é obrigatório!'
+        }),
         published: Joi.string().regex(/^[AR]{1}$/).required().messages({
             'string.pattern.base': 'Status de publicação deve ser aprovado ou reprovado!',
             'string.empty': 'É necessário informar um status de publicação!',

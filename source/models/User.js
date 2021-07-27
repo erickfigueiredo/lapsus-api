@@ -105,6 +105,8 @@ class User {
                     currentPage: page
                 });
 
+            console.log(user.data)
+
 
             return user.data[0] ? { success: true, user } : { success: false, message: 'Não foi possível recuperar os usuários / Usuários inexistentes!' }
         } catch (e) {

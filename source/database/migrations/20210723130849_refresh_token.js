@@ -2,12 +2,12 @@
 
 const tableName = 'refresh_token'
 
-exports.up = function(knex) {
+exports.up = async function(knex) {
     await knex.schema.createTable(tableName, function(table) {
         table.increments('id').primary().notNullable();
         table.string('hash', 255).notNullable();
-        table.integer('expires_in').unsigned.notNullable();
-        table.integer('id_user').unsigned.notNullable().references('id').inTable('user');
+        table.integer('expires_in').unsigned().notNullable();
+        table.integer('id_user').unsigned().notNullable().references('id').inTable('user');
     });
 };
 
