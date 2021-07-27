@@ -5,9 +5,9 @@ class CategoryController {
     static async show(req, res) {
         const id = req.params.id;
 
-        if (isNaN(parseInt(id)))
+        if (isNaN(parseInt(id))) {
             return res.status(400).send({ success: false, message: 'Id inválido!' });
-
+        }
 
         const ctg = await Category.findOne(id);
         return ctg.success ? res.send(ctg) : res.status(404).send(ctg);
@@ -16,54 +16,61 @@ class CategoryController {
     static async index(req, res) {
         let page = req.query.page;
 
-        if (isNaN(parseInt(page))) page = 1;
+        if (isNaN(parseInt(page))) { page = 1; }
 
         const ctgs = await Category.findAll(page);
         return ctgs.success ? res.send(ctgs) : res.status(404).send(ctgs);
     }
 
+    // Middleware Verificar nível usuário
     static async create(req, res) {
         const valid = CategoryValidator.createValidate();
         const { error } = valid.validate(req.body);
 
-        if (error)
+        if (error) {
             return res.status(400).send({ success: false, message: error.details[0].message });
+        }
 
-
+        req.body.name = req.body.name.toLowerCase();
         const existName = await Category.findByName(req.body.name);
-        if (existName.success)
+        if (existName.success) {
             return res.status(409).send({ success: false, message: 'Nome já cadastrado!' });
-
+        }
 
         const result = await Category.create(req.body);
         return result.success ? res.send(result) : res.status(400).send(result);
     }
 
+    // Middleware Verificar nível usuário
     static async update(req, res) {
         const valid = CategoryValidator.updateValidate();
         const { error } = valid.validate(req.body);
 
-        if (error)
+        if (error) {
             return res.status(400).send({ success: false, message: error.details[0].message });
-
+        }
 
         const form = req.body;
 
-        const ctg = await Category.findOne(form.id);
+        const existCategory = await Category.findOne(form.id);
 
-        if (ctg.success) {
+        if (existCategory.success) {
             const toUpdate = {};
 
-            if (form.name && ctg.category.name != form.name) {
-                const existName = await Category.findByName(form.name);
-                if (existName.success)
-                    return res.status(409).send({ success: false, message: 'Nome já cadastrado!' });
+            if (form.name) {
+                form.name = form.name.toLowerCase();
 
-
-                toUpdate.name = form.name;
+                if(existCategory.category.name != form.name) {
+                    const existName = await Category.findByName(form.name);
+                    if (existName.success){
+                        return res.status(409).send({ success: false, message: 'Nome já cadastrado!' });
+                    }
+    
+                    toUpdate.name = form.name;
+                }
             }
 
-            if (form.desc && ctg.category.desc != form.desc) toUpdate.desc = form.desc;
+            if (form.desc && existCategory.category.desc != form.desc) toUpdate.desc = form.desc;
 
             if (Object.keys(toUpdate).length) {
                 toUpdate.id = form.id;
@@ -71,11 +78,13 @@ class CategoryController {
                 const result = await Category.update(toUpdate);
                 return result.success ? res.send(result) : res.status(400).send(result);
             }
-            return res.send(ctg);
+            return res.send(existCategory);
         }
         return res.status(404).send({ success: false, message: 'Categoria inexistente!' });
     }
 
+    // Avaliar se tem onDelete Cascade
+    // Middleware Verificar nível usuário
     static async delete(req, res) {
         const id = req.params.id;
 

@@ -64,7 +64,6 @@ class Institution {
                 .table('institution')
                 .returning('*');
 
-
             return institution[0] ? { success: true, institution: institution[0] } : { success: false, message: 'Não foi possível cadastrar a instituição' };
         } catch (e) {
             Message.error(e);

@@ -10,8 +10,8 @@ const createValidate = () => {
             'any.required': 'Categoria é obrigatório!'
         }),
         desc: Joi.string().trim().min(3).max(500).messages({
-            'string.min': 'Descrição deve conter no mínimo 3 letras!',
-            'string.max': 'Descrição deve conter no máximo 500 letras!'
+            'string.min': 'Descrição deve conter no mínimo 3 caracteres!',
+            'string.max': 'Descrição deve conter no máximo 500 caracteres!'
         })
     })
 }
@@ -30,8 +30,8 @@ const updateValidate = () => {
             'string.max': 'Categoria deve conter no máximo 50 letras!',
         }),
         desc: Joi.string().trim().min(3).max(500).messages({
-            'string.min': 'Descrição deve conter no mínimo 3 letras!',
-            'string.max': 'Descrição deve conter no máximo 500 letras!'
+            'string.min': 'Descrição deve conter no mínimo 3 caracteres!',
+            'string.max': 'Descrição deve conter no máximo 500 caracteres!'
         })
     })
 }

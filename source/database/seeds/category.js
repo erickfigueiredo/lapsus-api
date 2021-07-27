@@ -1,24 +1,25 @@
+// Arquivo de População Inicial da Tabela Category
 
 exports.seed = function(knex) {
   return knex('category').del()
     .then(function () {
       return knex('category').insert([
-        {name: 'Afastamento do Solo de Fundações'},
-        {name: 'Aumento Repentino do Nível de Água'},
-        {name: 'Deformações em Estradas'},
-        {name: 'Deslizamento de Lama'},
-        {name: 'Deslizamento de Mata'},
-        {name: 'Deslizamento de Pedregulhos'},
-        {name: 'Diminuição Repentina do Nível de Água'},
-        {name: 'Inclinação de Objetos ou Estruturas'},
-        {name: 'Instalações Subterrâneas Quebradas'},
-        {name: 'Movimentação de Objetos ou Estruturas'},
-        {name: 'Nascentes'},
-        {name: 'Pedregulhos Recentes na Paisagem'},
-        {name: 'Portas e Janelas Tortas ou Emperradas'},
-        {name: 'Rachadura em Construções ou Calçadas'},
-        {name: 'Rompimento de Superfície do Solo pela Água'},
-        {name: 'Sons Incomuns sem Motivo Aparente'},
+        {name: 'afastamento do solo de fundações'},
+        {name: 'aumento repentino do nível de água'},
+        {name: 'deformações em estradas'},
+        {name: 'deslizamento de lama'},
+        {name: 'deslizamento de mata'},
+        {name: 'deslizamento de pedregulhos'},
+        {name: 'diminuição repentina do nível de água'},
+        {name: 'inclinação de objetos ou estruturas'},
+        {name: 'instalações subterrâneas quebradas'},
+        {name: 'movimentação de objetos ou estruturas'},
+        {name: 'nascentes'},
+        {name: 'pedregulhos recentes na paisagem'},
+        {name: 'portas e janelas Tortas ou Emperradas'},
+        {name: 'rachadura em construções ou calçadas'},
+        {name: 'rompimento de superfície do solo pela água'},
+        {name: 'sons incomuns sem motivo aparente'},
       ]);
     });
 };

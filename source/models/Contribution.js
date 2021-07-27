@@ -5,7 +5,7 @@ class Contribution {
     static async findOne(id) {
         try {
             const contrib = await knex.select('*')
-                .from('category')
+                .from('contribution')
                 .where({ id });
 
             if (contrib[0]) {
@@ -14,7 +14,7 @@ class Contribution {
                     .where({ id_contribution: id });
 
 
-                if (annex[0]) contrib[0].annex = annex;
+                if (annex[0]) { contrib[0].annex = annex; }
 
                 return { success: true, contribution: contrib[0] };
             }
@@ -51,7 +51,10 @@ class Contribution {
 
                     const id_contribution = contrib[0].id;
 
-                    for (file of files) {
+                    contrib[0].annexes = [];
+
+                    // Insert array knex (verificar)
+                    for (const file of files) {
                         const f = await trx('annex').insert({
                             uri: file.uri,
                             id_contribution
@@ -61,7 +64,7 @@ class Contribution {
                     }
 
                     return { success: true, contribution: contrib[0] };
-                })
+                });
             } else {
                 const contrib = await knex.insert(data)
                     .table('contribution')
@@ -89,33 +92,6 @@ class Contribution {
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Falha ao atualizar a contribuição!' };
-        }
-    }
-
-    static async delete(id) {
-        try {
-            const uriAnnexes = await knex.select('uri').from('annex').where({ id_contribution: id });
-
-            const result = await knex.transaction(async trx => {
-
-                if (uriAnnexes[0])
-                    await trx('annex')
-                        .where({ id_contribution: id })
-                        .del();
-
-
-                await trx('contribution').where({ id }).del();
-
-                return { success: true, message: 'Contribuição deletada com sucesso!' };
-            });
-
-            if(uriAnnexes[0]) result.uriAnnexes = uriAnnexes;
-
-            return result;
-        } catch (e) {
-            Message.warning(e);
-            return { success: false, message: 'Falha ao deletar a contribuição!' };
-
         }
     }
 }

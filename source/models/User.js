@@ -16,6 +16,20 @@ class User {
         }
     }
 
+    static async findOneManager(id) {
+        try {
+            const user = await knex.select('*')
+                .from('user')
+                .where({ id })
+                .andWhere('type', '!=', 'R');
+
+            return user[0] ? { success: true, user: user[0] } : { success: false, message: 'Não foi possível recuperar o gerente / Gerente inexistente!' };
+        } catch (e) {
+            Message.warning(e);
+            return { success: false, message: 'Houve um erro ao recuperar o gerente!' };
+        }
+    }
+
     static async findOneByType(id, type) {
         try {
             const user = await knex.select('*')
@@ -72,7 +86,7 @@ class User {
                     currentPage: page
                 });
 
-                
+
             return user.data[0] ? { sucess: true, user } : { success: false, message: 'Não foi possível recuperar os usuários / Usuários inexistentes!' };
         } catch (e) {
             Message.warning(e);
@@ -102,7 +116,7 @@ class User {
     static async countByType(type) {
         try {
             const count = await knex('user').count('id').where({ type, 'is_active': true });
-            
+
             return count[0].count;
         } catch (e) {
             Message.warning(e);

@@ -78,8 +78,7 @@ router.delete('/shapefile/:id', Shapefile.delete);
 router.get('/contribution/all', Contribution.index);
 router.get('/contribution/:id', Contribution.show);
 router.post('/contribution', Contribution.create);
-router.put('/contribution', Contribution.create);
-router.delete('/contribution/:id', Contribution.delete);
+router.put('/contribution', Contribution.evaluateStatus);
 
 // -> Rotas de Contribuição final
 

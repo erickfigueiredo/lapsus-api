@@ -1,8 +1,6 @@
-require('dotenv').config();
-
 const JWT = require('jsonwebtoken');
 
-const authenticate = (req, res, next) => {
+const ensureAuthentication = (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader)
@@ -20,15 +18,14 @@ const authenticate = (req, res, next) => {
     if (!/^Bearer$/i.test(scheme))
         return res.status(401).send({ success: false, message: 'Erro de token mal formatado!' });
 
-    JWT.verify(token, process.env.JWT_SECRET, (error, decoded)=> {
-        if(error) res.status(401).send({success: false, message: 'Erro de token inválido!'});
-
-        req.locals = decoded;
-
+    try {
+        JWT.verify(token, process.env.JWT_SECRET);
         return next();
-    });
+    } catch(error) {
+        return res.status(401).send({success: false, message: 'Token inválido!'}); 
+    }
 }
 
 module.exports = {
-    authenticate
+    ensureAuthentication
 };

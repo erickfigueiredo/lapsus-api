@@ -3,7 +3,7 @@ const Joi = require('joi');
 const createValidate = () => {
     return Joi.object().keys({
         occurrence: Joi.date().max('now').required().messages({
-            'date.max': 'Data não pode ser no futuro!',
+            'date.max': 'Ocorrência não pode ser no futuro!',
             'date.empty': 'É necessário informar uma data de ocorrência!',
             'date.required': 'Data de ocorrência é obrigatória!'
         }),
@@ -16,14 +16,15 @@ const createValidate = () => {
             'boolean.required': 'É obrigatório informar se há vítimas!'
         }),
         desc: Joi.string().trim().min(3).max(500).messages({
-            'string.min': 'Remetente deve conter no mínimo 3 letras!',
-            'string.max': 'Remetente deve conter no máximo 500 letras!'
+            'string.min': 'Descrição deve conter no mínimo 3 letras!',
+            'string.max': 'Descrição deve conter no máximo 500 letras!'
         }),
+        // Regex
         local: Joi.string().required().messages({
             'string.empty': 'É necessário informar as coordenadas!',
             'string.required': 'É obrigatório informar as coordenadas!'
         }),
-        id_category: Joi.number().integer().min(1).required().messages({
+        id_category: Joi.number().integer().min(2).required().messages({
             'number.integer': 'Id de categoria deve ser um número inteiro!',
             'number.min': 'Id de categoria não pode ser menor que 1!',
             'number.empty': 'É necessário informar um Id de categoria!',
