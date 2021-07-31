@@ -3,6 +3,8 @@ const User = require('../models/User');
 const InstitutionValidator = require('../validators/InstitutionValidator');
 
 class InstitutionController {
+
+    // Refatorar Tabela Address
     static async show(req, res) {
         const id = req.params.id;
 

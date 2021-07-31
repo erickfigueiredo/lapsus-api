@@ -88,14 +88,14 @@ class CategoryController {
     static async delete(req, res) {
         const id = req.params.id;
 
-        if (isNaN(parseInt(id)))
+        if (isNaN(parseInt(id))) {
             return res.status(400).send({ success: false, message: 'Id inválido!' });
-
+        }
 
         const existCategory = await Category.findOne(id);
-        if (!existCategory.success)
+        if (!existCategory.success) {
             return res.status(404).send(existCategory);
-
+        }
 
         const result = await Category.delete(id);
         return result.success ? res.send(result) : res.status(400).send(result);
