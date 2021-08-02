@@ -1,6 +1,6 @@
 // Tabela Etype_subenv
 
-const tableName = 'subenv';
+const tableName = 'etype_subenv';
 
 exports.up = async function (knex) {
     await knex.schema.createTable(tableName, function (table) {

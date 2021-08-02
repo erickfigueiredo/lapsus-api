@@ -1,0 +1,58 @@
+
+exports.seed = function (knex) {
+  // Inserts seed entries
+  return knex('etype_actornv2').insert([
+    { actor: 'ANI', actornv2: 'CON', desc: 'Animal Contaminado' },
+    { actor: 'ANI', actornv2: 'DEA', desc: 'Animal Morto' },
+    { actor: 'ANI', actornv2: 'DGR', desc: 'Animal Potencialmente perigoso' },
+    { actor: 'ANI', actornv2: 'FRM', desc: 'Animal de Fazenda' },
+    { actor: 'ANI', actornv2: 'HRD', desc: 'Grande Grupo de Animais' },
+    { actor: 'ANI', actornv2: 'INJ', desc: 'Animal Machucado' },
+    { actor: 'ANI', actornv2: 'LIV', desc: 'Animal Vivo' },
+    { actor: 'ANI', actornv2: 'PET', desc: 'Animal Doméstico' },
+    { actor: 'ANI', actornv2: 'PRO', desc: 'Animal de Espécie Protegida' },
+    { actor: 'ANI', actornv2: 'SPC', desc: 'Animal com Expertise Necessária para Lidar' },
+    { actor: 'ANI', actornv2: 'WLD', desc: 'Animal Selvagem' },
+
+    { actor: 'BEV', actornv2: 'ASR', desc: 'Ambiente para Montagem e Recreação' },
+    { actor: 'BEV', actornv2: 'IND', desc: 'Ambiente Industrial' },
+    { actor: 'BEV', actornv2: 'NRES', desc: 'Depósitos e Ambientes Não Residenciais' },
+    { actor: 'BEV', actornv2: 'OFF', desc: 'Escritório' },
+    { actor: 'BEV', actornv2: 'OTH', desc: 'Outro' },
+    { actor: 'BEV', actornv2: 'RESDW', desc: 'Residências Habitacionais ???' },
+    { actor: 'BEV', actornv2: 'RESIN', desc: 'Instituições Residênciais ???' },
+    { actor: 'BEV', actornv2: 'RESINT', desc: 'Residencial Institucional ???' },
+    { actor: 'BEV', actornv2: 'RESOTH', desc: 'Outras Residências' },
+    { actor: 'BEV', actornv2: 'SHP', desc: 'Shoppings e Comércios' },
+
+    { actor: 'PPL', actornv2: '1', desc: 'Pessoa' },
+    { actor: 'PPL', actornv2: 'ADU', desc: 'Pessoa Adulta' },
+    { actor: 'PPL', actornv2: 'CHD', desc: 'Criança' },
+    { actor: 'PPL', actornv2: 'CNT', desc: 'Pessoa Contaminada' },
+    { actor: 'PPL', actornv2: 'CWD', desc: 'Grupo de Pessoas Atuando em Conjunto' },
+    { actor: 'PPL', actornv2: 'DED', desc: 'Pessoa Morta' },
+    { actor: 'PPL', actornv2: 'EVC', desc: 'Pessoa Evacuada' },
+    { actor: 'PPL', actornv2: 'GND', desc: 'Gender ???' },
+    { actor: 'PPL', actornv2: 'GRP', desc: 'Grupo de Pessoas' },
+    { actor: 'PPL', actornv2: 'HST', desc: 'Protestantes' },
+    { actor: 'PPL', actornv2: 'INT', desc: 'Pessoas Intoxicadas' },
+    { actor: 'PPL', actornv2: 'OTH', desc: 'Outros' },
+    { actor: 'PPL', actornv2: 'PRS', desc: 'Prisioneiros' },
+    { actor: 'PPL', actornv2: 'SNS', desc: 'Pessoas Sensíveis Culturalmente ou Politicamente' },
+    { actor: 'PPL', actornv2: 'VIO', desc: 'Pessoa com Comportamento Violento' },
+    { actor: 'PPL', actornv2: 'VLN', desc: 'Pessoa Vulnerável' },
+    { actor: 'PPL', actornv2: 'WTN', desc: 'Testemunha' },
+
+    { actor: 'VEH', actornv2: 'AIR', desc: 'Veículo Aéreo' },
+    { actor: 'VEH', actornv2: 'ANI', desc: 'Veículo Animal' },
+    { actor: 'VEH', actornv2: 'BIC', desc: 'Bicicleta' },
+    { actor: 'VEH', actornv2: 'CAR', desc: 'Carro' },
+    { actor: 'VEH', actornv2: 'EMG', desc: 'Veículo de Emergência' },
+    { actor: 'VEH', actornv2: 'MBK', desc: 'Motocicleta' },
+    { actor: 'VEH', actornv2: 'MIL', desc: 'Militar' },
+    { actor: 'VEH', actornv2: 'OTH', desc: 'Outros' },
+    { actor: 'VEH', actornv2: 'TRK', desc: 'Caminhão' },
+    { actor: 'VEH', actornv2: 'TRN', desc: 'Trem' },
+    { actor: 'VEH', actornv2: 'VES', desc: 'Embarcação' }
+  ]);
+};

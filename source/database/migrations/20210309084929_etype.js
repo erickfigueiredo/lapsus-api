@@ -7,7 +7,7 @@ exports.up = async function (knex) {
         table.string('id_event', 40).notNullable().references('id').inTable('event').primary();
         table.string('subenv', 10).notNullable();
         table.string('env', 10).notNullable();
-        table.foreign(['subenv', 'env']).references(['subenv', 'env']).inTable('subenv');
+        table.foreign(['subenv', 'env']).references(['subenv', 'env']).inTable('etype_subenv');
         table.timestamps(false, true);
     });
 
