@@ -36,6 +36,7 @@ class ContributionController {
         upload(req, res, async (fail) => {
 
             if (fail instanceof multer.MulterError) {
+                console.log(fail)
                 return res.status(400).send({ success: false, message: 'Os arquivos não atendem aos requisitos necessários!' });
             }
 

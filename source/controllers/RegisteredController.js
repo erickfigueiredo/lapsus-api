@@ -71,7 +71,7 @@ class RegisteredController {
         if (registered.success && registered.user.is_active) {
             const toUpdate = {};
 
-            if (form.email && registered.user.email != form.email) {
+            if (form.email && registered.user.email !== form.email) {
 
                 const existEmail = await User.findByEmail(form.email);
                 if (existEmail.success)
@@ -81,9 +81,9 @@ class RegisteredController {
                 toUpdate.email = form.email;
             }
 
-            if (form.name && registered.user.name != form.name) toUpdate.name = form.name;
+            if (form.name && registered.user.name !== form.name) toUpdate.name = form.name;
 
-            if (form.surname && registered.user.surname != form.surname) toUpdate.surname = form.surname;
+            if (form.surname && registered.user.surname !== form.surname) toUpdate.surname = form.surname;
 
             if (form.password) {
                 const salt = bcrypt.genSaltSync(saltRounds);

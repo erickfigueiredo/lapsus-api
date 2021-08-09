@@ -75,7 +75,7 @@ class TechnicianController {
         if (tech.success && tech.user.is_active) {
             const toUpdate = {};
 
-            if (form.email && tech.user.email != form.email) {
+            if (form.email && tech.user.email !== form.email) {
                 const existEmail = await User.findByEmail(form.email);
                 if (existEmail.success) {
                     return res.status(409).send({ success: false, message: 'E-mail já cadastrado!' });
@@ -84,7 +84,7 @@ class TechnicianController {
                 toUpdate.email = form.email;
             }
 
-            if (form.id_institution && tech.user.id_institution != form.id_institution) {
+            if (form.id_institution && tech.user.id_institution !== form.id_institution) {
                 const existInstitution = await Institution.findOne(form.id_institution);
                 if (!existInstitution.success) {
                     return res.status(404).send({ success: false, message: 'Instituição inexistente!' });
@@ -93,9 +93,9 @@ class TechnicianController {
                 toUpdate.id_institution = form.id_institution;
             }
 
-            if (form.name && admin.user.name != form.name) { toUpdate.name = form.name };
+            if (form.name && admin.user.name !== form.name) { toUpdate.name = form.name };
 
-            if (form.surname && admin.user.surname != form.surname) { toUpdate.name = form.surname };
+            if (form.surname && admin.user.surname !== form.surname) { toUpdate.name = form.surname };
 
             if (form.password) {
                 const salt = bcrypt.genSaltSync(saltRounds);

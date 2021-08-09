@@ -9,7 +9,7 @@ const ensureAuthentication = (req, res, next) => {
 
     const tokenParts = authHeader.split(' ');
 
-    if (parts.length !== 2)
+    if (parts.length !=== 2)
         return res.status(401).send({ success: false, message: 'Erro no token!' });
 
 

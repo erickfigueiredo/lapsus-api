@@ -21,7 +21,7 @@ class User {
             const user = await knex.select('*')
                 .from('user')
                 .where({ id })
-                .andWhere('type', '!=', 'R');
+                .andWhere('type', '!==', 'R');
 
             return user[0] ? { success: true, user: user[0] } : { success: false, message: 'Não foi possível recuperar o gerente / Gerente inexistente!' };
         } catch (e) {

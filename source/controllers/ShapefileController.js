@@ -55,7 +55,8 @@ class ShapefileController {
                 return res.status(400).send({ success: false, message: error.details[0].message });
             }
 
-            const existAdder = User.findOneByType(added_by, 'A');
+            const existAdder = await User.findOneByType(req.body.added_by, 'A');
+            console.log(existAdder)
             if (!existAdder.success) {
                 fs.unlinkSync(`${req.file.path}`);
                 return res.status(404).send({ success: false, message: 'Usuário adicionador inexistente!' });
@@ -63,7 +64,7 @@ class ShapefileController {
 
             req.body.title = req.body.title.toLowerCase();
 
-            const existTitle = Shapefile.findByTitle(req.body.title);
+            const existTitle = await Shapefile.findByTitle(req.body.title);
             if (existTitle.success) {
                 fs.unlinkSync(`${req.file.path}`);
                 return res.status(409).send({ success: false, message: 'Título já cadastrado!' });
@@ -112,7 +113,7 @@ class ShapefileController {
             if (form.title) {
                 form.title = form.title.toLowerCase();
 
-                if (shp.shapefile.title != form.title) {
+                if (shp.shapefile.title !== form.title) {
                     const existTitle = await Shapefile.findByTitle(form.title);
 
                     if (existTitle.success) {
@@ -123,7 +124,7 @@ class ShapefileController {
                 }
             }
 
-            if (form.desc && shp.shapefile.desc != form.desc) { toUpdate.desc = form.desc };
+            if (form.desc && shp.shapefile.desc !== form.desc) { toUpdate.desc = form.desc };
 
             if (Object.keys(toUpdate).length) {
                 toUpdate.id = form.id;

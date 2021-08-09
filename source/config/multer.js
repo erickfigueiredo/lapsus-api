@@ -11,6 +11,7 @@ const multerConfig = (dir, fileProps) => {
                 callback(null, path.resolve(__dirname, '..', '..', 'upload', dir));
             },
             filename(req, file, callback) {
+                console.log(file)
                 const ext = file.mimetype.split('/');
 
                 const date = new Date();

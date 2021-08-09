@@ -60,7 +60,7 @@ class CategoryController {
             if (form.name) {
                 form.name = form.name.toLowerCase();
 
-                if(existCategory.category.name != form.name) {
+                if(existCategory.category.name !== form.name) {
                     const existName = await Category.findByName(form.name);
                     if (existName.success){
                         return res.status(409).send({ success: false, message: 'Nome já cadastrado!' });
@@ -70,7 +70,7 @@ class CategoryController {
                 }
             }
 
-            if (form.desc && existCategory.category.desc != form.desc) toUpdate.desc = form.desc;
+            if (form.desc && existCategory.category.desc !== form.desc) toUpdate.desc = form.desc;
 
             if (Object.keys(toUpdate).length) {
                 toUpdate.id = form.id;

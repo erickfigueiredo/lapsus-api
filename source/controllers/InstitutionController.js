@@ -68,7 +68,7 @@ class InstitutionController {
         if (inst.success) {
             const toUpdate = {};
 
-            if (form.email && inst.institution.email != form.email) {
+            if (form.email && inst.institution.email !== form.email) {
                 const existEmail = await Institution.findByEmail(form.email);
                 if (existEmail.success) {
                     return res.status(409).send({ success: false, message: 'E-mail já cadastrado!' });
@@ -77,7 +77,7 @@ class InstitutionController {
                 toUpdate.email = form.email;
             }
 
-            if (form.phone && inst.institution.phone != form.phone) {
+            if (form.phone && inst.institution.phone !== form.phone) {
                 const existPhone = await Institution.findByPhone(form.phone);
                 if (existPhone.success) {
                     return res.status(409).send({ success: false, message: 'Telefone já cadastrado!' });
@@ -86,9 +86,9 @@ class InstitutionController {
                 toUpdate.phone = form.phone;
             }
 
-            if (form.name && inst.institution.name != form.name) { toUpdate.name = form.name };
+            if (form.name && inst.institution.name !== form.name) { toUpdate.name = form.name };
 
-            if (form.address && inst.institution.address != form.address) { toUpdate.address = form.address };
+            if (form.address && inst.institution.address !== form.address) { toUpdate.address = form.address };
 
             if (Object.keys(toUpdate).length) {
                 toUpdate.id = form.id;

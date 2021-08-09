@@ -69,7 +69,7 @@ class AdminController {
         if (admin.success && admin.user.is_active) {
             const toUpdate = {};
 
-            if (form.email && admin.user.email != form.email) {
+            if (form.email && admin.user.email !== form.email) {
                 const existEmail = await User.findByEmail(form.email);
                 if (existEmail.success) {
                     return res.status(409).send({ success: false, message: 'E-mail já cadastrado!' });
@@ -78,9 +78,9 @@ class AdminController {
                 toUpdate.email = form.email;
             }
 
-            if (form.name && admin.user.name != form.name) { toUpdate.name = form.name };
+            if (form.name && admin.user.name !== form.name) { toUpdate.name = form.name };
 
-            if (form.surname && admin.user.surname != form.surname) { toUpdate.surname = form.surname };
+            if (form.surname && admin.user.surname !== form.surname) { toUpdate.surname = form.surname };
 
             if (form.password) {
                 const salt = bcrypt.genSaltSync(saltRounds);

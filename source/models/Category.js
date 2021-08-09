@@ -87,6 +87,10 @@ class Category {
             return existCategory.success ? { success: false, message: 'Não foi possível deletar a categoria!' } : { success: true, message: 'Categoria deletada com successo!' };
         } catch (e) {
             Message.warning(e);
+            if(e.toString().indexOf('violates foreign key constraint') !== -1){
+                return {success: false, message: 'Não é possível deletar esse dado, pois existem informações associadas!'};
+            }
+
             return { success: false, message: 'Falha ao deletar categoria!' };
         }
     }

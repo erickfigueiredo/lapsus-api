@@ -1,5 +1,7 @@
 const router = require('express').Router();
 
+const {a} = require('../middlewares/teste');
+
 //const Auth = require('../middlewares/Auth');
 const Administrator = require('../controllers/AdminController');
 const Category = require('../controllers/CategoryController');
@@ -11,6 +13,7 @@ const Moderator = require('../controllers/ModeratorController');
 const Registered = require('../controllers/RegisteredController');
 const Shapefile = require('../controllers/ShapefileController');
 const Technician = require('../controllers/TechnicianController');
+const TSO2 = require('../controllers/TSO2Controller');
 
 // DEFINIÇÃO DE ROTAS
 
@@ -77,10 +80,11 @@ router.delete('/shapefile/:id', Shapefile.delete);
 // -> Rotas de Contribution
 router.get('/contribution/all', Contribution.index);
 router.get('/contribution/:id', Contribution.show);
-router.post('/contribution', Contribution.create);
+router.post('/contribution', a, Contribution.create);
 router.put('/contribution', Contribution.evaluateStatus);
 
-// -> Rotas de Contribuição final
+// -> Rotas de TSO2
+router.post('/tso2', TSO2.create)
 
 // -> Rotas de Backup
 

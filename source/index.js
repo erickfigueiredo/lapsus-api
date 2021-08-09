@@ -20,6 +20,15 @@ app.use(morgan('dev'));
 // Raiz usará o módulo router
 app.use('/', router);
 
+app.use((err, req, res, next) => {
+    if (err) {
+        console.error(err.stack);
+        return res.status(500).send({ success: false, message: 'Erro interno no servidor!' });
+    }
+
+    return next();
+});
+
 app.listen(process.env.APP_PORT, (error) => {
     Message.release('\nVersão: 0.0.1')
     Message.success(`\nServidor rodando na porta ${process.env.APP_PORT}\n`);

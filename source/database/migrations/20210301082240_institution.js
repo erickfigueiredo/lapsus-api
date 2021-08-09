@@ -9,6 +9,7 @@ exports.up = async function (knex) {
         table.string('email', 100).notNullable().unique();
         table.string('phone', 12).notNullable().unique();
         table.string('address', 256).notNullable();
+        // Alterar a forma de representar o endereço para obter informações mais interessantes sobre esse 
         table.timestamps(false, true);
     });
 
