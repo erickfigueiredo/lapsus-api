@@ -23,7 +23,7 @@ const multerConfig = (dir, fileProps) => {
             }
         }),
         limits: {
-            files: fileProps.numFiles
+            //files: fileProps.numFiles
         },
         fileFilter(req, file, callback) {
             if (fileProps.allowedMimes.includes(file.mimetype))

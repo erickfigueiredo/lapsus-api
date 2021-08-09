@@ -24,7 +24,8 @@ const createValidate = () => {
                 'date.empty': 'Momento da ocorrência não pode ser vazio!'
             }), //momento da occorência
             // verificar espaços vazios
-            freetext: Joi.string().min(3).max(500).messages({
+            freetext: Joi.string().regex(/^\S$|^\S[ \S]*\S$/).min(3).max(500).messages({
+                'string.pattern.base': 'Espaços não são permitidos no início ou no fim!',
                 'string.min': 'Descrição do evento não pode ter menos que 3 caracteres!',
                 'string.max': 'Descrição do evento não pode ter mais que 500 caracteres!',
                 'string.empty': 'Descrição do evento não pode ser vazia!'
@@ -37,15 +38,15 @@ const createValidate = () => {
                 'number.empty': 'Escala não pode ser vazia'
             }),
             risk_assessmnt: Joi.string().regex().messages({
-                'string.pattern': '',
+                'string.pattern.base': '',
                 'string.empty': ''
             }),
             status: Joi.string().regex().messages({
-                'string.pattern': '',
+                'string.pattern.base': '',
                 'string.empty': ''
             }),
             cause: Joi.string().regex().messages({
-                'string.pattern': '',
+                'string.pattern.base': '',
                 'string.empty': ''
             })
 
@@ -55,14 +56,15 @@ const createValidate = () => {
 
         context: Joi.object().keys({
             // verificar espaços vazios
-            freetext: Joi.string().min(3).max(500).messages({
+            freetext: Joi.string().regex(/^\S$|^\S[ \S]*\S$/).min(3).max(500).messages({
+                'string.pattern.base': 'Espaços não são permitidos no início ou no fim!',
                 'string.min': 'Descrição do contexto não pode ter menos que 3 caracteres!',
                 'string.max': 'Descrição do contexto não pode ter mais que 500 caracteres!',
                 'string.empty': 'Descrição do contexto não pode ser vazia!'
             }),
             // Verificar se é obrigatorio
             urgency: Joi.string().regex().messages({
-                'string.pattern': '',
+                'string.pattern.base': '',
                 'string.empty': 'Urgência não pode ser vazia!'
             })
         }),
@@ -77,11 +79,11 @@ const createValidate = () => {
                             'any.required': 'Tipo de local é necessário quando um subtipo é informado!'
                         })
                     }).messages({
-                        'string.pattern': 'Código de tipo de local inválido!',
+                        'string.pattern.base': 'Código de tipo de local inválido!',
                         'string.empty': 'Tipo de local não pode ser vazio!'
                     }),
                 subloctype: Joi.string().regex(/^[A-Z]{3,6}$/).messages({
-                    'string.pattern': 'Código de sublocal inválido!',
+                    'string.pattern.base': 'Código de sublocal inválido!',
                     'string.empty': 'Tipo de sublocal não pode ser vazio!'
                 })
             })
@@ -97,7 +99,7 @@ const createValidate = () => {
                             'any.required': 'É necessário informar o ator base!'
                         })
                     }).messages({
-                        'string.pattern': 'Código de ator inválido!',
+                        'string.pattern.base': 'Código de ator inválido!',
                         'string.empty': 'Ator não pode ser vazio!'
                     }),
                 actornv2: Joi.string().regex(/^[0-9A-Z]{1,6}$/).when(
@@ -108,12 +110,12 @@ const createValidate = () => {
                             'any.required': 'É necessário informar um ator nível 2!'
                         })
                     }).messages({
-                        'string.pattern': 'Código de ator nível 2 inválido',
+                        'string.pattern.base': 'Código de ator nível 2 inválido',
                         'string.empty': 'Ator nível 2 não pode ser vazio!'
                     }),
                 actorNv3: Joi.string().regex(/^[0-9A-Z]{2,6}$/)
                     .messages({
-                        'string.pattern': 'Código de ator nível 3 inválido',
+                        'string.pattern.base': 'Código de ator nível 3 inválido',
                         'string.empty': 'Ator nível 3 não pode ser vazio!'
                     })
             })
@@ -160,7 +162,12 @@ const createValidate = () => {
                 datime: Joi.date().max('now').messages({
                     'date.max': 'Momento da declaração de situação do local não pode ser no futuro!'
                 }),
-                freetext: Joi,
+                freetext: Joi.string().regex(/^\S$|^\S[ \S]*\S$/).min(3).max(500).messages({
+                    'string.pattern.base': 'Espaços não são permitidos no início ou no fim!',
+                    'string.min': 'Descrição de egeo não pode ter menos que 3 caracteres!',
+                    'string.max': 'Descrição de egeo não pode ter mais que 500 caracteres!',
+                    'string.empty': 'Descrição de egeo não pode ser vazia!'
+                }),
                 type: Joi.string().regex(/^[A-Z]{3,5}$/).when(
                     'subtype',
                     {
@@ -170,11 +177,11 @@ const createValidate = () => {
                         })
                     }
                 ).messages({
-                    'string.pattern': 'Código de tipo de egeo inválido!',
+                    'string.pattern.base': 'Código de tipo de egeo inválido!',
                     'string.empty': 'Tipo de egeo não pode ser vazio!'
                 }),
                 subtype: Joi.string().regex(/^[A-Z]{2,7}$/).messages({
-                    'string.pattern': 'Código do subtipo de egeo inválido!',
+                    'string.pattern.base': 'Código do subtipo de egeo inválido!',
                     'string.empty': 'Subtipo de egeo não pode ser vazio!'
                 })
             })
@@ -208,11 +215,11 @@ const createValidate = () => {
                         })
                     }
                 ).messages({
-                    'string.pattern': 'Código de tempo inválido!',
+                    'string.pattern.base': 'Código de tempo inválido!',
                     'string.empty': 'Tempo não pode ser vazio'
                 }),
                 subWeather: Joi.string().regex(/^[A-Z]{3,6}$/).messages({
-                    'string.pattern': 'Código de subtempo inválido!',
+                    'string.pattern.base': 'Código de subtempo inválido!',
                     'string.empty': 'Subtempo não pode ser vazio!'
                 })
             })

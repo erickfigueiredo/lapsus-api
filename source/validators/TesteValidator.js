@@ -2,8 +2,9 @@ const Joi = require('joi');
 
 const createValidate = () => {
     return Joi.object().keys({
-        datime: Joi.date().max('now').messages({
-            'date.max': 'Momento da identificação não pode ser no futuro!'
+        desc: Joi.string().email().messages({
+            'string.email': 'Espaços no inicio ou no fim não são permitidos'
+            
         }),
     })
 }

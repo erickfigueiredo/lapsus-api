@@ -4,6 +4,9 @@ const TesteValidator = require('../validators/TesteValidator');
 
 const {v4: uuidV4} = require('uuid');
 
+const multer = require('multer');
+const multerConfig = require('../config/Multer');
+
 class TSO2Controller {
     static async index(req, res) {
 
@@ -51,18 +54,16 @@ class TSO2Controller {
      */
 
     static async create(req, res) {
-        const valid = TesteValidator.createValidate();
+         const valid = TesteValidator.createValidate();
         const {error} = valid.validate(req.body);
 
         if (error) {
             return res.status(400).send({ success: false, message: error.details[0].message });
-        }
+        } 
 
+        console.log(req.body.desc)
 
-
-    
-
-        
+        throw new Error('Isso é um erro')
 
         
 

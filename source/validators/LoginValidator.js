@@ -4,11 +4,11 @@ const loginValidate = () => {
     return Joi.object().keys({
         email: Joi.string().trim().email().required().messages({
             'string.email': 'E-mail inválido!',
-            'string.empty': 'É necessário informar um e-mail!',
+            'string.empty': 'Campo e-mail não pode ser vazio!',
             'any.required': 'E-mail é obrigatório!'
         }),
         password: Joi.string().required().messages({
-            'string.empty': 'É necessário informar uma senha!',
+            'string.empty': 'Campo senha não pode ser vazio!',
             'any.required': 'Senha é obrigatória!'
         })
     })
