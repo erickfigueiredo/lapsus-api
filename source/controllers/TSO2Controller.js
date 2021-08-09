@@ -68,7 +68,6 @@ class TSO2Controller {
         
 
 
-        return res.end();
     }
 }
 
