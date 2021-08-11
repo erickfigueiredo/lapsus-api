@@ -2,7 +2,7 @@ const TSO2 = require('../models/TSO2');
 const TSO2Validator = require('../validators/TSO2Validator');
 const TesteValidator = require('../validators/TesteValidator');
 
-const {v4: uuidV4} = require('uuid');
+const { v4: uuidV4 } = require('uuid');
 
 const multer = require('multer');
 const multerConfig = require('../config/Multer');
@@ -54,20 +54,32 @@ class TSO2Controller {
      */
 
     static async create(req, res) {
-         const valid = TesteValidator.createValidate();
-        const {error} = valid.validate(req.body);
+        const fileProps = { allowedMimes: ['image/png', 'image/jpeg', 'audio/mpeg', 'video/mp4'], numFiles: 5 };
 
-        if (error) {
-            return res.status(400).send({ success: false, message: error.details[0].message });
-        } 
+        const upload = multer(multerConfig('annexes', fileProps)).array('file', 5);
+        upload(req, res, async (fail) => {
 
-        console.log(req.body.desc)
+            if (fail instanceof multer.MulterError) {
+                console.log(fail)
+                return res.status(400).send({ success: false, message: 'Os arquivos não atendem aos requisitos necessários!' });
+            }
 
-        throw new Error('Isso é um erro')
+            const valid = TSO2Validator.createValidate();
+            const { error } = valid.validate(req.body);
 
-        
+            if (error) {
+                // Deleta os arquivos se houve upload
+                // Interessante mudar para UUID
+
+                return res.status(400).send({ success: false, message: error.details[0].message });
+            }
+
+            // Se deu tudo certo com a validação, verificamos a existencia das informações no banco de dados;
+            
 
 
+            console.log(req.files)
+        });
     }
 }
 
@@ -84,7 +96,7 @@ let a = {
 
     certainty: '', //0 a 100
 
-    urgency: '', 
+    urgency: '',
 
     event_status: '',
     event_risk: '',
@@ -126,7 +138,7 @@ let a = {
     freetext: '',
 
     contrib_assoc: '',
-    
+
     added_by: '',
     position: ''
 }

@@ -8,7 +8,7 @@ const Category = require('../controllers/CategoryController');
 const Contact = require('../controllers/ContactController');
 const Contribution = require('../controllers/ContributionController');
 const Institution = require('../controllers/InstitutionController');
-const Login = require('../controllers/LoginController');
+const Access = require('../controllers/AccessController');
 const Moderator = require('../controllers/ModeratorController');
 const Registered = require('../controllers/RegisteredController');
 const Shapefile = require('../controllers/ShapefileController');
@@ -38,8 +38,8 @@ router.post('/contact', Contact.create);
 router.get('/contact/toggle_check/:id', Contact.toggleVisualize);
 router.delete('/contact/:id', Contact.delete);
 
-// -> Rotas de Login
-router.post('/login', Login.login);
+// -> Rotas de Access
+router.post('/login', Access.login);
 
 
 // -> Rotas de Registered
