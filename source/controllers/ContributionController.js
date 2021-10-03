@@ -68,6 +68,8 @@ class ContributionController {
                 return res.status(404).send(existCategory);
             }
 
+            // Aqui Tentamos Capturar o endereço corretamente
+
             let result = null;
 
             if (req.files) {

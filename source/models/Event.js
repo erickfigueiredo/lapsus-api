@@ -85,6 +85,7 @@ class EventTypeActor {
 
 
 module.exports = {
+    EventStatus,
     EventRiskAssessment,
     EventCause,
     EventLocType,

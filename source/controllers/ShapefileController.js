@@ -23,26 +23,26 @@ class ShapefileController {
     }
 
     static async index(req, res) {
-        let page = req.query.page;
-
-        if (isNaN(parseInt(page))) { page = 1 };
-
-        const shps = await Shapefile.findAll(page);
+        let method = req.query.withURI;
+        
+        if(method !== 'y') method = 'n';
+        
+        const shps = await Shapefile.findAll(method);
         return shps.success ? res.send(shps) : res.status(404).send(shps);
     }
 
     static async create(req, res) {
-        const fileProps = { allowedMimes: 'application/zip', numFiles: 1 };
+        const fileProps = { allowedMimes: ['application/zip', 'application/x-zip-compressed'], numFiles: 1 };
 
         const upload = multer(multerConfig('shapefiles', fileProps)).single('file');
         upload(req, res, async (fail) => {
 
-            if (!req.file) {
-                return res.send({ success: false, message: 'É necessário submeter um arquivo!' });
-            }
-
             if (fail instanceof multer.MulterError) {
                 return res.status(400).send({ success: false, message: 'Extensão de arquivo inválida!' });
+            }
+
+            if (!req.file) {
+                return res.status(400).send({ success: false, message: 'É necessário submeter um arquivo!' });
             }
 
             req.body = JSON.parse(req.body.data);
@@ -56,7 +56,6 @@ class ShapefileController {
             }
 
             const existAdder = await User.findOneByType(req.body.added_by, 'A');
-            console.log(existAdder)
             if (!existAdder.success) {
                 fs.unlinkSync(`${req.file.path}`);
                 return res.status(404).send({ success: false, message: 'Usuário adicionador inexistente!' });

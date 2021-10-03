@@ -64,6 +64,7 @@ router.put('/technician', Technician.update);
 router.delete('/technician/:id', Technician.deactivate);
 
 // -> Rotas de Institution
+router.get('/institution/all/detailed', Institution.indexDetailed);
 router.get('/institution/all', Institution.index);
 router.get('/institution/:id', Institution.show);
 router.post('/institution', Institution.create);

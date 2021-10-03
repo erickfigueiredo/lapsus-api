@@ -2,46 +2,45 @@ const knex = require('../database/knex');
 const Message = require('../utils/Message');
 
 class Category {
-
     static async findOne(id) {
         try {
-            const category = await knex.select('*')
+            const category = await knex.select(['id', 'name', 'desc'])
                 .from('category')
                 .where({ id });
 
             return category[0] ? { success: true, category: category[0] } : { success: false, message: 'Não foi possível recuperar a categoria / Categoria inexistente!' };
         } catch (e) {
             Message.warning(e);
+
             return { success: false, message: 'Houve um erro ao recuperar a categoria!' };
         }
     }
 
     static async findByName(name) {
         try {
-            const category = await knex.select('*')
+            const category = await knex.select(['id', 'name', 'desc'])
                 .from('category')
                 .where({ name });
 
-            return category[0] ? { success: true, category: category[0] } : { success: false, message: 'Não foi possível recuperar a categoria / Categoria inexistente!' };
+            return category[0] ? { success: true, category: category[0] } :
+                { success: false, message: 'Não foi possível recuperar a categoria / Categoria inexistente!' };
         } catch (e) {
             Message.warning(e);
+
             return { success: false, message: 'Houve um erro ao recuperar a categoria!' };
         }
     }
 
-    static async findAll(page) {
+    static async findAll() {
         try {
-            const category = await knex.select('*')
+            const category = await knex.select(['id', 'name', 'desc'])
                 .from('category')
-                .orderBy(['name', 'created_at'])
-                .paginate({
-                    perPage: 20,
-                    currentPage: page
-                });
+                .orderBy('name');
 
-            return category.data[0] ? { success: true, category } : { success: false, message: 'Não foi possível recuperar as categorias / Categorias inexistentes!' }
+            return category[0] ? { success: true, category } : { success: false, message: 'Não foi possível recuperar as categorias / Categorias inexistentes!' };
         } catch (e) {
             Message.warning(e);
+
             return { success: false, message: 'Houve um erro ao recuperar as categorias!' };
         }
     }
@@ -50,11 +49,12 @@ class Category {
         try {
             const category = await knex.insert(data)
                 .table('category')
-                .returning('*');
+                .returning(['id', 'name', 'desc']);
 
             return category[0] ? { success: true, category: category[0] } : { success: false, message: 'Não foi possível cadastrar a categoria!' };
         } catch (e) {
             Message.warning(e);
+            
             return { success: false, message: 'Falha ao inserir categoria!' };
         }
     }
@@ -67,11 +67,12 @@ class Category {
             const category = await knex.update(data)
                 .table('category')
                 .where({ id })
-                .returning('*');
+                .returning(['id', 'name', 'desc']);
 
             return category[0] ? { success: true, category: category[0] } : { success: false, message: 'Não foi possível atualizar a categoria!' };
         } catch (e) {
             Message.warning(e);
+
             return { success: false, message: 'Falha ao atualizar categoria!' };
         }
     }
@@ -87,8 +88,10 @@ class Category {
             return existCategory.success ? { success: false, message: 'Não foi possível deletar a categoria!' } : { success: true, message: 'Categoria deletada com successo!' };
         } catch (e) {
             Message.warning(e);
-            if(e.toString().indexOf('violates foreign key constraint') !== -1){
-                return {success: false, message: 'Não é possível deletar esse dado, pois existem informações associadas!'};
+
+            if (e.toString().indexOf('violates foreign key constraint') !== -1) {
+                
+                return { success: false, message: 'Não é possível deletar esse dado, pois existem informações associadas!' };
             }
 
             return { success: false, message: 'Falha ao deletar categoria!' };

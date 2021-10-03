@@ -12,6 +12,8 @@ const router = require('./routes/routes');
 
 app.use(cors({ origin: true, credentials: true }));
 
+//app.use('/shapefiles', express.static('../upload/shapefiles'));
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(helmet());

@@ -32,17 +32,18 @@ class Shapefile {
         }
     }
 
-    static async findAll(page) {
+    // Aqui passamos um modificador para poder fornecer o URI tbm
+    static async findAll(method) {
         try {
-            const shp = await knex.select('*')
-                .from('shapefile')
-                .orderBy('created_at', 'DESC')
-                .paginate({
-                    perPage: 20,
-                    currentPage: page
-                });
+            const attr = ['id', 'title', 'desc'];
 
-            return shp.data[0] ? { success: true, shapefile: shp } : { success: false, message: 'Houve um erro ao recuperar os shapefiles / Shapefiles inexistentes!' };
+            if(method === 'y') attr.push('uri');
+
+            const shp = await knex.select(attr)
+                .from('shapefile')
+                .orderBy('created_at', 'DESC');
+
+            return shp[0] ? { success: true, shapefile: shp } : { success: false, message: 'Houve um erro ao recuperar os shapefiles / Shapefiles inexistentes!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar os shapefiles!' };
@@ -53,8 +54,7 @@ class Shapefile {
         try {
             const shp = await knex.insert(data)
                 .table('shapefile')
-                .returning('*');
-
+                .returning(['id', 'title', 'desc']);
 
             return shp[0] ? { success: true, shapefile: shp[0] } : { success: false, message: 'Não foi possível recuperar o shapefile / Shapefile inexistente!' };
         } catch (e) {
@@ -71,7 +71,7 @@ class Shapefile {
             const shp = await knex.update(data)
                 .table('shapefile')
                 .where({ id })
-                .returning('*');
+                .returning(['id', 'title', 'desc']);
 
             return shp[0] ? { success: true, shapefile: shp[0] } : { success: false, message: 'Não foi possível atualizar o shapefile!' };
         } catch (e) {

@@ -17,9 +17,25 @@ class Institution {
 
     static async findAll(page) {
         try {
-            const institution = await knex.select('*')
+            const institution = await knex.select(['id', 'name'])
                 .from('institution')
+                .orderBy(['name', 'created_at']);
+
+            return institution[0] ? { success: true, institution } : { success: false, message: 'Não foi possível recuperar as instituições / Instituições inexistentes!' };
+        } catch (e) {
+            Message.warning(e);
+            return { success: false, message: 'Houve um erro ao recuperar as instituições!' };
+        }
+    }
+
+    static async findAllDetailed(page) {
+        try {
+            const institution = await knex.select(['institution.id', 'institution.name', 'institution.email', 'institution.created_at'])
+                .count('user.id', {as: 'amount_users'})
+                .from('institution')
+                .leftJoin('user','institution.id', 'user.id_institution')
                 .orderBy(['name', 'created_at'])
+                .groupBy('institution.id')
                 .paginate({
                     perPage: 20,
                     currentPage: page

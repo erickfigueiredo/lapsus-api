@@ -1,8 +1,9 @@
-const crypto = require('crypto');
 const path = require('path');
+const { v4: uuidV4 } = require('uuid');
 
 const multer = require('multer');
 
+// Talvez mudar pra UUID
 const multerConfig = (dir, fileProps) => {
     return {
         dest: path.resolve(__dirname, '..', '..', 'upload', dir),
@@ -14,9 +15,7 @@ const multerConfig = (dir, fileProps) => {
                 console.log(file)
                 const ext = file.mimetype.split('/');
 
-                const date = new Date();
-
-                file.key = crypto.createHash('sha256').update(file.originalname + date).digest('hex');
+                file.key = uuidV4();
                 file.key += `.${ext[1]}`;
 
                 callback(null, file.key);
@@ -26,6 +25,7 @@ const multerConfig = (dir, fileProps) => {
             //files: fileProps.numFiles
         },
         fileFilter(req, file, callback) {
+            console.log(file)
             if (fileProps.allowedMimes.includes(file.mimetype))
                 callback(null, true);
 

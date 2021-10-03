@@ -17,11 +17,22 @@ class InstitutionController {
     }
 
     static async index(req, res) {
+
+        // Modificar
         let page = req.query.page;
 
         if (isNaN(parseInt(page))) { page = 1; }
 
         const insts = await Institution.findAll(page);
+        return insts.success ? res.send(insts) : res.status(404).send(insts);
+    }
+
+    static async indexDetailed(req, res) {
+        let page = req.query.page;
+
+        if (isNaN(parseInt(page))) { page = 1; }
+
+        const insts = await Institution.findAllDetailed(page);
         return insts.success ? res.send(insts) : res.status(404).send(insts);
     }
 
