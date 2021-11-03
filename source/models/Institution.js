@@ -30,15 +30,13 @@ class Institution {
 
     static async findAllDetailed(page) {
         try {
-            const institution = await knex.select(['institution.id', 'institution.name', 'institution.email', 'institution.created_at'])
-                .count('user.id', {as: 'amount_users'})
+            const institution = await knex.select(['id', 'name', 'email', 'phone', 'created_at'])
                 .from('institution')
-                .leftJoin('user','institution.id', 'user.id_institution')
                 .orderBy(['name', 'created_at'])
-                .groupBy('institution.id')
                 .paginate({
                     perPage: 20,
-                    currentPage: page
+                    currentPage: page,
+                    isLengthAware: true
                 });
 
             return institution.data[0] ? { success: true, institution } : { success: false, message: 'Não foi possível recuperar as instituições / Instituições inexistentes!' };
@@ -78,7 +76,7 @@ class Institution {
         try {
             const institution = await knex.insert(data)
                 .table('institution')
-                .returning('*');
+                .returning(['id', 'name', 'email', 'phone', 'created_at']);
 
             return institution[0] ? { success: true, institution: institution[0] } : { success: false, message: 'Não foi possível cadastrar a instituição' };
         } catch (e) {

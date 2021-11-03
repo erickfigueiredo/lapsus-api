@@ -8,7 +8,7 @@ class Category {
                 .from('category')
                 .where({ id });
 
-            return category[0] ? { success: true, category: category[0] } : { success: false, message: 'Não foi possível recuperar a categoria / Categoria inexistente!' };
+            return category[0] ? { success: true, category: category[0] } : { success: false, message: 'Categoria inexistente!' };
         } catch (e) {
             Message.warning(e);
 
@@ -22,8 +22,7 @@ class Category {
                 .from('category')
                 .where({ name });
 
-            return category[0] ? { success: true, category: category[0] } :
-                { success: false, message: 'Não foi possível recuperar a categoria / Categoria inexistente!' };
+            return category[0] ? { success: true, category: category[0] } : { success: false, message: 'Categoria inexistente!' };
         } catch (e) {
             Message.warning(e);
 
@@ -33,15 +32,34 @@ class Category {
 
     static async findAll() {
         try {
-            const category = await knex.select(['id', 'name', 'desc'])
+            const category = await knex.select(['id', 'name'])
                 .from('category')
                 .orderBy('name');
 
-            return category[0] ? { success: true, category } : { success: false, message: 'Não foi possível recuperar as categorias / Categorias inexistentes!' };
+            return category[0] ? { success: true, category } : { success: false, message: 'Categorias inexistentes!' };
         } catch (e) {
             Message.warning(e);
 
             return { success: false, message: 'Houve um erro ao recuperar as categorias!' };
+        }
+    }
+
+    static async findAllDetailed(page) {
+        try {
+            const category = await knex.select(['id', 'name', 'desc'])
+                .from('category')
+                .orderBy(['name', 'created_at'])
+                .paginate({
+                    perPage: 40,
+                    currentPage: page,
+                    isLengthAware: true
+                });
+
+            return category.data[0] ? 
+            { success: true, category } : { success: false, message: 'Categorias inexistentes!' };
+        } catch (e) {
+            Message.warning(e);
+            return { success: false, message: 'Houve um erro ao recuperar as instituições!' };
         }
     }
 
@@ -83,15 +101,13 @@ class Category {
                 .where({ id })
                 .del();
 
-            const existCategory = await this.findOne(id);
-
-            return existCategory.success ? { success: false, message: 'Não foi possível deletar a categoria!' } : { success: true, message: 'Categoria deletada com successo!' };
+            return { success: true, message: 'Categoria deletada com successo!' };
         } catch (e) {
             Message.warning(e);
 
             if (e.toString().indexOf('violates foreign key constraint') !== -1) {
                 
-                return { success: false, message: 'Não é possível deletar esse dado, pois existem informações associadas!' };
+                return { success: false, message: 'Não é possível deletar essa categoria, pois existem informações associadas!' };
             }
 
             return { success: false, message: 'Falha ao deletar categoria!' };

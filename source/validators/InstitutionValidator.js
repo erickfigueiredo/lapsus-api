@@ -9,8 +9,8 @@ const createValidate = () => {
             'string.empty': 'Campo nome não pode ser vazio!',
             'any.required': 'Nome é obrigatório!'
         }),
-        phone: Joi.string().regex(/^[0-9]{10,12}$/).required().messages({
-            'string.pattern.base': 'Telefone deve ter 10-12 caracteres numéricos!',
+        phone: Joi.string().regex(/^[0-9]{10,11}$/).required().messages({
+            'string.pattern.base': 'Telefone deve ter 10 ou 11 caracteres numéricos!',
             'string.empty': 'Campo telefone não pode ser vazio!',
             'any.required': 'Telefone é obrigatório!'
         }),
@@ -44,17 +44,17 @@ const updateValidate = () => {
             'number.empty': 'Campo id não pode ser vazio!',
             'any.required': 'Id é obrigatório!'
         }),
-        name: Joi.string().regex(/^(?!\s)(?!.*\s$)[A-Za-z-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).messages({
+        name: Joi.string().regex(/^(?!\s)(?!.*\s$)[A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).messages({
             'string.pattern.base': 'Nome deve conter apenas letras e não deve iniciar ou terminar com espaços!',
             'string.min': 'Nome deve conter no mínimo 2 caracteres!',
-            'string.max': 'Nome deve conter no máximo 2 caracteres!',
+            'string.max': 'Nome deve conter no máximo 50 caracteres!',
             'string.empty': 'Campo nome não pode ser vazio!'
         }),
-        phone: Joi.string().regex(/^(?!\s)(?!.*\s$)[0-9]{10,12}$/).messages({
+        phone: Joi.string().regex(/^(?!\s)(?!.*\s$)[0-9]{10,11}$/).messages({
             'string.empty': 'Campo telefone não pode ser vazio!',
-            'string.pattern.base': 'Telefone deve ter 12-13 caracteres numéricos!'
+            'string.pattern.base': 'Telefone deve ter 10 ou 11 caracteres numéricos!'
         }),
-        address: Joi.string().regex(/^(?!\s)(?!.*\s$)[0-9A-Za-z-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(10).max(256).messages({
+        address: Joi.string().regex(/^(?!\s)(?!.*\s$)[0-9A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ, ]+$/).min(10).max(256).messages({
             'string.pattern.base': 'Endereço deve conter apenas letras e números!',
             'string.min': 'Endereço deve conter no mínimo 10 caracteres!',
             'string.max': 'Endereço deve conter no máximo 256 caracteres!',

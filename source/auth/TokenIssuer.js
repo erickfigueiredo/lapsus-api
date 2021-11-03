@@ -1,7 +1,7 @@
 const JWT = require('jsonwebtoken');
 
-const generateAccessToken = payload => new Promise((resolve, reject) => {
-    JWT.sign(payload, process.env.ACCESS_TKN_SECRET, { algorithm: process.env.JWT_TOKEN_ALGORITHM, expiresIn: '15m' },
+const generateToken = payload => new Promise((resolve, reject) => {
+    JWT.sign(payload, process.env.JWT_TKN_SECRET, { algorithm: process.env.JWT_TKN_ALGORITHM, expiresIn: '7d' },
         (error, token) => {
             if (error) reject(error);
             else resolve(token);
@@ -9,13 +9,5 @@ const generateAccessToken = payload => new Promise((resolve, reject) => {
     );
 });
 
-const generateRefreshToken = payload => new Promise((resolve, reject) => {
-    JWT.sign(payload, process.env.ACCESS_TKN_SECRET, { algorithm: process.env.JWT_TOKEN_ALGORITHM},
-        (error, token) => {
-            if (error) reject(error);
-            else resolve(token);
-        }
-    );
-});
 
-module.exports = { generateAccessToken, generateRefreshToken };
+module.exports = { generateToken };

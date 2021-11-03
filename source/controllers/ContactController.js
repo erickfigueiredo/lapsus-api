@@ -40,7 +40,7 @@ class ContactController {
     }
 
     static async toggleVisualize(req, res) {
-        const id = req.params.id;
+        const id = req.body.id;
 
         if (isNaN(parseInt(id))) {
 

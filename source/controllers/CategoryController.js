@@ -11,14 +11,23 @@ class CategoryController {
         }
 
         const ctg = await Category.findOne(id);
-        
+
         return ctg.success ? res.send(ctg) : res.status(404).send(ctg);
     }
 
-    static async index(req, res) {
+    static async index(_, res) {
         const ctgs = await Category.findAll();
 
         return ctgs.success ? res.send(ctgs) : res.status(404).send(ctgs);
+    }
+
+    static async indexDetailed(req, res) {
+        let page = req.query.page;
+
+        if (isNaN(parseInt(page))) { page = 1; }
+
+        const ctg = await Category.findAllDetailed(page);
+        return ctg.success ? res.send(ctg) : res.status(404).send(ctg);
     }
 
     static async create(req, res) {
@@ -32,7 +41,7 @@ class CategoryController {
 
         req.body.name = req.body.name.toLowerCase();
         const existName = await Category.findByName(req.body.name);
-        
+
         if (existName.success) {
 
             return res.status(409).send({ success: false, message: 'Nome já cadastrado!' });
@@ -61,13 +70,13 @@ class CategoryController {
             if (form.name) {
                 form.name = form.name.toLowerCase();
 
-                if(existCategory.category.name !== form.name) {
+                if (existCategory.category.name !== form.name) {
                     const existName = await Category.findByName(form.name);
 
-                    if (existName.success){
+                    if (existName.success) {
                         return res.status(409).send({ success: false, message: 'Nome já cadastrado!' });
                     }
-    
+
                     toUpdate.name = form.name;
                 }
             }
@@ -103,7 +112,7 @@ class CategoryController {
         }
 
         const result = await Category.delete(id);
-        
+
         return result.success ? res.send(result) : res.status(400).send(result);
     }
 }

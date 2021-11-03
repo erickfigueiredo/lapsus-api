@@ -56,15 +56,16 @@ class User {
         }
     }
 
-    static async findByInstitution(idInstitution, page) {
+    static async findAllByInstitution(idInstitution, page) {
         try {
-            const user = await knex.select('*')
+            const user = await knex.select(['id', 'name', 'surname', 'email', 'created_at'])
                 .from('user')
                 .where({ 'id_institution': idInstitution, 'is_active': true })
                 .orderBy(['name', 'created_at'])
                 .paginate({
                     perPage: 20,
-                    currentPage: page
+                    currentPage: page,
+                    isLengthAware: true
                 });
 
             return user.data[0] ? { success: true, user } : { success: false, message: 'Não foi possível recuperar os usuários / Usuários inexistentes!' }

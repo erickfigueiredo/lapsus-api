@@ -23,7 +23,8 @@ class Contact {
                 .orderBy(['is_visualized', 'created_at'])
                 .paginate({
                     perPage: 20,
-                    currentPage: page
+                    currentPage: page,
+                    isLengthAware: true
                 });
 
             return contact.data[0] ? { success: true, contact } : { success: false, message: 'Não foi possível recuperar as mensagens / Mensagens inexistentes!' };

@@ -23,7 +23,7 @@ const createValidate = (type = 'T') => {
             'string.empty': 'Campo e-mail não pode ser vazio!',
             'any.required': 'E-mail é obrigatório!'
         }),
-        password: Joi.string().regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#!])[0-9a-zA-Z$*&@#!]$/).min(8).max(30).required().messages({
+        password: Joi.string().regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$/).max(30).required().messages({
             'string.pattern.base': 'A senha deve conter pelo menos uma letra minúscula, uma maiúscula, um dígito e um caractere especial!',
             'string.min': 'Senha deve conter no mínimo 8 caracteres!',
             'string.max': 'Senha deve conter no máximo 30 caracteres!',

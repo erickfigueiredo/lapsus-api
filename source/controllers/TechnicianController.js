@@ -26,6 +26,21 @@ class TechnicianController {
         return tech.success ? res.send(techs) : res.status(404).send(techs);
     }
 
+    static async indexByInstitution(req, res) {
+        const idInstitution = req.params.id_institution;
+
+        if(isNaN(parseInt(idInstitution))) {
+            return res.status(400).send({success: false, message: 'Id de instituição Inválido'});
+        }
+
+        let page = req.query.page;
+        
+        if (isNaN(parseInt(page))) { page = 1 };
+
+        const techs = await User.findAllByInstitution(idInstitution, page);
+        return techs.success ? res.send(techs) : res.status(404).send(techs);
+    }
+
     static async create(req, res) {
         const valid = UserValidator.createValidate();
         const { error } = valid.validate(req.body);

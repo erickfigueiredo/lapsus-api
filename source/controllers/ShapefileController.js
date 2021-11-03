@@ -51,6 +51,7 @@ class ShapefileController {
             const { error } = valid.validate(req.body);
 
             if (error) {
+                console.log(error)
                 fs.unlinkSync(`${req.file.path}`);
                 return res.status(400).send({ success: false, message: error.details[0].message });
             }

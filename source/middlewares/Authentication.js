@@ -9,7 +9,7 @@ const ensureAuthentication = (req, res, next) => {
 
     const tokenParts = authHeader.split(' ');
 
-    if (parts.length !== 2){
+    if (tokenParts.length !== 2){
         return res.status(401).send({ success: false, message: 'Erro no token!' });
     }
 
@@ -20,7 +20,9 @@ const ensureAuthentication = (req, res, next) => {
     }
 
     try {
-        JWT.verify(token, process.env.JWT_SECRET);
+        const decode = JWT.verify(token, process.env.JWT_TKN_SECRET);
+        req.locals = decode;
+
         return next();
     } catch(error) {
         return res.status(401).send({success: false, message: 'Token inválido!'}); 

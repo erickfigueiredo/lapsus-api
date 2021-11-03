@@ -24,26 +24,24 @@ class AccessController {
             if (validPassword) {
                 try {
 
+                    const user = { id: existEmail.user.id, type: existEmail.user.type, name: existEmail.user.name };
+
                     const payload = {
-                        userId: existEmail.id,
-                        userType: existEmail.type,
-                        userName: existEmail.name
+                        id: existEmail.user.id,
+                        type: existEmail.user.type
                     };
 
-                    // Verificar a consistencia da Instituição
+
                     if (existEmail.user.type === 'T') {
-                        jwtToken.sub.userInstitution = existEmail.id_institution;
+                        jwtToken.sub.userInstitution = existEmail.user.id_institution;
+                        user.id_institution = existEmail.user.id_institution;
                     }
 
-                    const refreshToken = await tokenIssuer.generateRefreshToken(payload);
-                    const accessToken = await tokenIssuer.generateAccessToken(payload);
+                    const token = await tokenIssuer.generateToken(payload);
 
-                    // Vamos gravar o refresh token no banco talvez armazenar o email ao invés do Id
-                    
-
-
-                    return res.send({ success: true, refreshToken, accessToken });
+                    return res.send({ success: true, user, token });
                 } catch (e) {
+                    console.log(e)
                     return res.status(500).send({ success: false, message: 'Erro interno no servidor, tente novamente mais tarde!' });
                 }
             }
@@ -51,10 +49,11 @@ class AccessController {
         return res.status(404).send({ success: false, message: 'Email ou senha incorretos!' });
     }
 
-    static async logout(req, res) {
+    static async getUserInfo(req, res) {
+        const id = req.locals.id;
+        const result = await User.findOne(id);
 
-        // Aqui removemos o refresh token do usuário
-        res.end();
+        return result.success ? res.send(result) : res.status(404).send(result);
     }
 };
 
