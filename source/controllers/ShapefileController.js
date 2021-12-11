@@ -6,9 +6,8 @@ const User = require('../models/User');
 const multer = require('multer');
 const multerConfig = require('../config/Multer');
 
-const extract = require('extract-zip');
-const fs = require('fs');
-const path = require('path');
+const remFiles = require('../utils/RemoveFiles');
+
 
 class ShapefileController {
     static async show(req, res) {
@@ -51,14 +50,13 @@ class ShapefileController {
             const { error } = valid.validate(req.body);
 
             if (error) {
-                console.log(error)
-                fs.unlinkSync(`${req.file.path}`);
+                remFiles([req.file]);
                 return res.status(400).send({ success: false, message: error.details[0].message });
             }
 
             const existAdder = await User.findOneByType(req.body.added_by, 'A');
             if (!existAdder.success) {
-                fs.unlinkSync(`${req.file.path}`);
+                remFiles([req.file]);
                 return res.status(404).send({ success: false, message: 'Usuário adicionador inexistente!' });
             }
 
@@ -66,27 +64,15 @@ class ShapefileController {
 
             const existTitle = await Shapefile.findByTitle(req.body.title);
             if (existTitle.success) {
-                fs.unlinkSync(`${req.file.path}`);
+                remFiles([req.file]);
                 return res.status(409).send({ success: false, message: 'Título já cadastrado!' });
             }
 
-            const newKey = req.file.key.split('.');
-
-            try {
-                await extract(req.file.path, { dir: `${req.file.destination}\\${newKey[0]}` });
-
-                fs.unlinkSync(`${req.file.path}`);
-            } catch (e) {
-                fs.unlinkSync(`${req.file.path}`);
-
-                return res.status(500).send({ success: false, message: 'Houve um erro ao extrair o arquivo!' });
-            }
-
-            req.body.uri = newKey[0];
+            req.body.uri = req.file.path;
 
             const result = await Shapefile.create(req.body);
             if (!result.success) {
-                fs.rmdirSync(path.resolve(__dirname, '..', '..', 'upload', 'shapefiles', req.body.uri), { recursive: true });
+                remFiles([req.file]);
 
                 return res.status(400).send(result);
             }
@@ -155,7 +141,7 @@ class ShapefileController {
             return res.status(400).send(result);
         }
 
-        fs.rmdirSync(path.resolve(__dirname, '..', '..', 'upload', 'shapefiles', shp.shapefile.uri), { recursive: true });
+        remFiles([{path: shp.shapefile.uri}]);
 
         return res.send(result);
     }
