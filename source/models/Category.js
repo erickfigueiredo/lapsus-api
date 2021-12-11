@@ -30,7 +30,7 @@ class Category {
         }
     }
 
-    static async findAll() {
+    static async listAll() {
         try {
             const category = await knex.select(['id', 'name'])
                 .from('category')

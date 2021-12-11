@@ -19,7 +19,7 @@ exports.seed = function (knex) {
     { loctype: 'NAT', subloctype: 'HMT', desc: 'Montanha Acima de Área Acessível por Veículo' },
     { loctype: 'NAT', subloctype: 'LMT', desc: 'Área Montanhosa com Acesso Rodoviário Limitado ???' },
     { loctype: 'NAT', subloctype: 'SSSI', desc: 'Locais de Interesse Científico' },
-    { loctype: 'OSEA', subloctype: 'OFF', desc: 'PLataforma Marítma' },
+    { loctype: 'OSEA', subloctype: 'OFF', desc: 'Plataforma Marítma' },
     { loctype: 'OTH', subloctype: 'CUT', desc: '???' },
     { loctype: 'OTH', subloctype: 'ELV', desc: '???' },
     { loctype: 'OTH', subloctype: 'EMB', desc: '???' },

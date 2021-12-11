@@ -163,6 +163,7 @@ exports.seed = function (knex) {
     { actor: 'BEV', actornv2: 'RESIN', actornv3: '999', desc: '...' },
     { actor: 'BEV', actornv2: 'RESINT', actornv3: '999', desc: '...' },
 
+    // Mudar
     { actor: 'PPL', actornv2: '1', actornv3: '999', desc: '...' },
     { actor: 'PPL', actornv2: 'ADU', actornv3: '999', desc: '...' },
     { actor: 'PPL', actornv2: 'CNT', actornv3: '999', desc: '...' },

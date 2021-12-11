@@ -6,7 +6,7 @@ exports.up = async function (knex) {
     await knex.schema.createTable(tableName, function (table) {
         table.increments('id').notNullable().primary();
         table.string('uri', 200);
-        table.integer('id_contribution').unsigned().notNullable().references('id').inTable('contribution').onDelete('CASCADE');
+        table.integer('id_contribution').unsigned().notNullable().references('id').inTable('contribution');
         table.timestamps(false, true);
     });
 

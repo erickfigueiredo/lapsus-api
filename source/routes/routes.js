@@ -12,7 +12,8 @@ const Moderator = require('../controllers/ModeratorController');
 const Registered = require('../controllers/RegisteredController');
 const Shapefile = require('../controllers/ShapefileController');
 const Technician = require('../controllers/TechnicianController');
-const TSO2 = require('../controllers/TSO2Controller');
+
+const EMSI = require('../controllers/EMSIController');
 
 // DEFINIÇÃO DE ROTAS
 
@@ -84,18 +85,20 @@ router.get('/contribution/:id', Contribution.show);
 router.post('/contribution', Contribution.create);
 router.put('/contribution', Contribution.evaluateStatus);
 
+
 // -> Rotas de TSO2
-router.post('/tso2', TSO2.create)
+router.get('/emsi/lists', EMSI.getFormLists);
+router.post('/emsi', EMSI.create);
 
 
 // -> Rotas de 
 
 // -> Rotas de Erro 404
-router.get('/ops', (req, res) => {
-    res.status(404).send('ERRO 404 | A rota solicitada não existe!');
+router.get('/ops', (_, res) => {
+    res.status(404).send({success: false, message: 'A rota solicitada não existe!'});
 })
 
-router.get('*', (req, res) => {
+router.get('*', (_, res) => {
     res.redirect('/ops');
 });
 

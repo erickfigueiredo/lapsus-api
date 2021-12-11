@@ -5,18 +5,14 @@ const tableName = 'address';
 exports.up = async function (knex) {
     await knex.schema.createTable(tableName, function (table) {
         /*
-        table.string('street', 100).notNullable();
-        table.string('neigh', 100).notNullable();
-        table.string('complement', 100);
-        table.string('num', 10);
-        table.string('zipcode', 8).notNullable();
-        table.string('city', 60).notNullable();
-        table.string('state', 60).notNullable();
-        table.string('country', 60).notNullable();
+            Nessa tabela, a Atomicidade de endereço é violada devido ao formato de retorno
+            da Nominatim API, dependendo da coordenada informada, alguns atributos existem 
+            e outros não. Portanto foi utilizada a propriedade que retorna o endereço por 
+            extenso.
         */
         table.increments('id').notNullable().primary();
         table.string('address', 256).notNullable();
-        table.integer('id_loc').unsigned().references('id_loc').inTable('position');
+        table.integer('id_loc').unsigned().notNullable().references('id_loc').inTable('position');
         table.timestamps(false, true);
     });
 

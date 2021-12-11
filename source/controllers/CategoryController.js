@@ -15,8 +15,8 @@ class CategoryController {
         return ctg.success ? res.send(ctg) : res.status(404).send(ctg);
     }
 
-    static async index(_, res) {
-        const ctgs = await Category.findAll();
+    static async index(req, res) {
+        const ctgs = await Category.listAll();
 
         return ctgs.success ? res.send(ctgs) : res.status(404).send(ctgs);
     }

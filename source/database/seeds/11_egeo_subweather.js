@@ -46,6 +46,6 @@ exports.seed = function (knex) {
     { weather: 'WIN', subweather: 'TRST', desc: 'Tempestade Tropical' },
     { weather: 'WIN', subweather: 'TYPH', desc: 'Tufão' },
     { weather: 'WIN', subweather: 'WHIR', desc: 'Furacão' },
-    { weather: 'WIN', subweather: 'WTRSPT', desc: 'Tromba d\'Água' }
+    { weather: 'WIN', subweather: 'WTRSPT', desc: 'Tromba d`Água' }
   ]);
 };
