@@ -26,17 +26,13 @@ class Contribution {
         }
     }
 
-    static async findAll(page) {
+    static async listAll() {
         try {
-            const contrib = await knex.select('*')
+            const contrib = await knex.select('id', 'desc')
                 .from('contribution')
-                .orderBy('published')
-                .paginate({
-                    perPage: 20,
-                    currentPage: page
-                });
+                .orderBy('published');
 
-            return contrib.data[0] ? { success: true, contribution: contrib } : { success: false, message: 'Não foi possível recuperar as contribuições / Contribuições inexistentes!' };
+            return contrib[0] ? { success: true, contribution: contrib } : { success: false, message: 'Não foi possível recuperar as contribuições / Contribuições inexistentes!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar as contribuições!' };
@@ -45,36 +41,21 @@ class Contribution {
 
     static async create(data, files = null) {
         try {
-            if (files) {
-                return await knex.transaction(async trx => {
-                    const contrib = await trx('contribution').insert(data, '*');
+            return await knex.transaction(async trx => {
+                const [id_contribution] = await trx('contribution').insert(data).returning('id');
 
-                    const id_contribution = contrib[0].id;
-
-                    contrib[0].annexes = [];
-
-                    // Insert array knex (verificar)
+                if (files) {
                     for (const file of files) {
-                        const f = await trx('annex').insert({
-                            uri: file.uri,
-                            id_contribution
-                        }, 'uri');
-
-                        contrib[0].annexes.push(f);
+                        file.id_contribution = id_contribution;
                     }
 
-                    return { success: true, contribution: contrib[0] };
-                });
-            } else {
-                const contrib = await knex.insert(data)
-                    .table('contribution')
-                    .returning('*');
+                    await trx('annex').insert(files);
+                }
+            });
 
-                return contrib[0] ? { success: true, contribution: contrib[0] } : { success: false, message: 'Não foi possível cadastrar a contribuição!' };
-            }
         } catch (e) {
             Message.warning(e);
-            return { success: false, message: 'Falha ao inserir contribuição!' };
+            return { success: false, message: 'Falha ao cadastrar contribuição!' };
         }
     }
 

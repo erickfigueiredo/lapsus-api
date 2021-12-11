@@ -3,10 +3,10 @@ const Contribution = require('../models/Contribution');
 const User = require('../models/User');
 const ContributionValidator = require('../validators/ContributionValidator');
 
+const remFiles = require('../utils/RemoveFiles');
+
 const multer = require('multer');
 const multerConfig = require('../config/Multer');
-
-const fs = require('fs');
 
 class ContributionController {
     static async show(req, res) {
@@ -36,7 +36,6 @@ class ContributionController {
         upload(req, res, async (fail) => {
 
             if (fail instanceof multer.MulterError) {
-                console.log(fail)
                 return res.status(400).send({ success: false, message: 'Os arquivos não atendem aos requisitos necessários!' });
             }
 
@@ -46,7 +45,7 @@ class ContributionController {
             const { error } = valid.validate(req.body);
 
             if (error) {
-                if (req.files) { for (const file of req.files) { fs.unlinkSync(`${file.path}`); } }
+                if (req.files) remFiles(req.files);
 
                 return res.status(400).send({ success: false, message: error.details[0].message });
             }
@@ -55,20 +54,19 @@ class ContributionController {
                 const existCollaborator = await User.findOneByType(req.body.id_collaborator, 'R');
 
                 if (!existCollaborator.success) {
-                    if (req.files) { for (const file of req.files) { fs.unlinkSync(`${file.path}`); } }
+                    if (req.files) if (req.files) remFiles(req.files);
 
                     return res.status(404).send(existCollaborator);
                 }
             }
 
+            // Talvez remover isso
             const existCategory = await Category.findOne(req.body.id_category);
             if (!existCategory.success) {
-                if (req.files) { for (const file of req.files) { fs.unlinkSync(`${file.path}`); } }
+                if (req.files) remFiles(req.files);
 
                 return res.status(404).send(existCategory);
             }
-
-            // Aqui Tentamos Capturar o endereço corretamente
 
             let result = null;
 
@@ -81,7 +79,7 @@ class ContributionController {
             }
 
             if (!result.success) {
-                if (req.files) { for (const file of req.files) { fs.unlinkSync(`${file.path}`); } };
+                if (req.files) remFiles(req.files);
 
                 return res.status(400).send(result);
             }
