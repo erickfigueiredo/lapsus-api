@@ -33,15 +33,13 @@ class AccessController {
 
 
                     if (existEmail.user.type === 'T') {
-                        jwtToken.sub.userInstitution = existEmail.user.id_institution;
-                        user.id_institution = existEmail.user.id_institution;
+                        payload.id_institution = existEmail.user.id_institution;
                     }
 
                     const token = await tokenIssuer.generateToken(payload);
 
                     return res.send({ success: true, user, token });
                 } catch (e) {
-                    console.log(e)
                     return res.status(500).send({ success: false, message: 'Erro interno no servidor, tente novamente mais tarde!' });
                 }
             }
@@ -56,7 +54,5 @@ class AccessController {
         return result.success ? res.send(result) : res.status(404).send(result);
     }
 };
-
-// Refresh Token = O conceito gira entorno de guardar o refreshToken no banco de dados e o accessToken em um cookie, talvez
 
 module.exports = AccessController;
