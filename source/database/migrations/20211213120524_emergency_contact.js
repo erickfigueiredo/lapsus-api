@@ -1,12 +1,12 @@
-// Tabela Org Information
+// Tabela Contatos de Emergência
 
-const tableName = 'org_information'
+const tableName = 'emergency_contact'
 
 exports.up = function(knex) {
     await knex.schema.createTable(tableName, function(table) {
         table.increments('id').notNullable().primary();
         table.string('name', 50).notNullable();
-        table.string('uuid',40);
+        table.string('phone',11);
         table.timestamps(false, true);
     });
 

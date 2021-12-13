@@ -12,10 +12,9 @@ const Moderator = require('../controllers/ModeratorController');
 const Registered = require('../controllers/RegisteredController');
 const Shapefile = require('../controllers/ShapefileController');
 const Technician = require('../controllers/TechnicianController');
+const OrgInformation = require('../controllers/OrgInformationController');
 
 const EMSI = require('../controllers/EMSIController');
-
-// DEFINIÇÃO DE ROTAS
 
 // -> Rotas de Access
 router.get('/me', ensureAuthentication, Access.getUserInfo);
@@ -85,8 +84,13 @@ router.get('/contribution/:id', Contribution.show);
 router.post('/contribution', Contribution.create);
 router.put('/contribution', Contribution.evaluateStatus);
 
+// -> Rotas de Informações da organização
+router.get('/organization', OrgInformation.show);
+router.put('/organization', OrgInformation.update);
 
-// -> Rotas de TSO2
+// -> Rotas de Contatos de Emergência
+
+// -> Rotas de EMSI
 router.get('/emsi/lists', EMSI.getFormLists);
 router.post('/emsi', EMSI.create);
 
