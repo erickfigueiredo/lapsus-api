@@ -7,6 +7,7 @@ exports.up = async function (knex) {
         table.string('id', 40).primary().notNullable();
         table.string('freetext', 500);
         table.string('urgency', 15);
+        table.datetime('creation', { precision: 6 });
         table.string('seclass', 7).references('seclass').inTable('context_seclass');
         table.string('mode', 6).notNullable().references('mode').inTable('context_mode');
         table.string('msgtype', 6).notNullable().references('msgtype').inTable('context_msgtype');

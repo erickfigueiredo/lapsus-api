@@ -14,9 +14,9 @@ exports.up = async function (knex) {
         table.string('freetext', 500);
         table.string('source', 10).references('source').inTable('event_source');
         table.integer('scale').unsigned().references('scale').inTable('event_scale');
-        table.string('status').notNullable().references('status').inTable('event_status').
-        table.string('risk_assessmnt').references('risk_assessmnt').inTable('event_risk_assessmnt');
-        table.string('cause').references('cause').inTable('event_cause');
+        table.string('status', 10).references('status').inTable('event_status').
+        table.string('risk_assessmnt', 10).references('risk_assessmnt').inTable('event_risk_assessmnt');
+        table.string('cause', 10).references('cause').inTable('event_cause');
         table.timestamps(false, true);
     });
 

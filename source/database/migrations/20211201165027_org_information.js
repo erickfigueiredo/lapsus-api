@@ -5,8 +5,9 @@ const tableName = 'org_information'
 exports.up = function(knex) {
     await knex.schema.createTable(tableName, function(table) {
         table.increments('id').notNullable().primary();
-        table.string('name', 50).notNullable();
-        table.string('uuid',40);
+        table.string('name', 80).notNullable();
+        table.string('uuid',40).notNullable();
+        table.boolean('was_updated').defaultTo('false').notNullable();
         table.timestamps(false, true);
     });
 
