@@ -18,7 +18,7 @@ USE `lapsusVGI` ;
 -- Table `lapsusVGI`.`usuario`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lapsusVGI`.`usuario` (
-  `idUsuario` INT NOT NULL AUTO_increments,
+  `idUsuario` INT NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`idUsuario`))
 ENGINE = InnoDB;
 
@@ -43,7 +43,7 @@ ENGINE = InnoDB;
 -- Table `lapsusVGI`.`instituicao`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lapsusVGI`.`instituicao` (
-  `idInstituicao` INT NOT NULL AUTO_increments,
+  `idInstituicao` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(50) NULL,
   `telefone` VARCHAR(20) NULL,
   `administradora` TINYINT NULL,
@@ -65,7 +65,7 @@ ENGINE = InnoDB;
 -- Table `lapsusVGI`.`gestor`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lapsusVGI`.`gestor` (
-  `idUsuario` INT NOT NULL AUTO_increments,
+  `idUsuario` INT NOT NULL AUTO_INCREMENT,
   `idInstituicao` INT NOT NULL,
   `Administrador` TINYINT NULL,
   `nome` VARCHAR(50) NULL,
@@ -185,7 +185,6 @@ CREATE TABLE IF NOT EXISTS `lapsusVGI`.`EVENT` (
   `RISK_ASSESSMNT` VARCHAR(10) NULL,
   `CAUSE` VARCHAR(10) NULL,
   PRIMARY KEY (`ID`),
-  
   CONSTRAINT `fk_EVENT_SOURCE1`
     FOREIGN KEY (`SOURCE`)
     REFERENCES `lapsusVGI`.`EVENT_SOURCE` (`SOURCE`)
@@ -342,7 +341,7 @@ ENGINE = InnoDB;
 -- Table `lapsusVGI`.`EVAC`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lapsusVGI`.`EVAC` (
-  `evac_id` INT NOT NULL AUTO_increments,
+  `evac_id` INT NOT NULL AUTO_INCREMENT,
   `EVENT_ID` VARCHAR(40) NOT NULL,
   `DATIME` DATETIME NULL,
   `DISPLACED` INT NULL,
@@ -370,7 +369,7 @@ ENGINE = InnoDB;
 -- Table `lapsusVGI`.`CASUALTIES`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lapsusVGI`.`CASUALTIES` (
-  `casualties_id` INT NOT NULL AUTO_increments,
+  `casualties_id` INT NOT NULL AUTO_INCREMENT,
   `EVENT_ID` VARCHAR(40) NOT NULL,
   `CONTEXT` VARCHAR(15) NOT NULL,
   `DATIME` DATETIME NULL,
@@ -490,7 +489,7 @@ ENGINE = InnoDB;
 -- Table `lapsusVGI`.`EXTERNAL_INFO`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lapsusVGI`.`EXTERNAL_INFO` (
-  `external_info_id` INT NOT NULL AUTO_increments,
+  `external_info_id` INT NOT NULL AUTO_INCREMENT,
   `CONTEXT_ID` VARCHAR(40) NOT NULL,
   `FREE_TEXT` VARCHAR(500) NULL,
   `URI` VARCHAR(200) NOT NULL,
@@ -555,7 +554,7 @@ ENGINE = InnoDB;
 -- Table `lapsusVGI`.`EGEO`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lapsusVGI`.`EGEO` (
-  `ID` INT NOT NULL AUTO_increments,
+  `ID` INT NOT NULL AUTO_INCREMENT,
   `DATIME` DATETIME NULL,
   `FREETEXT` VARCHAR(500) NULL,
   `EVENT_ID` VARCHAR(40) NOT NULL,
@@ -640,7 +639,7 @@ ENGINE = InnoDB;
 -- Table `lapsusVGI`.`POSITION`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lapsusVGI`.`POSITION` (
-  `LOC_ID` INT NOT NULL AUTO_increments,
+  `LOC_ID` INT NOT NULL AUTO_INCREMENT,
   `NAME` VARCHAR(80) NULL,
   `COORD` GEOMETRY NULL,
   `EGEO_ID` INT NOT NULL,
@@ -659,7 +658,7 @@ ENGINE = InnoDB;
 -- Table `lapsusVGI`.`ADDRESS`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lapsusVGI`.`ADDRESS` (
-  `address_id` INT NOT NULL AUTO_increments,
+  `address_id` INT NOT NULL AUTO_INCREMENT,
   `ADDRESS` VARCHAR(256) NOT NULL,
   `LOC_ID` INT NOT NULL,
   PRIMARY KEY (`address_id`),
@@ -926,7 +925,7 @@ ENGINE = InnoDB;
 -- Table `lapsusVGI`.`categoria`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lapsusVGI`.`categoria` (
-  `idcategoria` INT NOT NULL AUTO_increments,
+  `idcategoria` INT NOT NULL AUTO_INCREMENT,
   `descricao` VARCHAR(500) NULL,
   PRIMARY KEY (`idcategoria`))
 ENGINE = InnoDB;
@@ -936,7 +935,7 @@ ENGINE = InnoDB;
 -- Table `lapsusVGI`.`contribuicao`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lapsusVGI`.`contribuicao` (
-  `idContribuicao` INT NOT NULL AUTO_increments,
+  `idContribuicao` INT NOT NULL AUTO_INCREMENT,
   `ocorrencia` DATETIME NULL,
   `riscoDano` TINYINT NULL,
   `vitima` TINYINT NULL,
@@ -975,7 +974,7 @@ ENGINE = InnoDB;
 -- Table `lapsusVGI`.`contato`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lapsusVGI`.`contato` (
-  `idContato` INT NOT NULL AUTO_increments,
+  `idContato` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(50) NULL,
   `assunto` VARCHAR(50) NULL,
   `email` VARCHAR(50) NULL,
@@ -989,7 +988,7 @@ ENGINE = InnoDB;
 -- Table `lapsusVGI`.`shapefile`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lapsusVGI`.`shapefile` (
-  `idShapefile` INT NOT NULL AUTO_increments,
+  `idShapefile` INT NOT NULL AUTO_INCREMENT,
   `uri` VARCHAR(50) NULL,
   `data` DATE NULL,
   `idUsuario` INT NOT NULL,
@@ -1009,7 +1008,7 @@ ENGINE = InnoDB;
 -- Table `lapsusVGI`.`anexo`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `lapsusVGI`.`anexo` (
-  `idanexo` INT NOT NULL AUTO_increments,
+  `idanexo` INT NOT NULL AUTO_INCREMENT,
   `URI` VARCHAR(200) NULL,
   `idContribuicao` INT NOT NULL,
   PRIMARY KEY (`idanexo`),
@@ -1132,7 +1131,7 @@ START TRANSACTION;
 USE `lapsusVGI`;
 INSERT INTO `lapsusVGI`.`EVENT_CAUSE` (`CAUSE`, `descricao`) VALUES ('ACC', 'Acidental');
 INSERT INTO `lapsusVGI`.`EVENT_CAUSE` (`CAUSE`, `descricao`) VALUES ('NAT', 'Natural');
-INSERT INTO `lapsusVGI`.`EVENT_CAUSE` (`CAUSE`, `descricao`) VALUES ('DEL', 'DELIBERATE???');
+-- INSERT INTO `lapsusVGI`.`EVENT_CAUSE` (`CAUSE`, `descricao`) VALUES ('DEL', 'DELIBERATE???');
 
 COMMIT;
 
@@ -1260,28 +1259,28 @@ INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES (
 INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('MIND', 'Área Minerada', 'DGR');
 INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('NGA', 'Área Não Trafegável', 'DGR');
 INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('NGACIV', 'Área Não Trafegável Para Civís', 'DGR');
-INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('NUKCNL', 'Taxa de Dose Nuclear Linha de Contorno ???', 'DGR');
+-- INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('NUKCNL', 'Taxa de Dose Nuclear Linha de Contorno ???', 'DGR');
 INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('OBSGEN', 'Obstáculo em Geral', 'DGR');
 INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('PRHBAR', 'Área Proibida', 'DGR');
 INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('RAD', 'Área Radioativa', 'DGR');
-INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('RADCLD', 'Contorno Determinado Por Radar de Nuvem Radioativa ???', 'DGR');
+-- INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('RADCLD', 'Contorno Determinado Por Radar de Nuvem Radioativa ???', 'DGR');
 INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('RSTR', 'Área Proibida', 'DGR');
 INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('SGA', 'Área Com Dificuldade de Tráfego', 'DGR');
 INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('SITKIL', 'Área Com Suposta Morte', 'DGR');
 INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('UNXOD', 'Área a ser Explodida', 'DGR');
 INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('AOR', 'Área de Responsabilidade', 'GEN');
-INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('ASYGEN', 'Área de Montagem, Geral ???', 'GEN');
-INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('ASYSPL', 'Área de Montagem, Fornecimento ???', 'GEN');
+-- INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('ASYGEN', 'Área de Montagem, Geral ???', 'GEN');
+-- INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('ASYSPL', 'Área de Montagem, Fornecimento ???', 'GEN');
 INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('BDYOR', 'Área de Organizações', 'GEN');
 INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('BDYPOA', 'Área Administrativa Política', 'GEN');
-INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('BDYPT', 'Limite Em Ponto ???', 'GEN');
-INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('CKPGEN', 'Checkpoint ???', 'GEN');
+-- INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('BDYPT', 'Limite Em Ponto ???', 'GEN');
+-- INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('CKPGEN', 'Checkpoint ???', 'GEN');
 INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('CNTPTL', 'Ponto de Contato (Local de Fácil Identificação)', 'GEN');
 INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('COLDZ', 'Área Gelada', 'GEN');
 INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('COMCKP', 'Checkpoint de Comunicação', 'GEN');
-INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('COMLOW', 'Locais Com Produção em Excesso de Agentes Químicos ???', 'GEN');
+-- INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('COMLOW', 'Locais Com Produção em Excesso de Agentes Químicos ???', 'GEN');
 INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('COMMZ', 'Zona de Comunicação', 'GEN');
-INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('COMUP', 'Locais Com Produção em Excesso de Agentes Químicos ???', 'GEN');
+-- INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('COMUP', 'Locais Com Produção em Excesso de Agentes Químicos ???', 'GEN');
 INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('CONTAR', 'Área de Controle', 'GEN');
 INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('CORDON', 'Perímetro de Uma Área ou Setor de Resgate', 'GEN');
 INSERT INTO `lapsusVGI`.`EGEO_subtype` (`subtype`, `descricao`, `TYPE`) VALUES ('CRDPNT', 'Ponto de Cordenação', 'GEN');
@@ -1344,7 +1343,7 @@ USE `lapsusVGI`;
 INSERT INTO `lapsusVGI`.`EGEO_WEATHER` (`WEATHER`, `descricao`) VALUES ('HUM', 'Condições Húmidas');
 INSERT INTO `lapsusVGI`.`EGEO_WEATHER` (`WEATHER`, `descricao`) VALUES ('ICY', 'Condições Gélidas');
 INSERT INTO `lapsusVGI`.`EGEO_WEATHER` (`WEATHER`, `descricao`) VALUES ('TDS', 'Condições Tempestivas');
-INSERT INTO `lapsusVGI`.`EGEO_WEATHER` (`WEATHER`, `descricao`) VALUES ('TMPsxx', 'Temperatura?');
+-- INSERT INTO `lapsusVGI`.`EGEO_WEATHER` (`WEATHER`, `descricao`) VALUES ('TMPsxx', 'Temperatura?');
 INSERT INTO `lapsusVGI`.`EGEO_WEATHER` (`WEATHER`, `descricao`) VALUES ('VIS', 'Condições de Visibilidade');
 INSERT INTO `lapsusVGI`.`EGEO_WEATHER` (`WEATHER`, `descricao`) VALUES ('Wddsss', 'Direção do Vento e Velocidade');
 INSERT INTO `lapsusVGI`.`EGEO_WEATHER` (`WEATHER`, `descricao`) VALUES ('WIN', 'Condições de Ventania');
@@ -1400,7 +1399,7 @@ INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`
 INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('CLF', 'Penhasco', 'COAST');
 INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('CSTW', 'Água próximo a costa', 'COAST');
 INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('EST', 'Estuário', 'COAST');
-INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('FEN', 'FEN????', 'COAST');
+-- INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('FEN', 'FEN????', 'COAST');
 INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('BOG', 'Pântano', 'INW');
 INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('CAN', 'Canal de Água', 'INW');
 INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('ICELK', 'Lago Congelado', 'INW');
@@ -1409,16 +1408,16 @@ INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`
 INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('CRP', 'Colheita', 'NAT');
 INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('GRS', 'Pastagem', 'NAT');
 INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('HFR', 'Floresta Alta, Com Árvores Acima de 20 metros', 'NAT');
-INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('HLS', 'Áreas Montanhosas Com Acesso Rodoviário Limitado ??????', 'NAT');
+-- INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('HLS', 'Áreas Montanhosas Com Acesso Rodoviário Limitado ??????', 'NAT');
 INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('HMT', 'Montanha acima da área acessível por veículo', 'NAT');
-INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('LMT', 'Áreas Montanhosas Com Acesso Rodoviário Limitado ?????', 'NAT');
+-- INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('LMT', 'Áreas Montanhosas Com Acesso Rodoviário Limitado ?????', 'NAT');
 INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('SSSI', 'Locais de Interesse Científico', 'NAT');
 INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('OFF', 'Plataforma Marítma', 'OSEA');
-INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('CUT', '????', 'OTH');
-INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('ELV', '????', 'OTH');
-INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('EMB', '????', 'OTH');
-INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('LFR', '????', 'OTH');
-INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('SRB', '????', 'OTH');
+-- INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('CUT', '????', 'OTH');
+-- INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('ELV', '????', 'OTH');
+-- INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('EMB', '????', 'OTH');
+-- INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('LFR', '????', 'OTH');
+-- INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('SRB', '????', 'OTH');
 INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('OWNRSC', 'Local Com Time de Resgate Próprio', 'PRIVAT');
 INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('TRK', 'Ferrovia', 'RAIL');
 INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('1RD', 'Estrada de Mão Única', 'ROAD');
@@ -1431,12 +1430,12 @@ INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`
 INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('MIN', 'Mina', 'UDGN');
 INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('TUN', 'Túnel', 'UDGN');
 INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('UND', 'Construção Subterrânea', 'UDGN');
-INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('ASR', '????', 'URB');
+-- INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('ASR', '????', 'URB');
 INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('HOSP', 'Hospital', 'URB');
 INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('IND', 'Área Industrial', 'URB');
 INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('MALL', 'Shopping', 'URB');
-INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('OFF', '????', 'URB');
-INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('PRK', '???', 'URB');
+-- INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('OFF', '????', 'URB');
+-- INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('PRK', '???', 'URB');
 INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('RES', 'Área Residencial', 'URB');
 INSERT INTO `lapsusVGI`.`ETYPE_subloctype` (`subLoctype`, `descricao`, `LOCTYPE`) VALUES ('STRT', 'Área Pública', 'URB');
 
@@ -1477,9 +1476,9 @@ INSERT INTO `lapsusVGI`.`ETYPE_actornv2` (`actornv2`, `descricao`, `ACTOR`) VALU
 INSERT INTO `lapsusVGI`.`ETYPE_actornv2` (`actornv2`, `descricao`, `ACTOR`) VALUES ('NRES', 'Depósitos e Ambientes Não Residenciais', 'BEV');
 INSERT INTO `lapsusVGI`.`ETYPE_actornv2` (`actornv2`, `descricao`, `ACTOR`) VALUES ('OFF', 'Escritório', 'BEV');
 INSERT INTO `lapsusVGI`.`ETYPE_actornv2` (`actornv2`, `descricao`, `ACTOR`) VALUES ('OTH', 'Outros', 'BEV');
-INSERT INTO `lapsusVGI`.`ETYPE_actornv2` (`actornv2`, `descricao`, `ACTOR`) VALUES ('RESDW', 'Residências Habitacionais ???', 'BEV');
-INSERT INTO `lapsusVGI`.`ETYPE_actornv2` (`actornv2`, `descricao`, `ACTOR`) VALUES ('RESIN', 'Instituições Residênciais ???', 'BEV');
-INSERT INTO `lapsusVGI`.`ETYPE_actornv2` (`actornv2`, `descricao`, `ACTOR`) VALUES ('RESINT', 'Residencial Institucional ???', 'BEV');
+-- INSERT INTO `lapsusVGI`.`ETYPE_actornv2` (`actornv2`, `descricao`, `ACTOR`) VALUES ('RESDW', 'Residências Habitacionais ???', 'BEV');
+-- INSERT INTO `lapsusVGI`.`ETYPE_actornv2` (`actornv2`, `descricao`, `ACTOR`) VALUES ('RESIN', 'Instituições Residênciais ???', 'BEV');
+-- INSERT INTO `lapsusVGI`.`ETYPE_actornv2` (`actornv2`, `descricao`, `ACTOR`) VALUES ('RESINT', 'Residencial Institucional ???', 'BEV');
 INSERT INTO `lapsusVGI`.`ETYPE_actornv2` (`actornv2`, `descricao`, `ACTOR`) VALUES ('RESOTH', 'Outras Residências', 'BEV');
 INSERT INTO `lapsusVGI`.`ETYPE_actornv2` (`actornv2`, `descricao`, `ACTOR`) VALUES ('SHP', 'Shoppings e Comércios', 'BEV');
 INSERT INTO `lapsusVGI`.`ETYPE_actornv2` (`actornv2`, `descricao`, `ACTOR`) VALUES ('1', 'Pessoa', 'PPL');
@@ -1489,7 +1488,7 @@ INSERT INTO `lapsusVGI`.`ETYPE_actornv2` (`actornv2`, `descricao`, `ACTOR`) VALU
 INSERT INTO `lapsusVGI`.`ETYPE_actornv2` (`actornv2`, `descricao`, `ACTOR`) VALUES ('CWD', 'Grupo de Pessoas Atuando Em Conjunto', 'PPL');
 INSERT INTO `lapsusVGI`.`ETYPE_actornv2` (`actornv2`, `descricao`, `ACTOR`) VALUES ('DED', 'Pessoa Morta', 'PPL');
 INSERT INTO `lapsusVGI`.`ETYPE_actornv2` (`actornv2`, `descricao`, `ACTOR`) VALUES ('EVC', 'Pessoa Evacuada', 'PPL');
-INSERT INTO `lapsusVGI`.`ETYPE_actornv2` (`actornv2`, `descricao`, `ACTOR`) VALUES ('GND', 'Gender ???', 'PPL');
+-- INSERT INTO `lapsusVGI`.`ETYPE_actornv2` (`actornv2`, `descricao`, `ACTOR`) VALUES ('GND', 'Gender ???', 'PPL');
 INSERT INTO `lapsusVGI`.`ETYPE_actornv2` (`actornv2`, `descricao`, `ACTOR`) VALUES ('GRP', 'Grupo de Pessoas', 'PPL');
 INSERT INTO `lapsusVGI`.`ETYPE_actornv2` (`actornv2`, `descricao`, `ACTOR`) VALUES ('HST', 'Protestantes', 'PPL');
 INSERT INTO `lapsusVGI`.`ETYPE_actornv2` (`actornv2`, `descricao`, `ACTOR`) VALUES ('INT', 'Pessoas Intoxicadas', 'PPL');
@@ -1615,22 +1614,22 @@ INSERT INTO `lapsusVGI`.`ETYPE_actornv3` (`actornv3`, `descricao`, `actornv2`, `
 INSERT INTO `lapsusVGI`.`ETYPE_actornv3` (`actornv3`, `descricao`, `actornv2`, `ACTOR`) VALUES ('PAS', 'Trem Com Passageiros', 'TRN', 'VEH');
 INSERT INTO `lapsusVGI`.`ETYPE_actornv3` (`actornv3`, `descricao`, `actornv2`, `ACTOR`) VALUES ('REF', 'Trem Com Carga Refrigerada', 'TRN', 'VEH');
 INSERT INTO `lapsusVGI`.`ETYPE_actornv3` (`actornv3`, `descricao`, `actornv2`, `ACTOR`) VALUES ('STM', 'Trem Movido a Vapor', 'TRN', 'VEH');
-INSERT INTO `lapsusVGI`.`ETYPE_actornv3` (`actornv3`, `descricao`, `actornv2`, `ACTOR`) VALUES ('TRM', 'Trams and light railways???', 'TRN', 'VEH');
+-- INSERT INTO `lapsusVGI`.`ETYPE_actornv3` (`actornv3`, `descricao`, `actornv2`, `ACTOR`) VALUES ('TRM', 'Trams and light railways???', 'TRN', 'VEH');
 INSERT INTO `lapsusVGI`.`ETYPE_actornv3` (`actornv3`, `descricao`, `actornv2`, `ACTOR`) VALUES ('UDG', 'Trem Subterrâneo', 'TRN', 'VEH');
 INSERT INTO `lapsusVGI`.`ETYPE_actornv3` (`actornv3`, `descricao`, `actornv2`, `ACTOR`) VALUES ('UND', 'Trem Com Carga Não Determinada', 'TRN', 'VEH');
-INSERT INTO `lapsusVGI`.`ETYPE_actornv3` (`actornv3`, `descricao`, `actornv2`, `ACTOR`) VALUES ('VIP', 'Trem Com VIP???', 'TRN', 'VEH');
+-- INSERT INTO `lapsusVGI`.`ETYPE_actornv3` (`actornv3`, `descricao`, `actornv2`, `ACTOR`) VALUES ('VIP', 'Trem Com VIP???', 'TRN', 'VEH');
 INSERT INTO `lapsusVGI`.`ETYPE_actornv3` (`actornv3`, `descricao`, `actornv2`, `ACTOR`) VALUES ('VLT', 'Trem Longo', 'TRN', 'VEH');
 INSERT INTO `lapsusVGI`.`ETYPE_actornv3` (`actornv3`, `descricao`, `actornv2`, `ACTOR`) VALUES ('AMB', 'Ambulância', 'VES', 'VEH');
 INSERT INTO `lapsusVGI`.`ETYPE_actornv3` (`actornv3`, `descricao`, `actornv2`, `ACTOR`) VALUES ('BOT', 'Barco', 'VES', 'VEH');
 INSERT INTO `lapsusVGI`.`ETYPE_actornv3` (`actornv3`, `descricao`, `actornv2`, `ACTOR`) VALUES ('CNO', 'Canoa ou Kayak', 'VES', 'VEH');
-INSERT INTO `lapsusVGI`.`ETYPE_actornv3` (`actornv3`, `descricao`, `actornv2`, `ACTOR`) VALUES ('CRG', 'Cargo???', 'VES', 'VEH');
+-- INSERT INTO `lapsusVGI`.`ETYPE_actornv3` (`actornv3`, `descricao`, `actornv2`, `ACTOR`) VALUES ('CRG', 'Cargo???', 'VES', 'VEH');
 INSERT INTO `lapsusVGI`.`ETYPE_actornv3` (`actornv3`, `descricao`, `actornv2`, `ACTOR`) VALUES ('DSL', 'Movido a Diesel', 'VES', 'VEH');
 INSERT INTO `lapsusVGI`.`ETYPE_actornv3` (`actornv3`, `descricao`, `actornv2`, `ACTOR`) VALUES ('FLO', 'Embarcação Flutuando', 'VES', 'VEH');
 INSERT INTO `lapsusVGI`.`ETYPE_actornv3` (`actornv3`, `descricao`, `actornv2`, `ACTOR`) VALUES ('FRY', 'Balsa', 'VES', 'VEH');
 INSERT INTO `lapsusVGI`.`ETYPE_actornv3` (`actornv3`, `descricao`, `actornv2`, `ACTOR`) VALUES ('HOV', 'Aerodeslizador', 'VES', 'VEH');
 INSERT INTO `lapsusVGI`.`ETYPE_actornv3` (`actornv3`, `descricao`, `actornv2`, `ACTOR`) VALUES ('HZD', 'Transportando Carga Perigosa', 'VES', 'VEH');
 INSERT INTO `lapsusVGI`.`ETYPE_actornv3` (`actornv3`, `descricao`, `actornv2`, `ACTOR`) VALUES ('JSK', 'Jet Ski', 'VES', 'VEH');
-INSERT INTO `lapsusVGI`.`ETYPE_actornv3` (`actornv3`, `descricao`, `actornv2`, `ACTOR`) VALUES ('LEI', 'Lazer???', 'VES', 'VEH');
+-- INSERT INTO `lapsusVGI`.`ETYPE_actornv3` (`actornv3`, `descricao`, `actornv2`, `ACTOR`) VALUES ('LEI', 'Lazer???', 'VES', 'VEH');
 INSERT INTO `lapsusVGI`.`ETYPE_actornv3` (`actornv3`, `descricao`, `actornv2`, `ACTOR`) VALUES ('LIS', 'Inclinado Para Um Lado', 'VES', 'VEH');
 INSERT INTO `lapsusVGI`.`ETYPE_actornv3` (`actornv3`, `descricao`, `actornv2`, `ACTOR`) VALUES ('MIL', 'Militar', 'VES', 'VEH');
 INSERT INTO `lapsusVGI`.`ETYPE_actornv3` (`actornv3`, `descricao`, `actornv2`, `ACTOR`) VALUES ('MPW', 'Movido Por Força Humana', 'VES', 'VEH');
@@ -1687,36 +1686,36 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `lapsusVGI`;
-INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('CORECT', 'Condições Corretas de Humidade???', 'HUM');
+-- INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('CORECT', 'Condições Corretas de Humidade???', 'HUM');
 INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('DRZLE', 'Chuvisco', 'HUM');
 INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('FOG', 'Névoa', 'HUM');
 INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('RAIN', 'Chuva', 'HUM');
-INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('RAINSR', 'Rains Shower???', 'HUM');
+-- INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('RAINSR', 'Rains Shower???', 'HUM');
 INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('THSTRN', 'Tempestade e Chuva', 'HUM');
 INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('BLWSNW', 'Soprando Neve', 'ICY');
-INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('CLRICE', 'Clear icing????', 'ICY');
+-- INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('CLRICE', 'Clear icing????', 'ICY');
 INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('CORECT', 'Sem Problemas em Relação a Gelo', 'ICY');
 INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('FDRZLE', 'Chuvisco Congelante', 'ICY');
 INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('FRAIN', 'Chuva Congelante', 'ICY');
 INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('FRZFOG', 'Névoa Congelante', 'ICY');
-INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('HAIL', 'HAIL????', 'ICY');
+-- INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('HAIL', 'HAIL????', 'ICY');
 INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('ICECRY', 'Cristais de Gelo', 'ICY');
-INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('ICEPLT', 'Ice Pellets ???', 'ICY');
+-- INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('ICEPLT', 'Ice Pellets ???', 'ICY');
 INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('MIXICE', 'Mixed Icing', 'ICY');
 INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('RIMICE', 'Geada de Gelo', 'ICY');
 INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('SLEET', 'Granizo', 'ICY');
 INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('SNOW', 'Preciptação de Cristais de Gelo', 'ICY');
-INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('SNWGRN', 'Snow Grains ???', 'ICY');
-INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('SNWSHR', 'Snow Shower ???', 'ICY');
+-- INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('SNWGRN', 'Snow Grains ???', 'ICY');
+-- INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('SNWSHR', 'Snow Shower ???', 'ICY');
 INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('CORECT', 'Sem Problemas em Relação a Tempestade', 'TDS');
 INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('LGTNNG', 'Raio', 'TDS');
 INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('THST', 'Tempestade', 'TDS');
 INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('CORECT', 'Sem Problemas em Relação a Visibilidade', 'VIS');
-INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('HAZE', 'Perigo ???', 'VIS');
+-- INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('HAZE', 'Perigo ???', 'VIS');
 INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('SMOKE', 'Fumaça', 'VIS');
 INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('CORECT', 'Sem Problemas Com Condições de Ventania', 'WIN');
 INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('CYCL', 'Ciclone', 'WIN');
-INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('DSTDVL', 'Dust Devil???', 'WIN');
+-- INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('DSTDVL', 'Dust Devil???', 'WIN');
 INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('DSTSND', 'Sopro de Areai ou Poeira', 'WIN');
 INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('DSTSTR', 'Tempestade de Poeira', 'WIN');
 INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('FNLCLD', 'Nuvem de Funil', 'WIN');
@@ -1726,8 +1725,8 @@ INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`)
 INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('TORN', 'Tornado', 'WIN');
 INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('TRST', 'Tempestade Tropical', 'WIN');
 INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('TYPH', 'Tufão', 'WIN');
-INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('WHIR', 'Whirlwind ???', 'WIN');
-INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('WTRSPT', 'Waterspout ???', 'WIN');
+-- INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('WHIR', 'Whirlwind ???', 'WIN');
+-- INSERT INTO `lapsusVGI`.`EGEO_subWeather` (`subWeather`, `descricao`, `WEATHER`) VALUES ('WTRSPT', 'Waterspout ???', 'WIN');
 
 COMMIT;
 
