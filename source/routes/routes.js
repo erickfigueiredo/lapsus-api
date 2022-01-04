@@ -1,6 +1,14 @@
 const router = require('express').Router();
 
 const {ensureAuthentication} = require('../middlewares/Authentication');
+const {
+    allowOwnUser,
+    allowAdmin,
+    allowTechnician,
+    allowManager,
+    allowRegisteredAndModerator,
+    allowManagerAndModerator
+} = require('../middlewares/Authorization');
 
 const Administrator = require('../controllers/AdminController');
 const Category = require('../controllers/CategoryController');
@@ -13,6 +21,8 @@ const Registered = require('../controllers/RegisteredController');
 const Shapefile = require('../controllers/ShapefileController');
 const Technician = require('../controllers/TechnicianController');
 const OrgInformation = require('../controllers/OrgInformationController');
+const EmergencyContact = require('../controllers/EmergencyContactController');
+const Legend = require('../controllers/LegendController');
 
 const EMSI = require('../controllers/EMSIController');
 
@@ -27,13 +37,13 @@ router.post('/admin', Administrator.create);
 router.put('/admin', Administrator.update);
 router.delete('/admin/:id', Administrator.deactivate);
 
-// -> Rotas de Category => OK
-router.get('/category/all/detailed', Category.indexDetailed);
+// -> Rotas de Category -> OKAY
+router.get('/category/all/detailed', Category.indexDetailed);// token - adm tec
 router.get('/category/all', Category.index);
-router.get('/category/:id', Category.show);
-router.post('/category', Category.create);
-router.put('/category', Category.update);
-router.delete('/category/:id', Category.delete);
+router.get('/category/:id', Category.show);// token - adm tec
+router.post('/category', Category.create);// token - adm tec
+router.put('/category', Category.update);// token - adm tec
+router.delete('/category/:id', Category.delete);// token - adm tec
 
 // -> Rotas de Contact
 router.get('/contact/all', Contact.index);
@@ -84,11 +94,19 @@ router.get('/contribution/:id', Contribution.show);
 router.post('/contribution', Contribution.create);
 router.put('/contribution', Contribution.evaluateStatus);
 
+
 // -> Rotas de Informações da organização
 router.get('/organization', OrgInformation.show);
 router.put('/organization', OrgInformation.update);
 
+// -> Rota de Legenda dos Mapas
+router.get('/map_legend', Legend.index);
+
 // -> Rotas de Contatos de Emergência
+router.get('/emergency_contact', EmergencyContact.index);
+router.post('/emergency_contact', EmergencyContact.create);
+router.put('/emergency_contact', EmergencyContact.update);
+router.delete('/emergency_contact/:id', EmergencyContact.delete);
 
 // -> Rotas de EMSI
 router.get('/emsi/lists', EMSI.getFormLists);

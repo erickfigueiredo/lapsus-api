@@ -4,7 +4,6 @@ const EmergencyContactValidator = require('../validators/EmergencyContactValidat
 class EmergencyContactController {
     static async index(req, res) {
         const emCtt = await EmergencyContact.listAll();
-
         return emCtt.success ? res.send(emCtt) : res.status(404).send(emCtt);
     }
 
@@ -40,8 +39,8 @@ class EmergencyContactController {
 
             if (Object.keys(toUpdate).length) {
                 toUpdate.id = form.id;
-                const result = await EmergencyContact.update(toUpdate);
 
+                const result = await EmergencyContact.update(toUpdate);
                 return result.success ? res.send(result) : res.status(400).send(result);
             }
 
@@ -59,13 +58,11 @@ class EmergencyContactController {
         }
 
         const existEmCtt = await EmergencyContact.findOne(id);
-
         if (!existEmCtt.success) {
             return res.status(404).send(existEmCtt);
         }
 
         const result = await EmergencyContact.delete(id);
-
         return result.success ? res.send(result) : res.status(400).send(result);
     }
 }

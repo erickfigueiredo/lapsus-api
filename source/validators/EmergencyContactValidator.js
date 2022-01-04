@@ -7,12 +7,12 @@ const createValidate = () => {
             'string.min': 'Nome deve conter no mínimo 2 letras!',
             'string.max': 'Nome deve conter no máximo 50 letras!',
             'string.empty': 'Campo nome não pode ser vazio!',
-            'any.required': 'Nome é obrigatório!'
+            'any.required': 'Campo nome é obrigatório!'
         }),
-        phone: Joi.string().regex(/^[0-9]{10,11}$/).required().messages({
-            'string.pattern.base': 'Telefone deve ter 10 ou 11 caracteres numéricos!',
+        phone: Joi.string().regex(/^[0-9]{3,11}$/).required().messages({
+            'string.pattern.base': 'Telefone deve ter de 3 à 11 caracteres numéricos!',
             'string.empty': 'Campo telefone não pode ser vazio!',
-            'any.required': 'Telefone é obrigatório!'
+            'any.required': 'Campo telefone é obrigatório!'
         })
     })
 }
@@ -22,7 +22,7 @@ const updateValidate = () => {
         id: Joi.number().integer().min(1).required().messages({
             'number.integer': 'Id deve ser um número inteiro!',
             'number.min': 'Id não pode ser menor que 1!',
-            'number.empty': 'Campo id não pode ser vazio!',
+            'number.empty': 'Id não pode ser vazio!',
             'any.required': 'Id é obrigatório!'
         }),
         name: Joi.string().regex(/^(?!\s)(?!.*\s$)[A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).messages({
@@ -31,9 +31,9 @@ const updateValidate = () => {
             'string.max': 'Nome deve conter no máximo 50 caracteres!',
             'string.empty': 'Campo nome não pode ser vazio!'
         }),
-        phone: Joi.string().regex(/^(?!\s)(?!.*\s$)[0-9]{10,11}$/).messages({
-            'string.empty': 'Campo telefone não pode ser vazio!',
-            'string.pattern.base': 'Telefone deve ter 10 ou 11 caracteres numéricos!'
+        phone: Joi.string().regex(/^(?!\s)(?!.*\s$)[0-9]{3,11}$/).messages({
+            'string.pattern.base': 'Telefone deve ter de 3 à 11 caracteres numéricos!',
+            'string.empty': 'Campo telefone não pode ser vazio!'
         }),
     })
 }

@@ -6,7 +6,7 @@ exports.up = function(knex) {
     await knex.schema.createTable(tableName, function(table) {
         table.increments('id').notNullable().primary();
         table.string('name', 50).notNullable();
-        table.string('phone',11);
+        table.string('phone',11).notNullable();
         table.timestamps(false, true);
     });
 
