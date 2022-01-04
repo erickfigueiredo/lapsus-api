@@ -15,7 +15,6 @@ class AccessController {
         }
 
         const login = req.body;
-
         const existEmail = await User.findByEmail(login.email);
 
         if (existEmail.success) {
@@ -23,8 +22,13 @@ class AccessController {
 
             if (validPassword) {
                 try {
-
-                    const user = { id: existEmail.user.id, type: existEmail.user.type, name: existEmail.user.name };
+                    const user = { 
+                        id: existEmail.user.id, 
+                        type: existEmail.user.type, 
+                        name: existEmail.user.name, 
+                        surname: existEmail.user.surname,
+                        email: existEmail.user.email
+                    };
 
                     const payload = {
                         id: existEmail.user.id,
@@ -33,6 +37,7 @@ class AccessController {
 
 
                     if (existEmail.user.type === 'T') {
+                        user.id_institution = existEmail.user.id_institution;
                         payload.id_institution = existEmail.user.id_institution;
                     }
 
@@ -49,8 +54,8 @@ class AccessController {
 
     static async getUserInfo(req, res) {
         const id = req.locals.id;
-        const result = await User.findOne(id);
 
+        const result = await User.findOne(id);
         return result.success ? res.send(result) : res.status(404).send(result);
     }
 };
