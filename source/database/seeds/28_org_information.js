@@ -5,7 +5,7 @@ exports.seed = function (knex) {
         .then(function () {
             // Inserts seed entries
             return knex('org_information').insert([
-                { name: 'Instância Lapsus' }
+                { name: 'Instância Lapsus', uuid: '0' }
             ]);
         });
 };
