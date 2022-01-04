@@ -2,12 +2,12 @@ const Joi = require('joi');
 
 const createValidate = () => {
     return Joi.object().keys({
-        name: Joi.string().regex(/^(?!\s)(?!.*\s$)[A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).required().messages({
+        name: Joi.string().regex(/^(?!\s)(?!.*\s$)[A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(3).max(50).required().messages({
             'string.pattern.base': 'Categoria deve conter apenas letras e não deve iniciar ou terminar com espaços!',
-            'string.min': 'Categoria deve conter no mínimo 2 letras!',
+            'string.min': 'Categoria deve conter no mínimo 3 letras!',
             'string.max': 'Categoria deve conter no máximo 50 letras!',
             'string.empty': 'Campo categoria não pode ser vazio!',
-            'any.required': 'Categoria é obrigatório!'
+            'any.required': 'Campo categoria é obrigatório!'
         }),
         desc: Joi.string().regex(/^\S$|^\S[ \S]*\S$/).min(3).max(500).messages({
             'string.pattern.base': 'Espaços não são permitidos no início ou no fim!',
@@ -26,9 +26,9 @@ const updateValidate = () => {
             'number.empty': 'É necessário informar um Id!',
             'any.required': 'Id é obrigatório!'
         }),
-        name: Joi.string().regex(/^(?!\s)(?!.*\s$)[A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).messages({
+        name: Joi.string().regex(/^(?!\s)(?!.*\s$)[A-Za-z-áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(3).max(50).messages({
             'string.pattern.base': 'Categoria deve conter apenas letras e não deve iniciar ou terminar com espaços!',
-            'string.min': 'Categoria deve conter no mínimo 2 letras!',
+            'string.min': 'Categoria deve conter no mínimo 3 letras!',
             'string.max': 'Categoria deve conter no máximo 50 letras!',
             'string.empty': 'Campo categoria não pode ser vazio!'
         }),

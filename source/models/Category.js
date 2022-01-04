@@ -11,7 +11,6 @@ class Category {
             return category[0] ? { success: true, category: category[0] } : { success: false, message: 'Categoria inexistente!' };
         } catch (e) {
             Message.warning(e);
-
             return { success: false, message: 'Houve um erro ao recuperar a categoria!' };
         }
     }
@@ -25,7 +24,6 @@ class Category {
             return category[0] ? { success: true, category: category[0] } : { success: false, message: 'Categoria inexistente!' };
         } catch (e) {
             Message.warning(e);
-
             return { success: false, message: 'Houve um erro ao recuperar a categoria!' };
         }
     }
@@ -39,14 +37,13 @@ class Category {
             return category[0] ? { success: true, category } : { success: false, message: 'Categorias inexistentes!' };
         } catch (e) {
             Message.warning(e);
-
             return { success: false, message: 'Houve um erro ao recuperar as categorias!' };
         }
     }
 
     static async findAllDetailed(page) {
         try {
-            const category = await knex.select(['id', 'name', 'desc'])
+            const category = await knex.select(['id', 'name', 'desc', 'created_at'])
                 .from('category')
                 .orderBy(['name', 'created_at'])
                 .paginate({
@@ -59,7 +56,7 @@ class Category {
             { success: true, category } : { success: false, message: 'Categorias inexistentes!' };
         } catch (e) {
             Message.warning(e);
-            return { success: false, message: 'Houve um erro ao recuperar as instituições!' };
+            return { success: false, message: 'Houve um erro ao recuperar as categorias!' };
         }
     }
 
@@ -67,12 +64,11 @@ class Category {
         try {
             const category = await knex.insert(data)
                 .table('category')
-                .returning(['id', 'name', 'desc']);
+                .returning(['id', 'name', 'desc', 'created_at']);
 
             return category[0] ? { success: true, category: category[0] } : { success: false, message: 'Não foi possível cadastrar a categoria!' };
         } catch (e) {
             Message.warning(e);
-            
             return { success: false, message: 'Falha ao inserir categoria!' };
         }
     }
@@ -85,12 +81,11 @@ class Category {
             const category = await knex.update(data)
                 .table('category')
                 .where({ id })
-                .returning(['id', 'name', 'desc']);
+                .returning(['id', 'name', 'desc', 'created_at']);
 
             return category[0] ? { success: true, category: category[0] } : { success: false, message: 'Não foi possível atualizar a categoria!' };
         } catch (e) {
             Message.warning(e);
-
             return { success: false, message: 'Falha ao atualizar categoria!' };
         }
     }
@@ -101,12 +96,11 @@ class Category {
                 .where({ id })
                 .del();
 
-            return { success: true, message: 'Categoria deletada com successo!' };
+            return { success: true, message: 'Categoria deletada com sucesso!' };
         } catch (e) {
             Message.warning(e);
 
             if (e.toString().indexOf('violates foreign key constraint') !== -1) {
-                
                 return { success: false, message: 'Não é possível deletar essa categoria, pois existem informações associadas!' };
             }
 

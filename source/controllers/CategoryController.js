@@ -6,18 +6,15 @@ class CategoryController {
         const id = req.params.id;
 
         if (isNaN(parseInt(id))) {
-
             return res.status(400).send({ success: false, message: 'Id inválido!' });
         }
 
         const ctg = await Category.findOne(id);
-
         return ctg.success ? res.send(ctg) : res.status(404).send(ctg);
     }
 
     static async index(req, res) {
         const ctgs = await Category.listAll();
-
         return ctgs.success ? res.send(ctgs) : res.status(404).send(ctgs);
     }
 
@@ -35,7 +32,6 @@ class CategoryController {
         const { error } = valid.validate(req.body);
 
         if (error) {
-
             return res.status(400).send({ success: false, message: error.details[0].message });
         }
 
@@ -43,12 +39,10 @@ class CategoryController {
         const existName = await Category.findByName(req.body.name);
 
         if (existName.success) {
-
             return res.status(409).send({ success: false, message: 'Nome já cadastrado!' });
         }
 
         const result = await Category.create(req.body);
-
         return result.success ? res.status(201).send(result) : res.status(400).send(result);
     }
 
@@ -57,7 +51,6 @@ class CategoryController {
         const { error } = valid.validate(req.body);
 
         if (error) {
-
             return res.status(400).send({ success: false, message: error.details[0].message });
         }
 
@@ -86,33 +79,28 @@ class CategoryController {
             if (Object.keys(toUpdate).length) {
                 toUpdate.id = form.id;
                 const result = await Category.update(toUpdate);
-
                 return result.success ? res.send(result) : res.status(400).send(result);
             }
 
             return res.send(existCategory);
         }
 
-        return res.status(404).send({ success: false, message: 'Categoria inexistente!' });
+        return res.status(404).send(existCategory);
     }
 
     static async delete(req, res) {
         const id = req.params.id;
 
         if (isNaN(parseInt(id))) {
-
             return res.status(400).send({ success: false, message: 'Id inválido!' });
         }
 
         const existCategory = await Category.findOne(id);
-
         if (!existCategory.success) {
-
             return res.status(404).send(existCategory);
         }
 
         const result = await Category.delete(id);
-
         return result.success ? res.send(result) : res.status(400).send(result);
     }
 }
