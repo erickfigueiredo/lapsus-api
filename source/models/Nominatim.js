@@ -1,17 +1,14 @@
 const axios = require('axios');
 const baseUrl = 'https://nominatim.openstreetmap.org';
 
+const coordsHandler = require('../utils/CoordsHandler');
+
 const Message = require('../utils/Message');
 
 class Nominatim {
     static async findAddressesByPosition(position) {
         try {
-            let coords;
-            if (position.includes('POLYGON')) {
-                coords = position.split('((')[1].replace('))', '').split(',');
-            } else {
-                coords = position.split('(')[1].replace(')', '').split(',')
-            }
+            const coords = coordsHandler(position);
 
             const requests = coords.map(coord => {
                 coord = coord.split(' ');
