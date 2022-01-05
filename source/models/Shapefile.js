@@ -1,17 +1,14 @@
 const knex = require('../database/knex');
 const Message = require('../utils/Message');
 
-const fs = require('fs');
-const path = require('path');
-
 class Shapefile {
     static async findOne(id) {
         try {
-            const shp = await knex.select('*')
+            const shp = await knex.select('id', 'title', 'desc', 'uri')
                 .from('shapefile')
                 .where({ id });
 
-            return shp[0] ? { success: true, shapefile: shp[0] } : { success: false, message: 'Não foi possível recuperar o shapefile / Shapefile inexistente!' };
+            return shp[0] ? { success: true, shapefile: shp[0] } : { success: false, message: 'Shapefile inexistente!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar o shapefile!' };
@@ -20,11 +17,11 @@ class Shapefile {
 
     static async findByTitle(title) {
         try {
-            const shp = await knex.select('*')
+            const shp = await knex.select('id', 'title', 'desc')
                 .from('shapefile')
                 .where({ title });
 
-            return shp[0] ? { success: true, shapefile: shp[0] } : { success: false, message: 'Não foi possível recuperar o shapefile / Shapefile inexistente!' };
+            return shp[0] ? { success: true, shapefile: shp[0] } : { success: false, message: 'Shapefile inexistente!' };
 
         } catch (e) {
             Message.warning(e);
@@ -32,18 +29,17 @@ class Shapefile {
         }
     }
 
-    // Aqui passamos um modificador para poder fornecer o URI tbm
     static async findAll(method) {
         try {
-            const attr = ['id', 'title', 'desc'];
+            let attr = ['id', 'title', 'desc'];
 
-            if(method === 'y') attr.push('uri');
+            if (method === 'y') attr = 'uri';
 
             const shp = await knex.select(attr)
                 .from('shapefile')
                 .orderBy('created_at', 'DESC');
 
-            return shp[0] ? { success: true, shapefile: shp } : { success: false, message: 'Houve um erro ao recuperar os shapefiles / Shapefiles inexistentes!' };
+            return shp[0] ? { success: true, shapefile: shp } : { success: false, message: 'Shapefiles inexistentes!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar os shapefiles!' };
@@ -56,7 +52,7 @@ class Shapefile {
                 .table('shapefile')
                 .returning(['id', 'title', 'desc']);
 
-            return shp[0] ? { success: true, shapefile: shp[0] } : { success: false, message: 'Não foi possível recuperar o shapefile / Shapefile inexistente!' };
+            return shp[0] ? { success: true, shapefile: shp[0] } : { success: false, message: 'Não foi possível adicionar o shapefile!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Falha ao inserir shapefile!' };
@@ -85,11 +81,6 @@ class Shapefile {
             await knex('shapefile')
                 .where({ id })
                 .del();
-
-            const existShp = await this.findOne(id);
-            if (existShp.success)
-                return { success: false, message: 'Houve um erro ao deletar o Shapefile!' };
-
 
             return { success: true, message: 'Shapefile deletado com sucesso!' };
         } catch (e) {

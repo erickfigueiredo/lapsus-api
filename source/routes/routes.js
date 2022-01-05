@@ -84,9 +84,9 @@ router.put('/institution', Institution.update);
 // -> Rotas de Shapefile
 router.get('/shapefile/all', Shapefile.index);
 router.get('/shapefile/:id', Shapefile.show);
-router.post('/shapefile', Shapefile.create);
-router.put('/shapefile', Shapefile.update);
-router.delete('/shapefile/:id', Shapefile.delete);
+router.post('/shapefile', ensureAuthentication, allowAdmin, Shapefile.create);
+router.put('/shapefile', ensureAuthentication, allowAdmin, Shapefile.update);
+router.delete('/shapefile/:id', ensureAuthentication, allowAdmin, Shapefile.delete);
 
 // -> Rotas de Contribution
 router.get('/contribution/all', Contribution.index);
@@ -109,9 +109,8 @@ router.put('/emergency_contact', EmergencyContact.update);
 router.delete('/emergency_contact/:id', EmergencyContact.delete);
 
 // -> Rotas de EMSI
-router.get('/emsi/lists', EMSI.getFormLists);
-router.post('/emsi', EMSI.create);
-
+router.get('/emsi/lists', ensureAuthentication, allowManager, EMSI.getFormLists);
+router.post('/emsi', ensureAuthentication, allowManager, EMSI.create);
 
 // -> Rotas de 
 

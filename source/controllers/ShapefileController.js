@@ -1,7 +1,6 @@
 const Shapefile = require('../models/Shapefile');
-const ShapefileValidator = require('../validators/ShapefileValidator');
-
 const User = require('../models/User');
+const ShapefileValidator = require('../validators/ShapefileValidator');
 
 const multer = require('multer');
 const multerConfig = require('../config/Multer');
@@ -22,7 +21,7 @@ class ShapefileController {
     }
 
     static async index(req, res) {
-        let method = req.query.withURI;
+        let method = req.query.is_uri;
         
         if(method !== 'y') method = 'n';
         
@@ -37,7 +36,7 @@ class ShapefileController {
         upload(req, res, async (fail) => {
 
             if (fail instanceof multer.MulterError) {
-                return res.status(400).send({ success: false, message: 'Extensão de arquivo inválida!' });
+                return res.status(400).send({ success: false, message: 'É necessário submeter um único arquivo .zip!' });
             }
 
             if (!req.file) {
@@ -54,10 +53,10 @@ class ShapefileController {
                 return res.status(400).send({ success: false, message: error.details[0].message });
             }
 
-            const existAdder = await User.findOneByType(req.body.added_by, 'A');
+            const existAdder = await User.findOneByType(req.locals.id, 'A');
             if (!existAdder.success) {
                 remFiles([req.file]);
-                return res.status(404).send({ success: false, message: 'Usuário adicionador inexistente!' });
+                return res.status(404).send({ success: false, message: 'Usuário administrador inexistente!' });
             }
 
             req.body.title = req.body.title.toLowerCase();
@@ -68,7 +67,10 @@ class ShapefileController {
                 return res.status(409).send({ success: false, message: 'Título já cadastrado!' });
             }
 
-            req.body.uri = req.file.path;
+            req.body.uri = `/shapefiles/${req.body.key}`;
+            req.body.path = req.file.path;
+
+            req.body.added_by = req.locals.id;
 
             const result = await Shapefile.create(req.body);
             if (!result.success) {
@@ -136,12 +138,11 @@ class ShapefileController {
         }
 
         const result = await Shapefile.delete(id);
-
         if (!result.success) {
             return res.status(400).send(result);
         }
 
-        remFiles([{path: shp.shapefile.uri}]);
+        remFiles([{path: shp.shapefile.path}]);
 
         return res.send(result);
     }

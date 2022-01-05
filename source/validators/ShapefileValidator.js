@@ -14,12 +14,6 @@ const createValidate = () => {
             'string.min': 'Descrição deve conter no mínimo 3 caracteres!',
             'string.max': 'Descrição deve conter no máximo 100 caracteres!',
             'string.empty': 'Campo descrição não pode ser vazio!'
-        }),
-        added_by: Joi.number().integer().min(1).required().messages({
-            'number.integer': 'Adicionador deve ser um número inteiro!',
-            'number.min': 'Adicionador não pode ser menor que 1!',
-            'number.empty': 'Campo adicionador não pode ser vazio!',
-            'any.required': 'Adicionador é obrigatório!'
         })
     })
 }
