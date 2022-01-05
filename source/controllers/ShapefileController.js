@@ -67,7 +67,7 @@ class ShapefileController {
                 return res.status(409).send({ success: false, message: 'Título já cadastrado!' });
             }
 
-            req.body.uri = `/shapefiles/${req.body.key}`;
+            req.body.uri = `/shapefiles/${req.file.key}`;
             req.body.path = req.file.path;
 
             req.body.added_by = req.locals.id;
