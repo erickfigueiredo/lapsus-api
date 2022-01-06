@@ -8,10 +8,9 @@ class Contact {
                 .from('contact')
                 .where({ id });
 
-            return contact[0] ? { success: true, contact: contact[0] } : { success: false, message: 'Não foi possível recuperar a mensagem / Mensagem inexistente!' };
+            return contact[0] ? { success: true, contact: contact[0] } : { success: false, message: 'Mensagem inexistente!' };
         } catch (e) {
             Message.warning(e);
-
             return { success: false, message: 'Houve um erro ao recuperar a mensagem!' };
         }
     }
@@ -27,10 +26,9 @@ class Contact {
                     isLengthAware: true
                 });
 
-            return contact.data[0] ? { success: true, contact } : { success: false, message: 'Não foi possível recuperar as mensagens / Mensagens inexistentes!' };
+            return contact.data[0] ? { success: true, contact } : { success: false, message: 'Mensagens inexistentes!' };
         } catch (e) {
             Message.warning(e);
-
             return { success: false, message: 'Houve um erro ao recuperar as mensagens!' };
         }
     }
@@ -44,7 +42,6 @@ class Contact {
             return contact[0] ? { success: true, contact: contact[0] } : { success: false, message: 'Não foi possível cadastrar o mensagem!' };
         } catch (e) {
             Message.warning(e);
-
             return { success: false, message: 'Falha ao inserir mensagem!' };
         }
     }
@@ -62,7 +59,6 @@ class Contact {
             return contact[0] ? { success: true, contact: contact[0] } : { success: false, message: 'Não foi possível atualizar a mensagem!' };
         } catch (e) {
             Message.warning(e);
-
             return { success: false, message: 'Falha ao atualizar a mensagem!' };
         }
     }
@@ -73,12 +69,9 @@ class Contact {
                 .where({ id })
                 .del();
 
-            const existContact = await this.findOne(id);
-
-            return existContact.success ? { success: false, message: 'Não foi possível deletar a mensagem!' } : { success: true, message: 'Mensagem deletada com sucesso!' };
+            return { success: true, message: 'Mensagem deletada com sucesso!' };
         } catch (e) {
             Message.warning(e);
-            
             return { success: false, message: 'Falha ao deletar mensagem!' };
         }
     }

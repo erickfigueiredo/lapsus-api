@@ -6,12 +6,10 @@ class ContactController {
         const id = req.params.id;
 
         if (isNaN(parseInt(id))) {
-
             return res.status(400).send({ success: false, message: 'Id inválido!' });
         }
 
         const ctt = await Contact.findOne(id);
-
         return ctt.success ? res.send(ctt) : res.status(404).send(ctt);
     }
 
@@ -21,7 +19,6 @@ class ContactController {
         if (isNaN(parseInt(page))) { page = 1 };
 
         const ctts = await Contact.findAll(page);
-
         return ctts.success ? res.send(ctts) : res.status(404).send(ctts);
     }
 
@@ -30,33 +27,27 @@ class ContactController {
         const { error } = valid.validate(req.body);
 
         if (error) {
-
             return res.status(400).send({ success: false, message: error.details[0].message });
         }
 
         const result = await Contact.create(req.body);
-
-        return result.success ? res.send(result) : res.status(400).send(result);
+        return result.success ? res.status(201).send(result) : res.status(400).send(result);
     }
 
     static async toggleVisualize(req, res) {
         const id = req.body.id;
 
         if (isNaN(parseInt(id))) {
-
             return res.status(400).send({ success: false, message: 'Id inválido!' });
         }
 
         const existMessage = await Contact.findOne(id);
-
         if (!existMessage.success) {
-
             return res.status(404).send(existMessage);
         }
 
         const is_visualized = !existMessage.contact.is_visualized;
         const result = await Contact.update({ id, is_visualized });
-
         return result.success ? res.send(result) : res.status(400).send(result);
     }
 
@@ -64,19 +55,15 @@ class ContactController {
         const id = req.params.id;
 
         if (isNaN(parseInt(id))) { 
-
             return res.status(400).send({ success: false, message: 'Id inválido!' });
         }
 
         const existMessage = await Contact.findOne(id);
-
         if (!existMessage.success){
-
             return res.status(404).send(existMessage);
         }
 
         const result = await Contact.delete(id);
-        
         return result.success ? res.send(result) : res.status(400).send(result);
     }
 }

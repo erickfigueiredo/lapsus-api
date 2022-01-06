@@ -46,11 +46,11 @@ router.put('/category', Category.update);// token - adm tec
 router.delete('/category/:id', Category.delete);// token - adm tec
 
 // -> Rotas de Contact
-router.get('/contact/all', Contact.index);
-router.get('/contact/:id', Contact.show);
+router.get('/contact/all', ensureAuthentication, allowManager, Contact.index);
+router.get('/contact/:id', ensureAuthentication, allowManager, Contact.show);
 router.post('/contact', Contact.create);
-router.patch('/contact/toggle_check', Contact.toggleVisualize);
-router.delete('/contact/:id', Contact.delete);
+router.patch('/contact/toggle_check', ensureAuthentication, allowManager, Contact.toggleVisualize);
+router.delete('/contact/:id', ensureAuthentication, allowManager, Contact.delete);
 
 // -> Rotas de Registered
 router.get('/registered/all', Registered.index);
