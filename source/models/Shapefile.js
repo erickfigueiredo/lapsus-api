@@ -4,7 +4,7 @@ const Message = require('../utils/Message');
 class Shapefile {
     static async findOne(id) {
         try {
-            const shp = await knex.select('id', 'title', 'desc', 'uri')
+            const shp = await knex.select('id', 'title', 'desc', 'uri', 'path')
                 .from('shapefile')
                 .where({ id });
 
