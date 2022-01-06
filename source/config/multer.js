@@ -28,9 +28,9 @@ const multerConfig = (dir, fileProps) => {
         },
         fileFilter(req, file, callback) {
             if (!fileProps.allowedMimes.includes(file.mimetype))
-                callback(new multer.MulterError('LIMIT_UNEXPECTED_FILE'), false);
-                
-            callback(null, true);
+                callback(null, true);
+            
+            callback(null, false);
         }
     }
 };
