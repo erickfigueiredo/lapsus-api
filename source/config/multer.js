@@ -3,7 +3,6 @@ const { v4: uuidV4 } = require('uuid');
 
 const multer = require('multer');
 
-// Talvez mudar pra UUID
 const multerConfig = (dir, fileProps) => {
     return {
         dest: path.resolve(__dirname, '..', '..', 'upload', dir),
@@ -12,25 +11,26 @@ const multerConfig = (dir, fileProps) => {
                 callback(null, path.resolve(__dirname, '..', '..', 'upload', dir));
             },
             filename(req, file, callback) {
-                console.log(file)
                 const ext = file.mimetype.split('/');
 
                 file.key = uuidV4();
-                file.key += `.${ext[1]}`;
+                if (ext[1].includes('zip'))
+                    file.key += '.zip';
+                else
+                    file.key += `.${ext[1]}`;
 
                 callback(null, file.key);
             }
         }),
         limits: {
-            //files: fileProps.numFiles
+            files: fileProps.numFiles,
+            fileSize: 1024 * 1024 * fileProps.maxSize
         },
         fileFilter(req, file, callback) {
-            console.log(file)
-            if (fileProps.allowedMimes.includes(file.mimetype))
-                callback(null, true);
-
-            else
+            if (!fileProps.allowedMimes.includes(file.mimetype))
                 callback(new multer.MulterError('LIMIT_UNEXPECTED_FILE'), false);
+                
+            callback(null, true);
         }
     }
 };

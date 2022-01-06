@@ -22,21 +22,34 @@ class ShapefileController {
 
     static async index(req, res) {
         let method = req.query.is_uri;
-        
-        if(method !== 'y') method = 'n';
-        
+
+        if (method !== 'y') method = 'n';
+
         const shps = await Shapefile.findAll(method);
         return shps.success ? res.send(shps) : res.status(404).send(shps);
     }
 
     static async create(req, res) {
-        const fileProps = { allowedMimes: ['application/zip', 'application/x-zip-compressed'], numFiles: 1 };
+        const fileProps = {
+            allowedMimes: ['application/zip', 'application/x-zip-compressed'],
+            numFiles: 1,
+            maxSize: 10 // 10mb 
+        };
 
         const upload = multer(multerConfig('shapefiles', fileProps)).single('file');
         upload(req, res, async (fail) => {
 
             if (fail instanceof multer.MulterError) {
-                return res.status(400).send({ success: false, message: 'É necessário submeter um único arquivo .zip!' });
+                let message;
+                if (fail.code === 'LIMIT_FILE_SIZE')
+                    message = `O arquivo excede o limite de ${fileProps.maxSize} mb!`;
+
+                else if (fail.code === 'LIMIT_FILE_COUNT')
+                    message = `O número de arquivos excede o limite de ${fileProps.numFiles}!`;
+                    
+                else message = 'É necessário submeter um único arquivo .zip!';
+
+                return res.status(400).send({ success: false, message });
             }
 
             if (!req.file) {
@@ -142,7 +155,7 @@ class ShapefileController {
             return res.status(400).send(result);
         }
 
-        remFiles([{path: shp.shapefile.path}]);
+        remFiles([{ path: shp.shapefile.path }]);
 
         return res.send(result);
     }
