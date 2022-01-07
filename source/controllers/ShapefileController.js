@@ -46,7 +46,7 @@ class ShapefileController {
 
                 else if (fail.code === 'LIMIT_FILE_COUNT')
                     message = `O número de arquivos excede o limite de ${fileProps.numFiles}!`;
-                    
+
                 else message = 'É necessário submeter um único arquivo .zip!';
 
                 return res.status(400).send({ success: false, message });
@@ -57,6 +57,8 @@ class ShapefileController {
             }
 
             req.body = JSON.parse(req.body.data);
+
+            if (!req.body.desc) { req.body.desc = ''; }
 
             const valid = ShapefileValidator.createValidate();
             const { error } = valid.validate(req.body);
@@ -125,7 +127,8 @@ class ShapefileController {
                 }
             }
 
-            if (form.desc && shp.shapefile.desc !== form.desc) { toUpdate.desc = form.desc };
+            if (form.desc === '') { toUpdate.desc = ''; }
+            else if (form.desc && shp.shapefile.desc !== form.desc) { toUpdate.desc = form.desc; }
 
             if (Object.keys(toUpdate).length) {
                 toUpdate.id = form.id;
