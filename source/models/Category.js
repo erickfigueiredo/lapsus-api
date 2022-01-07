@@ -41,18 +41,13 @@ class Category {
         }
     }
 
-    static async findAllDetailed(page) {
+    static async findAllDetailed() {
         try {
             const category = await knex.select(['id', 'name', 'desc', 'created_at'])
                 .from('category')
-                .orderBy(['name', 'created_at'])
-                .paginate({
-                    perPage: 40,
-                    currentPage: page,
-                    isLengthAware: true
-                });
+                .orderBy(['name', 'created_at']);
 
-            return category.data[0] ? 
+            return category[0] ? 
             { success: true, category } : { success: false, message: 'Categorias inexistentes!' };
         } catch (e) {
             Message.warning(e);

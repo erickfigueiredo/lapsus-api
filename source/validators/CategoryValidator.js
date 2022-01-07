@@ -9,11 +9,11 @@ const createValidate = () => {
             'string.empty': 'Campo categoria não pode ser vazio!',
             'any.required': 'Campo categoria é obrigatório!'
         }),
-        desc: Joi.string().regex(/^\S$|^\S[ \S]*\S$/).min(3).max(500).messages({
+        desc: Joi.string().regex(/^\S$|^\S[ \S]*\S$/).empty('').min(3).max(500).messages({
             'string.pattern.base': 'Espaços não são permitidos no início ou no fim!',
             'string.min': 'Descrição deve conter no mínimo 3 caracteres!',
             'string.max': 'Descrição deve conter no máximo 500 caracteres!',
-            'string.empty': 'Campo descrição não pode ser vazio!'
+            //'string.empty': 'Campo descrição não pode ser vazio!'
         })
     })
 }
@@ -32,11 +32,11 @@ const updateValidate = () => {
             'string.max': 'Categoria deve conter no máximo 50 letras!',
             'string.empty': 'Campo categoria não pode ser vazio!'
         }),
-        desc: Joi.string().regex(/^\S$|^\S[ \S]*\S$/).min(3).max(500).messages({
+        desc: Joi.string().regex(/^\S$|^\S[ \S]*\S$/).empty('').min(3).max(500).messages({
             'string.pattern.base': 'Espaços não são permitidos no início ou no fim!',
             'string.min': 'Descrição deve conter no mínimo 3 caracteres!',
             'string.max': 'Descrição deve conter no máximo 500 caracteres!',
-            'string.empty': 'Campo descrição não pode ser vazio!'
+            //'string.empty': 'Campo descrição não pode ser vazio!'
         })
     })
 }

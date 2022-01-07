@@ -38,12 +38,12 @@ router.put('/admin', Administrator.update);
 router.delete('/admin/:id', Administrator.deactivate);
 
 // -> Rotas de Category -> OKAY
-router.get('/category/all/detailed', Category.indexDetailed);// token - adm tec
+router.get('/category/all/detailed',ensureAuthentication, allowManager, Category.indexDetailed);
 router.get('/category/all', Category.index);
-router.get('/category/:id', Category.show);// token - adm tec
-router.post('/category', Category.create);// token - adm tec
-router.put('/category', Category.update);// token - adm tec
-router.delete('/category/:id', Category.delete);// token - adm tec
+router.get('/category/:id',ensureAuthentication, allowManager, Category.show);
+router.post('/category',ensureAuthentication, allowManager, Category.create);
+router.put('/category',ensureAuthentication, allowManager, Category.update);
+router.delete('/category/:id',ensureAuthentication, allowManager, Category.delete);
 
 // -> Rotas de Contact
 router.get('/contact/all', ensureAuthentication, allowManager, Contact.index);
