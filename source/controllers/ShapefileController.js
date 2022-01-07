@@ -92,7 +92,7 @@ class ShapefileController {
                 return res.status(400).send(result);
             }
 
-            return res.send(result);
+            return res.status(201).send(result);
         });
     }
 
@@ -155,7 +155,7 @@ class ShapefileController {
             return res.status(400).send(result);
         }
 
-        remFiles([{ path: shp.shapefile.path }]);
+        remFiles([{ path: shp.shapefile.path }], true);
 
         return res.send(result);
     }
