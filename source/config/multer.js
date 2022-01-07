@@ -27,10 +27,11 @@ const multerConfig = (dir, fileProps) => {
             fileSize: 1024 * 1024 * fileProps.maxSize
         },
         fileFilter(req, file, callback) {
-            if (!fileProps.allowedMimes.includes(file.mimetype))
+            if (!fileProps.allowedMimes.includes(file.mimetype)) {
+                callback(new multer.MulterError('LIMIT_UNEXPECTED_FILE'), false);
+            } else {
                 callback(null, true);
-            
-            callback(null, false);
+            }
         }
     }
 };
