@@ -4,6 +4,7 @@ const User = require('../models/User');
 const ContributionValidator = require('../validators/ContributionValidator');
 
 const remFiles = require('../utils/RemoveFiles');
+const coordsHandler = require('../utils/CoordsHandler');
 
 const multer = require('multer');
 const multerConfig = require('../config/Multer');
@@ -26,17 +27,39 @@ class ContributionController {
         if (isNaN(parseInt(page))) { page = 1 };
 
         const ctbs = await Contribution.findAll(page);
-        return ctbs.success ? res.send(ctbs) : res.status(404).send(ctbs);
+
+        if(ctbs.success) {
+            for(const c of ctbs.contribution.data){
+                c.local = coordsHandler(c.local);
+            }
+
+            return res.send(ctbs);
+        }
+
+        return res.status(404).send(ctbs);
     }
 
     static async create(req, res) {
-        const fileProps = { allowedMimes: ['image/png', 'image/jpeg', 'audio/mpeg', 'video/mp4'], numFiles: 5 };
+        const fileProps = { 
+            allowedMimes: ['image/png', 'image/jpeg', 'application/pdf', 'audio/mpeg', 'video/mp4'], 
+            numFiles: 5,
+            maxSize: 10 //10mb
+        };
 
         const upload = multer(multerConfig('annexes', fileProps)).array('file', 5);
         upload(req, res, async (fail) => {
 
             if (fail instanceof multer.MulterError) {
-                return res.status(400).send({ success: false, message: 'Os arquivos não atendem aos requisitos necessários!' });
+                let message;
+                if(fail.code === 'LIMIT_FILE_SIZE')
+                    message = `Um ou mais arquivos excedem o limite de ${fileProps.maxSize} mb!`;
+                
+                else if(fail.code === 'LIMIT_FILE_COUNT')
+                    message = `O número de arquivos excede o limite de ${fileProps.numFiles}!`;
+                
+                else message = 'Um ou mais arquivos possuem extensão inválida!';
+
+                return res.status(400).send({ success: false, message });
             }
 
             req.body = JSON.parse(req.body.data);
@@ -51,7 +74,7 @@ class ContributionController {
             }
 
             if (req.body.id_collaborator) {
-                const existCollaborator = await User.findOneByType(req.body.id_collaborator, 'R');
+                const existCollaborator = await User.findOneByType(req.body.id_collaborator, ['R', 'M']);
 
                 if (!existCollaborator.success) {
                     if (req.files) if (req.files) remFiles(req.files);
@@ -60,7 +83,6 @@ class ContributionController {
                 }
             }
 
-            // Talvez remover isso
             const existCategory = await Category.findOne(req.body.id_category);
             if (!existCategory.success) {
                 if (req.files) remFiles(req.files);
@@ -69,9 +91,13 @@ class ContributionController {
             }
 
             let result = null;
-
             if (req.files) {
-                const files = req.files.map(file => { return { uri: file.path } });
+                const files = req.files.map(file => { 
+                    return { 
+                        uri: `/annexes/${file.key}`,
+                        path: file.path 
+                    } 
+                });
                 
                 result = await Contribution.create(req.body, files);
             } else {
@@ -84,7 +110,7 @@ class ContributionController {
                 return res.status(400).send(result);
             }
 
-            return res.send(result);
+            return res.status(201).send(result);
         });
     }
 
@@ -101,11 +127,14 @@ class ContributionController {
             return res.status(404).send(existContribution);
         }
 
-        const existManager = await User.findOneManager(req.body.id_manager);
+
+        const existManager = await User.findOneManager(req.locals.id);
         if (!existManager.success) {
             return res.status(404).send(existManager);
         }
-        
+
+        req.body.id_manager = req.locals.id;
+
         const result = await Contribution.update(req.body);
         return result.success ? res.send(result) : res.status(400).send(result);
     }

@@ -89,10 +89,10 @@ router.put('/shapefile', ensureAuthentication, allowAdmin, Shapefile.update);
 router.delete('/shapefile/:id', ensureAuthentication, allowAdmin, Shapefile.delete);
 
 // -> Rotas de Contribution
-router.get('/contribution/all', Contribution.index);
-router.get('/contribution/:id', Contribution.show);
+router.get('/contribution/all', ensureAuthentication, allowManagerAndModerator, Contribution.index);
+router.get('/contribution/:id', ensureAuthentication, allowManagerAndModerator, Contribution.show);
 router.post('/contribution', Contribution.create);
-router.put('/contribution', Contribution.evaluateStatus);
+router.put('/contribution', ensureAuthentication, allowManagerAndModerator, Contribution.evaluateStatus);
 
 
 // -> Rotas de Informações da organização

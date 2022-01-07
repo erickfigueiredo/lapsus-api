@@ -4,15 +4,19 @@ const Message = require('../utils/Message');
 class Contribution {
     static async findOne(id) {
         try {
-            const contrib = await knex.select('*')
-                .from('contribution')
-                .where({ id });
+            const contrib = await knex.select('c.id', 'c.created_at', 'c.updated_at', 'occurrence', 'victims', 'risk_damage', 'published',
+            'c.desc', knex.raw('st_asText(local) as local'), 'cat.name as category_name', 'coll.name as collaborator_name', 'coll.surname as collaborator_surname',
+            'mng.name as manager_name', 'mng.surname as manager_surname')
+            .from('contribution as c')
+            .join('category as cat', 'cat.id', 'c.id_category')
+            .leftJoin('user as coll', 'id_collaborator', 'coll.id')
+            .leftJoin('user as mng', 'id_manager', 'mng.id')
+            .where({'c.id': id});
 
             if (contrib[0]) {
-                const annex = await knex.select('uri')
+                const annex = await knex.select('id', 'uri')
                     .from('annex')
                     .where({ id_contribution: id });
-
 
                 if (annex[0]) { contrib[0].annexes = annex; }
 
@@ -26,11 +30,39 @@ class Contribution {
         }
     }
 
+    static async findAll(page) {
+        try {
+            const contrib = await knex.select('c.id', 'c.created_at', 'c.updated_at', 'occurrence', 'victims', 'risk_damage', 'published',
+                'c.desc', knex.raw('st_asText(local) as local'), 'cat.name as category_name', 'coll.name as collaborator_name', 'coll.surname as collaborator_surname',
+                'mng.name as manager_name', 'mng.surname as manager_surname')
+                .from('contribution as c')
+                .join('category as cat', 'cat.id', 'c.id_category')
+                .leftJoin('user as coll', 'id_collaborator', 'coll.id')
+                .leftJoin('user as mng', 'id_manager', 'mng.id')
+                .orderByRaw("published='P' DESC, created_at ASC")
+                .paginate({
+                    perPage: 40,
+                    currentPage: page,
+                    isLengthAware: true
+                });
+
+            for (const c of contrib.data) {
+                c.annexes = await knex.select('id', 'uri').from('annex').where({ id_contribution: c.id });
+            }
+
+            return { success: true, contribution: contrib };
+        } catch (e) {
+            Message.warning(e);
+            return { success: false, message: 'Houve um erro ao recuperar as contribuições' };
+        }
+    }
+
     static async listAll() {
         try {
-            const contrib = await knex.select('id', 'desc')
+            const contrib = await knex.select('contribution.id as id', 'name as category')
                 .from('contribution')
-                .orderBy('published');
+                .join('category', 'contribution.id_category', 'category.id')
+                .where({ published: 'A' });
 
             return contrib[0] ? { success: true, contribution: contrib } : { success: false, message: 'Não foi possível recuperar as contribuições / Contribuições inexistentes!' };
         } catch (e) {
@@ -51,6 +83,8 @@ class Contribution {
 
                     await trx('annex').insert(files);
                 }
+
+                return { success: true, message: 'Contribuição cadastrada com sucesso!' };
             });
 
         } catch (e) {
@@ -64,12 +98,12 @@ class Contribution {
             const id = data.id;
             delete data['id'];
 
-            const contrib = await knex.update(data)
+            await knex.update(data)
                 .table('contribution')
-                .where({ id })
-                .returning('*');
+                .where({ id });
 
-            return contrib[0] ? { success: true, contribution: contrib[0] } : { success: false, message: 'Não foi possível atualizar a contribuição!' };
+            const contrib = await Contribution.findOne(id);
+            return contrib;
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Falha ao atualizar a contribuição!' };
