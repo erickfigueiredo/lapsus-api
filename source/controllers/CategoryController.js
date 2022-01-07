@@ -19,11 +19,7 @@ class CategoryController {
     }
 
     static async indexDetailed(req, res) {
-        let page = req.query.page;
-
-        if (isNaN(parseInt(page))) { page = 1; }
-
-        const ctg = await Category.findAllDetailed(page);
+        const ctg = await Category.findAllDetailed();
         return ctg.success ? res.send(ctg) : res.status(404).send(ctg);
     }
 
@@ -41,6 +37,8 @@ class CategoryController {
         if (existName.success) {
             return res.status(409).send({ success: false, message: 'Nome já cadastrado!' });
         }
+
+        if (!req.body.desc) { req.body.desc = ''; }
 
         const result = await Category.create(req.body);
         return result.success ? res.status(201).send(result) : res.status(400).send(result);
@@ -74,7 +72,8 @@ class CategoryController {
                 }
             }
 
-            if (form.desc && existCategory.category.desc !== form.desc) toUpdate.desc = form.desc;
+            if (form.desc === '') { toUpdate.desc = ''; }
+            else if (form.desc && existCategory.category.desc !== form.desc) { toUpdate.desc = form.desc; }
 
             if (Object.keys(toUpdate).length) {
                 toUpdate.id = form.id;
