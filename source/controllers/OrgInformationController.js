@@ -16,7 +16,6 @@ class OrgInformationController {
         }
 
         const existOrg = await OrgInformation.find();
-        
         if (existOrg.success) {
             const form = req.body;
             

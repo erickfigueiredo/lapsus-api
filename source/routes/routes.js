@@ -97,22 +97,20 @@ router.put('/contribution', ensureAuthentication, allowManagerAndModerator, Cont
 
 // -> Rotas de Informações da organização
 router.get('/organization', OrgInformation.show);
-router.put('/organization', OrgInformation.update);
+router.put('/organization', ensureAuthentication, allowAdmin, OrgInformation.update);
 
 // -> Rota de Legenda dos Mapas
 router.get('/map_legend', Legend.index);
 
 // -> Rotas de Contatos de Emergência
 router.get('/emergency_contact', EmergencyContact.index);
-router.post('/emergency_contact', EmergencyContact.create);
-router.put('/emergency_contact', EmergencyContact.update);
-router.delete('/emergency_contact/:id', EmergencyContact.delete);
+router.post('/emergency_contact', ensureAuthentication, allowAdmin, EmergencyContact.create);
+router.put('/emergency_contact', ensureAuthentication, allowAdmin, EmergencyContact.update);
+router.delete('/emergency_contact/:id', ensureAuthentication, allowAdmin, EmergencyContact.delete);
 
 // -> Rotas de EMSI
 router.get('/emsi/lists', ensureAuthentication, allowManager, EMSI.getFormLists);
 router.post('/emsi', ensureAuthentication, allowManager, EMSI.create);
-
-// -> Rotas de 
 
 // -> Rotas de Erro 404
 router.get('/ops', (_, res) => {

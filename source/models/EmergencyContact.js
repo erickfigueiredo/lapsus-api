@@ -12,12 +12,11 @@ class EmergencyContact {
             return emContact[0] ? { success: true, emContact } : { success: false, message: 'Contato de emergência inexistente!' }
         } catch (e) {
             Message.warning(e);
-
             return { success: false, message: 'Houve um erro ao recuperar o contato de emergência!' }
         }
     }
 
-    static async listAll() {
+    static async findAll() {
         try {
             const emContact = await knex.select(['id', 'name', 'phone'])
                 .from('emergency_contact')
@@ -26,7 +25,6 @@ class EmergencyContact {
             return emContact[0] ? { success: true, emContact } : { success: false, message: 'Contatos de emergência inexistentes!' }
         } catch (e) {
             Message.warning(e);
-
             return { success: false, message: 'Houve um erro ao recuperar os contatos de emergência!' }
         }
     }
@@ -40,8 +38,7 @@ class EmergencyContact {
             return emContact[0] ? { success: true, emContact: emContact[0] } : { success: false, message: 'Não foi possível cadastrar o contato de emergência!' };
         } catch (e) {
             Message.warning(e);
-
-            return { success: false, message: 'Falha ao inserri o contato de emergência!' };
+            return { success: false, message: 'Falha ao inserir o contato de emergência!' };
         }
     }
 
@@ -58,7 +55,6 @@ class EmergencyContact {
             return emContact[0] ? { success: true, emContact: emContact[0] } : { success: false, message: 'Não foi possível atualizar o contato de emergência!' };
         } catch (e) {
             Message.warning(e);
-
             return { success: false, message: 'Falha ao atualizar o contato de emergência!' };
         }
     }
@@ -72,7 +68,6 @@ class EmergencyContact {
             return { success: true, message: 'Contato de emergência deletado com sucesso!' };
         } catch (e) {
             Message.warning(e);
-
             return { success: false, message: 'Falha ao deletar contato de emergência!' };
         }
     }

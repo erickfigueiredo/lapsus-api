@@ -3,7 +3,7 @@ const EmergencyContactValidator = require('../validators/EmergencyContactValidat
 
 class EmergencyContactController {
     static async index(req, res) {
-        const emCtt = await EmergencyContact.listAll();
+        const emCtt = await EmergencyContact.findAll();
         return emCtt.success ? res.send(emCtt) : res.status(404).send(emCtt);
     }
 
