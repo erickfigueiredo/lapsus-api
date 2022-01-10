@@ -138,7 +138,7 @@ class ShapefileController {
             }
             return res.send(shp);
         }
-        return res.status(404).send({ success: false, message: 'Shapefile inexistente!' });
+        return res.status(404).send(shp);
     }
 
     static async delete(req, res) {
