@@ -58,16 +58,16 @@ class ShapefileController {
 
             req.body = JSON.parse(req.body.data);
 
-            if (!req.body.desc) { req.body.desc = ''; }
-
             const valid = ShapefileValidator.createValidate();
             const { error } = valid.validate(req.body);
-
+            
             if (error) {
                 remFiles([req.file]);
                 return res.status(400).send({ success: false, message: error.details[0].message });
             }
-
+            
+            if (!req.body.desc) { req.body.desc = ''; }
+            
             const existAdder = await User.findOneByType(req.locals.id, 'A');
             if (!existAdder.success) {
                 remFiles([req.file]);
