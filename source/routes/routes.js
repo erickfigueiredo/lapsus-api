@@ -75,11 +75,12 @@ router.put('/technician', Technician.update);
 router.delete('/technician/:id', Technician.deactivate);
 
 // -> Rotas de Institution
-router.get('/institution/all/detailed', Institution.indexDetailed);
-router.get('/institution/all', Institution.index);
-router.get('/institution/:id', Institution.show);
-router.post('/institution', Institution.create);
-router.put('/institution', Institution.update);
+router.get('/institution/all/detailed', ensureAuthentication, allowAdmin, Institution.indexDetailed);
+router.get('/institution/all', ensureAuthentication, allowAdmin, Institution.index);
+router.get('/institution/:id', ensureAuthentication, allowManager, Institution.show);
+router.post('/institution', ensureAuthentication, allowAdmin, Institution.create);
+router.put('/institution', ensureAuthentication, allowAdmin, Institution.update);
+router.delete('/institution/:id', ensureAuthentication, allowAdmin, Institution.delete);
 
 // -> Rotas de Shapefile
 router.get('/shapefile/all', Shapefile.index);

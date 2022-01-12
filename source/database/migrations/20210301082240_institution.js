@@ -8,7 +8,13 @@ exports.up = async function (knex) {
         table.string('name', 50).notNullable();
         table.string('email', 100).notNullable().unique();
         table.string('phone', 12).notNullable().unique();
-        table.string('address', 256).notNullable();
+        table.string('street', 100).notNullable();
+        table.string('neighborhood', 100).notNullable();
+        table.string('city', 60).notNullable();
+        table.string('state', 2).notNullable();
+        table.string('zipcode', 8).notNullable();
+        table.string('number', 8).notNullable();
+
         // Alterar a forma de representar o endereço para obter informações mais interessantes sobre esse 
         table.timestamps(false, true);
     });

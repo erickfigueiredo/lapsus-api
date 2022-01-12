@@ -3,8 +3,6 @@ const User = require('../models/User');
 const InstitutionValidator = require('../validators/InstitutionValidator');
 
 class InstitutionController {
-
-    // Refatorar Tabela Address
     static async show(req, res) {
         const id = req.params.id;
 
@@ -12,19 +10,13 @@ class InstitutionController {
             return res.status(400).send({ success: false, message: 'Id inválido!' });
         }
 
-        const inst = await Institution.findOne(id);
-        return inst.success ? res.send(inst) : res.status(404).send(inst);
+        const form = await Institution.findOne(id);
+        return form.success ? res.send(form) : res.status(404).send(form);
     }
 
     static async index(req, res) {
-
-        // Modificar
-        let page = req.query.page;
-
-        if (isNaN(parseInt(page))) { page = 1; }
-
-        const insts = await Institution.findAll(page);
-        return insts.success ? res.send(insts) : res.status(404).send(insts);
+        const result = await Institution.findAll();
+        return result.success ? res.send(result) : res.status(404).send(result);
     }
 
     static async indexDetailed(req, res) {
@@ -32,8 +24,8 @@ class InstitutionController {
 
         if (isNaN(parseInt(page))) { page = 1; }
 
-        const insts = await Institution.findAllDetailed(page);
-        return insts.success ? res.send(insts) : res.status(404).send(insts);
+        const result = await Institution.findAllDetailed(page);
+        return result.success ? res.send(result) : res.status(404).send(result);
     }
 
     static async create(req, res) {
@@ -44,25 +36,37 @@ class InstitutionController {
             return res.status(400).send({ success: false, message: error.details[0].message });
         }
 
-        const inst = req.body;
+        const form = req.body;
 
-        const existAdder = await User.findOneByType(inst.added_by, 'A');
-        if (!existAdder.success) {
-            return res.status(404).send({ success: false, message: 'Usuário adicionador inexistente!' });
+        form.state = form.state.toUpperCase();
+
+        if (!['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA',
+            'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RO', 'RR', 'RJ',
+            'RN', 'RS', 'SC', 'SP', 'SE', 'TO'].includes(form.state)) {
+            return res.status(404).send({ success: false, message: 'O estado informado não existe!' });
         }
 
-        const existEmail = await Institution.findByEmail(inst.email);
+        form.number = form.number.toUpperCase();
+
+        const existAdder = await User.findOneByType(req.locals.id, 'A');
+        if (!existAdder.success) {
+            return res.status(404).send({ success: false, message: 'Usuário administrador inexistente!' });
+        }
+
+        const existEmail = await Institution.findByEmail(form.email);
         if (existEmail.success) {
             return res.status(409).send({ success: false, message: 'E-mail já cadastrado!' });
         }
 
-        const existPhone = await Institution.findByPhone(inst.phone);
+        const existPhone = await Institution.findByPhone(form.phone);
         if (existPhone.success) {
             return res.status(409).send({ success: false, message: 'Telefone já cadastrado!' });
         }
 
-        const result = await Institution.create(inst);
-        return result.success ? res.send(result) : res.status(400).send(result);
+        form.added_by = req.locals.id;
+
+        const result = await Institution.create(form);
+        return result.success ? res.status(201).send(result) : res.status(400).send(result);
     }
 
     static async update(req, res) {
@@ -75,11 +79,23 @@ class InstitutionController {
 
         const form = req.body;
 
-        const inst = await Institution.findOne(form.id);
-        if (inst.success) {
+        const existInst = await Institution.findOne(form.id);
+        if (existInst.success) {
             const toUpdate = {};
 
-            if (form.email && inst.institution.email !== form.email) {
+            if (form.state) {
+                form.state = form.state.toUpperCase();
+
+                if (!['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA',
+                    'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RO', 'RR', 'RJ',
+                    'RN', 'RS', 'SC', 'SP', 'SE', 'TO'].includes(form.state)) {
+                    return res.status(404).send({ success: false, message: 'O estado informado não existe!' });
+                }
+
+                if (existInst.institution.state !== form.state) toUpdate.street = form.street;
+            }
+
+            if (form.email && existInst.institution.email !== form.email) {
                 const existEmail = await Institution.findByEmail(form.email);
                 if (existEmail.success) {
                     return res.status(409).send({ success: false, message: 'E-mail já cadastrado!' });
@@ -88,7 +104,7 @@ class InstitutionController {
                 toUpdate.email = form.email;
             }
 
-            if (form.phone && inst.institution.phone !== form.phone) {
+            if (form.phone && existInst.institution.phone !== form.phone) {
                 const existPhone = await Institution.findByPhone(form.phone);
                 if (existPhone.success) {
                     return res.status(409).send({ success: false, message: 'Telefone já cadastrado!' });
@@ -97,9 +113,21 @@ class InstitutionController {
                 toUpdate.phone = form.phone;
             }
 
-            if (form.name && inst.institution.name !== form.name) { toUpdate.name = form.name };
+            if (form.name && existInst.institution.name !== form.name) { toUpdate.name = form.name; }
 
-            if (form.address && inst.institution.address !== form.address) { toUpdate.address = form.address };
+            if (form.street && existInst.institution.street !== form.street) { toUpdate.street = form.street; }
+
+            if (form.neighborhood && existInst.institution.neighborhood !== form.neighborhood) { toUpdate.neighborhood = form.neighborhood; }
+
+            if (form.number) {
+                form.number = form.number.toUpperCase();
+
+                if (existInst.institution.number !== form.number) toUpdate.number = form.number;
+            }
+
+            if (form.zipcode && existInst.institution.zipcode !== form.zipcode) { toUpdate.zipcode = form.zipcode; }
+
+            if (form.city && existInst.institution.city !== form.city) { toUpdate.city = form.city; }
 
             if (Object.keys(toUpdate).length) {
                 toUpdate.id = form.id;
@@ -107,9 +135,25 @@ class InstitutionController {
                 const result = await Institution.update(toUpdate);
                 return result.success ? res.send(result) : res.status(400).send(result);
             }
-            return res.send(inst);
+            return res.send(existInst);
         }
-        return res.status(404).send({ success: false, message: 'Instituição inexistente!' });
+        return res.status(404).send(existInst);
+    }
+
+    static async delete(req, res) {
+        const id = req.params.id;
+
+        if(isNaN(parseInt(id))) {
+            return res.status(400).send({success: false, message: 'Id inválido!'});
+        }
+
+        const existInst = await Institution.findOne(id);
+        if(!existInst.success) {
+            return res.status(404).send(existInst);
+        }
+
+        const result  =await Institution.delete(id);
+        return result.success ? res.send(result) : res.status(400).send(result);
     }
 }
 
