@@ -1,12 +1,8 @@
-# System shapefiles
-.upload/
+tmp/
+!tmp/.gitkeep
 
-# Tests files
-.tests/
+upload/annexes/*
+!upload/annexes/.gitkeep
 
-# Temporary files
-.tmp/
-
-# Diretórios da IDE
-.vscode/
-.metals/
+upload/shapefiles/*
+!upload/shapefiles/.gitkeep
