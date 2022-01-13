@@ -10,7 +10,7 @@ exports.up = async function (knex) {
         table.integer('certainty').unsigned();
         table.datetime('decl_datime', { precision: 6 });
         table.datetime('occ_datime', { precision: 6 });
-        table.datetime('obs_datime', { precision: 6 });
+        //table.datetime('obs_datime', { precision: 6 });
         table.string('freetext', 500);
         table.string('source', 10).references('source').inTable('event_source');
         table.integer('scale').unsigned().references('scale').inTable('event_scale');

@@ -75,7 +75,7 @@ class ContributionController {
             const { error } = valid.validate(req.body);
 
             if (error) {
-                if (req.files) remFiles(req.files);
+                if (req.files.length) remFiles(req.files);
 
                 return res.status(400).send({ success: false, message: error.details[0].message });
             }
@@ -84,7 +84,7 @@ class ContributionController {
                 const existCollaborator = await User.findOneByType(req.body.id_collaborator, ['R', 'M']);
 
                 if (!existCollaborator.success) {
-                    if (req.files) if (req.files) remFiles(req.files);
+                    if (req.files.length) remFiles(req.files);
 
                     return res.status(404).send(existCollaborator);
                 }
@@ -92,13 +92,13 @@ class ContributionController {
 
             const existCategory = await Category.findOne(req.body.id_category);
             if (!existCategory.success) {
-                if (req.files) remFiles(req.files);
+                if (req.files.length) remFiles(req.files);
 
                 return res.status(404).send(existCategory);
             }
 
             let result = null;
-            if (req.files) {
+            if (req.files.length) {
                 const files = req.files.map(file => { 
                     return { 
                         uri: `/annexes/${file.key}`,
@@ -112,7 +112,7 @@ class ContributionController {
             }
 
             if (!result.success) {
-                if (req.files) remFiles(req.files);
+                if (req.files.length) remFiles(req.files);
 
                 return res.status(400).send(result);
             }

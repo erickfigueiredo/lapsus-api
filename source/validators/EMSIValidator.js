@@ -1,5 +1,9 @@
 const Joi = require('joi');
 
+const today = new Date();
+let minDateLimit = new Date(today.setFullYear(today.getFullYear() - 100));
+minDateLimit = minDateLimit.toISOString().slice(0,10);
+
 const createValidate = () => {
     return Joi.object().min(1).keys({
         
@@ -23,12 +27,14 @@ const createValidate = () => {
                 'number.empty': 'O campo probabilidade não pode ser vazio!'
             }),
             //momento da Identificação
-            decl_datime: Joi.date().max('now').messages({
+            decl_datime: Joi.date().min(minDateLimit).max('now').messages({
+                'date.min': 'Momento da identificação não pode ser mais antigo que 100 anos!',
                 'date.max': 'Momento da identificação não pode ser no futuro!',
                 'date.empty': 'O campo momento da identificação não pode ser vazio!'
             }),
             //momento da occorência
-            occ_time: Joi.date().max('now').messages({
+            occ_time: Joi.date().min(minDateLimit).max('now').messages({
+                'date.min': 'Momento da ocorrência não pode ser mais antigo que 100 anos!',
                 'date.max': 'Momento da ocorrência não pode ser no futuro!',
                 'date.empty': 'O campo momento da ocorrência não pode ser vazio!'
             }),
@@ -77,18 +83,20 @@ const createValidate = () => {
             'object.min': 'Contexto deve conter no mínimo 1 atributo!'
         }),
 
-        egeo: Joi.object().min(1).keys({
+        egeo: Joi.object().keys({
             datime: Joi.date().max('now').messages({
                 'date.max': 'Momento da declaração de vítimas não pode ser no futuro!',
                 'date.empty': 'Momento da declaração de vítimas não pode ser vazio'
             }),
             type: Joi.string().regex(/^[A-Z]{1,10}$/).messages({
                 'string.pattern.base': 'Código de tipo inválido!',
-                'string.empty': 'Tipo não pode ser vazio'
+                'string.empty': 'Tipo não pode ser vazio',
+                'any.required': 'Tipo é obrigatório!'
             }),
             subtype: Joi.string().regex(/^[A-Z]{1,10}$/).messages({
                 'string.pattern.base': 'Código de subtipo inválido!',
-                'string.empty': 'Subtipo não pode ser vazio!'
+                'string.empty': 'Subtipo não pode ser vazio!',
+                'any.required': 'Subtipo é obrigatório!'
             }),
             freetext: Joi.string().regex(/^\S$|^\S[ \S]*\S$/).min(3).max(500).messages({
                 'string.pattern.base': 'Espaços não são permitidos no início ou no fim!',

@@ -14,21 +14,18 @@ class EMSI {
                 if (data.egeo) {
                     data.egeo.id_event = data.event.id;
                     const [id_egeo] = await trx('egeo').insert(data.egeo).returning('id');
-                    
+
                     const [id_loc] = await trx('position').insert({ id_egeo, coord: data.position }).returning('id_loc');
 
                     for (const address of data.addresses) address.id_loc = id_loc;
 
                     await trx('address').insert(data.addresses);
 
-                    console.log(id_egeo)
+                    if (data.weathers) {
+                        for (const weather of data.weathers) weather.id_egeo = id_egeo;
 
-
-                    for (const weather of data.weathers) weather.id_egeo = id_egeo;
-
-                    console.log(data.weathers)
-
-                    await trx('egeo_has_egeo_subweather').insert(data.weathers);
+                        await trx('egeo_has_egeo_subweather').insert(data.weathers);
+                    }
                 }
 
                 if (data.loctypes) {
@@ -44,31 +41,31 @@ class EMSI {
                 }
 
                 if (data.evacs) {
-                    for(const evac of data.evacs) evac.id_event = data.event.id;
-                    
+                    for (const evac of data.evacs) evac.id_event = data.event.id;
+
                     await trx('evac').insert(data.evacs);
                 }
-                
+
                 if (data.casualties) {
-                    for(const casualty of data.casualties) casualty.id_event = data.event.id;
+                    for (const casualty of data.casualties) casualty.id_event = data.event.id;
 
                     await trx('casualties').insert(data.casualties);
                 }
 
-                if(data.external_infos) {
+                if (data.external_infos) {
                     await trx('external_info').insert(data.external_infos);
                 }
-                
+
                 await trx('origin').insert(data.origin);
 
                 await trx('tso_2_0').insert(data.tso_2);
 
-                return {success: true, message: 'Mensagem de emergência criada com sucesso!'};
+                return { success: true, message: 'Mensagem de emergência cadastrada com sucesso!' };
             });
 
         } catch (e) {
             Message.warning(e);
-            return { success: false, message: 'Houve um erro ao criar a mensagem de emergência!' };
+            return { success: false, message: 'Falha ao cadastrar a mensagem de emergência!' };
         }
     }
 }

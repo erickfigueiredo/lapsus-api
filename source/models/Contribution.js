@@ -66,6 +66,7 @@ class Contribution {
             const contrib = await knex.select('contribution.id as id', 'name as category')
                 .from('contribution')
                 .join('category', 'contribution.id_category', 'category.id')
+                .orderBy('id')
                 .where({ published: 'A' });
 
             return { success: true, contribution: contrib };

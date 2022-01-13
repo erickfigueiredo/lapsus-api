@@ -2,8 +2,6 @@ const EMSI = require('../models/EMSI');
 const User = require('../models/User');
 const Nominatim = require('../models/Nominatim');
 
-const remFiles = require('../utils/RemoveFiles');
-
 const Actor = require('../models/etype/Actor');
 const Category = require('../models/Category');
 const Cause = require('../models/event/Cause');
@@ -16,7 +14,12 @@ const Status = require('../models/egeo/Status');
 const Type = require('../models/egeo/Type');
 const Weather = require('../models/egeo/Weather');
 
+const OrgInformation = require('../models/OrgInformation');
+
 const EMSIValidator = require('../validators/EMSIValidator');
+
+const remFiles = require('../utils/RemoveFiles');
+const reducer = require('../utils/ReduceObjArray');
 
 const { v4: uuidV4 } = require('uuid');
 
@@ -35,7 +38,7 @@ class EMSIController {
 
     static async getFormLists(req, res) {
         const actor = await Actor.listAll();
-        const category = await Category.listAll();
+        const category = await Category.findAll();
         const cause = await Cause.listAll();
         const casualties = await Casualties.listAll();
         const contribution = await Contribution.listAll();
@@ -46,45 +49,70 @@ class EMSIController {
         const scale = await Scale.listAll();
         const risk = await Risk.listAll();
 
-        // Mudar aqui, retornar uma mensagem de erro mais precisa
+        if (!actor.success) return res.status(404).send(actor);
 
-        // Colocar o retorno em ordem alfabetica
+        if (!category.success) return res.status(404).send(category);
 
-        if (actor.success && category.success && cause.success && type.success &&
-            casualties.success && loctype.success && scale.success && status.success 
-            && weather.success && risk.success) {
-            return res.send({
-                success: true,
-                actor: actor.actor,
-                category: category.category,
-                cause: cause.cause,
-                type: type.type,
-                casualties: casualties.casualties,
-                contribution: contribution.contribution,
-                loctype: loctype.loctype,
-                risk: risk.risk,
-                type: type.type,
-                scale: scale.scale,
-                status: status.status,
-                weather: weather.weather
-            });
-        }
+        if (!cause.success) return res.status(404).send(cause);
 
-        return res.status(404).send({ success: false, message: 'Houve um erro ao recuperar as listas para registro EMSI!' })
+        if (!casualties.success) return res.status(404).send(casualties);
+
+        if (!contribution.success) return res.status(404).send(contribution);
+
+        if (!loctype.success) return res.status(404).send(loctype);
+
+        if (!status.success) return res.status(404).send(status);
+
+        if (!type.success) return res.status(404).send(type);
+
+        if (!weather.success) return res.status(404).send(weather);
+
+        if (!scale.success) return res.status(404).send(scale);
+
+        if (!risk.success) return res.status(404).send(risk);
+
+        return res.send({
+            success: true,
+            actor: actor.actor,
+            casualties: casualties.casualties,
+            category: category.category,
+            cause: cause.cause,
+            contribution: contribution.contribution,
+            loctype: loctype.loctype,
+            risk: risk.risk,
+            type: type.type,
+            scale: scale.scale,
+            status: status.status,
+            weather: weather.weather
+        });
     }
 
     static async create(req, res) {
-        // Mudar essas propriedades talvez
+
+        let qttAnnexes = parseInt(process.env.ANNEX_QUANTITY);
+        if (isNaN(qttAnnexes)) qttAnnexes = 5;
+
         const fileProps = {
-            allowedMimes: ['image/png', 'image/jpeg', 'application/vnd.oasis.opendocument.text', 'application/pdf', 'application/rtf', 'audio/mp3', 'video/mp4', 'text/xml', 'application/msword', 'application/json'], 
-            numFiles: 5
+            allowedMimes: ['image/png', 'image/jpeg', 'application/vnd.oasis.opendocument.text', 'application/pdf', 'application/rtf', 'audio/mp3', 'video/mp4', 'text/xml',
+                'application/msword', 'application/json'],
+            numFiles: qttAnnexes,
+            maxSize: 10 //10mb
         };
 
-        const upload = multer(multerConfig('annexes', fileProps)).array('file', 5);
+        const upload = multer(multerConfig('annexes', fileProps)).array('file', qttAnnexes);
         upload(req, res, async (fail) => {
 
             if (fail instanceof multer.MulterError) {
-                return res.status(400).send({ success: false, message: 'os arquivos não atendem aos requisitos necessários!' });
+                let message;
+                if (fail.code === 'LIMIT_FILE_SIZE')
+                    message = `Um ou mais arquivos excedem o limite de ${fileProps.maxSize} mb!`;
+
+                else if (fail.code === 'LIMIT_FILE_COUNT')
+                    message = `O número de arquivos excede o limite de ${fileProps.numFiles}!`;
+
+                else message = 'Um ou mais arquivos possuem extensão inválida!';
+
+                return res.status(400).send({ success: false, message });
             }
 
             req.body = JSON.parse(req.body.data);
@@ -94,21 +122,29 @@ class EMSIController {
 
             if (error) {
                 if (req.files.length) remFiles(req.files);
-                
+
                 return res.status(400).send({ success: false, message: error.details[0].message });
             }
 
-            const existManager = await User.findOneManager(/*req.locals.id*/ 1);
-            if(!existManager.success){ 
+            const existManager = await User.findOneManager(req.locals.id);
+            if (!existManager.success) {
                 if (req.files.length) remFiles(req.files);
                 return res.status(404).send(existManager.message);
+            }
+
+            const existOrgInfo = await OrgInformation.find();
+            if (!existOrgInfo.success || !existOrgInfo.org.was_updated) {
+                if (req.files.length) remFiles(req.files);
+                return existOrgInfo.success ?
+                    res.status(409).send({ success: false, message: 'É necessário atualizar as informações sobre a organização!' })
+                    : res.status(404).send(existOrgInfo.message);
             }
 
             // Propriedades estáticas que tornam o sistema especifico para deslizamentos de terra
             const staticEventData = {
                 id: uuidV4(),
                 source: 'HUMOBS',
-                // Hora de observação pega do sistema
+                //obs_datime: new Date(),
             };
 
             const staticContextData = {
@@ -116,8 +152,8 @@ class EMSIController {
                 seclass: 'UNCLAS',
                 mode: 'ACTUAL',
                 msgtype: 'ALERT',
-                level: 'STRTGC'
-                //Creation pego do sistema
+                level: 'STRTGC',
+                //creation: new Date(),
             };
 
             req.body.event = {
@@ -142,12 +178,11 @@ class EMSIController {
                 subcategory: 'LDS'
             };
 
-            // Ver como vou resolver isso
             req.body.origin = {
-                // id da organização
-                // name
-                //id_usuário
-                // id do contexto
+                id_org: existOrgInfo.org.uuid,
+                name: existOrgInfo.org.name,
+                id_user: req.locals.id,
+                id_context: req.body.context.id
             };
 
             req.body.tso_2 = {
@@ -157,16 +192,30 @@ class EMSIController {
             };
             //Fim das definições estáticas 
 
+            // Remoção de combinações duplicadas
+            if (req.body.actors) {
+                req.body.actors = reducer(req.body.actors);
+            }
+
+            if (req.body.weathers) {
+                req.body.weathers = reducer(req.body.weathers);
+            }
+
+            if (req.body.loctypes) {
+                req.body.loctypes = reducer(req.body.loctypes);
+            }
+
             if (req.files.length) {
                 req.body.external_infos = req.files.map(file => ({
                     id_context: req.body.context.id,
-                    uri: file.path,
+                    uri: `/annexes/${file.key}`,
+                    path: file.path,
                     type: EMSIController.getFileType(file.mimetype)
                 }));
 
                 if (req.body.desc_external_infos) {
                     for (const desc of req.body.desc_external_infos) {
-                        if (req.body.external_infos[desc.index_file]) {
+                        if (!!req.body.external_infos[desc.index_file]) {
                             req.body.external_infos[desc.index_file].freetext = desc.freetext;
                         } else {
                             if (req.files.length) remFiles(req.files);
@@ -182,7 +231,7 @@ class EMSIController {
                 const addresses = await Nominatim.findAddressesByPosition(req.body.position);
                 if (!addresses.success) {
                     if (req.files.length) remFiles(req.files);
-                    return res.status(400).send(addresses.message);
+                    return res.status(500).send(addresses.message);
                 }
 
                 req.body.addresses = addresses.addresses;
@@ -190,7 +239,7 @@ class EMSIController {
 
             const result = await EMSI.create(req.body);
             if (result.success) {
-                return res.send(result)
+                return res.status(201).send(result)
             } else {
                 if (req.files.length) remFiles(req.files);
                 return res.status(400).send(result);

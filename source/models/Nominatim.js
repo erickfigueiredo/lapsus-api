@@ -13,14 +13,14 @@ class Nominatim {
             const requests = coords.map(coord => {
                 coord = coord.split(' ');
 
-                return axios.get(`${baseUrl}/reverse?format=jsonv2&lat=${coord[0]}&lon=${coord[1]}`)
+                return axios.get(`${baseUrl}/reverse?format=jsonv2&lat=${coord[0]}&lon=${coord[1]}`, { timeout: 3000 })
             });
 
             const result = await Promise.all(requests);
 
             const addresses = [];
             for (const res of result) {
-                if (!!res.data.display_name) {
+                if (res.data.display_name) {
                     addresses.push({ address: res.data.display_name });
                 } else {
                     throw new Error('Nominatim (OMS) - ' + res.data.error);
