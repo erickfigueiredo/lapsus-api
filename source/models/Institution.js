@@ -34,7 +34,7 @@ class Institution {
                 .from('institution')
                 .orderBy(['name', 'created_at'])
                 .paginate({
-                    perPage: 20,
+                    perPage: 25,
                     currentPage: page,
                     isLengthAware: true
                 });

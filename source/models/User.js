@@ -5,9 +5,9 @@ class User {
 
     static async findOne(id) {
         try {
-            const user = await knex.select('*')
+            const user = await knex.select('id', 'name', 'surname', 'email', 'type', 'id_institution')
                 .from('user')
-                .where({ id });
+                .where({ id, is_active: true });
 
             return user[0] ? { success: true, user: user[0] } : { success: false, message: 'Não foi possível recuperar o usuário / Usuário inexistente!' };
         } catch (e) {
@@ -34,7 +34,17 @@ class User {
         try {
             const user = await knex.select('*')
                 .from('user')
-                .where({ id, type });
+                .where({ id })
+                .andWhere(function () {
+                    if (type.length) {
+                        this.where({type: type[0]});
+
+                        for(let i = 1; i < type.length; i++)
+                            this.orWhere({type: type[i]});
+                    } else {
+                        this.where({ type });
+                    }
+                });
 
             return user[0] ? { success: true, user: user[0] } : { success: false, message: 'Não foi possível recuperar o usuário / Usuário inexistente!' };
         } catch (e) {
@@ -63,7 +73,7 @@ class User {
                 .where({ 'id_institution': idInstitution, 'is_active': true })
                 .orderBy(['name', 'created_at'])
                 .paginate({
-                    perPage: 20,
+                    perPage: 25,
                     currentPage: page,
                     isLengthAware: true
                 });
@@ -83,7 +93,7 @@ class User {
                 .where({ 'is_active': true })
                 .orderBy(['type', 'institution', 'name'])
                 .paginate({
-                    perPage: 20,
+                    perPage: 25,
                     currentPage: page
                 });
 
@@ -102,7 +112,7 @@ class User {
                 .where({ type, 'is_active': true })
                 .orderBy(['name', 'created_at'])
                 .paginate({
-                    perPage: 20,
+                    perPage: 25,
                     currentPage: page
                 });
 

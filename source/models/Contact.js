@@ -21,7 +21,7 @@ class Contact {
                 .from('contact')
                 .orderBy(['is_visualized', 'created_at'])
                 .paginate({
-                    perPage: 20,
+                    perPage: 25,
                     currentPage: page,
                     isLengthAware: true
                 });

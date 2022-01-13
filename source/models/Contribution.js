@@ -44,7 +44,7 @@ class Contribution {
                 .leftJoin('user as mng', 'id_manager', 'mng.id')
                 .orderByRaw("published='P' DESC, created_at ASC")
                 .paginate({
-                    perPage: 40,
+                    perPage: 25,
                     currentPage: page,
                     isLengthAware: true
                 });
