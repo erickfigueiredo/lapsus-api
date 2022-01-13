@@ -6,11 +6,10 @@ minDateLimit = minDateLimit.toISOString().slice(0,10);
 
 const createValidate = () => {
     return Joi.object().keys({
-        occurrence: Joi.date().min(minDateLimit).max('now').required().messages({
+        occurrence: Joi.date().min(minDateLimit).max('now').messages({
             'date.min': 'Ocorrência não pode ser mais antiga que 100 anos!',
             'date.max': 'Ocorrência não pode ser no futuro!',
             'date.empty': 'Data de ocorrência não pode ser vazia!',
-            'any.required': 'Data de ocorrência é obrigatória!'
         }),
         risk_damage: Joi.boolean().required().messages({
             'boolean.empty': 'Campo de riscos não pode ser vazio!',

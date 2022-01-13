@@ -10,7 +10,7 @@ exports.up = async function (knex) {
         table.boolean('victims').defaultTo('false').notNullable();
         table.string('published', 1).defaultTo('P').notNullable(); // Aprovado, Reprovado, Pendente
         table.string('desc', 500);
-        table.specificType('local', 'Geometry');
+        table.specificType('local', 'Geometry').notNullable();
         table.integer('id_category').unsigned().notNullable().references('id').inTable('category');
         table.integer('id_collaborator').unsigned().references('id').inTable('user');
         table.integer('id_manager').unsigned().references('id').inTable('user');
