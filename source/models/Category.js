@@ -28,7 +28,7 @@ class Category {
         }
     }
 
-    static async listAll() {
+    static async findAll() {
         try {
             const category = await knex.select(['id', 'name'])
                 .from('category')
