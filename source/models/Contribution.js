@@ -2,7 +2,9 @@ const knex = require('../database/knex');
 const Message = require('../utils/Message');
 
 class Contribution {
+    
     static async findOne(id) {
+
         try {
             const contrib = await knex.select('c.id', 'c.created_at', 'c.updated_at', 'occurrence', 'victims', 'risk_damage', 'published',
             'c.desc', knex.raw('st_asText(local) as local'), 'cat.name as category_name', 'coll.name as collaborator_name', 'coll.surname as collaborator_surname',
@@ -23,7 +25,7 @@ class Contribution {
                 return { success: true, contribution: contrib[0] };
             }
 
-            return { success: false, message: 'Não foi possível recuperar a contribuição / Contribuição inexistente!' };
+            return { success: false, message: 'Contribuição inexistente!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar a contribuição!' };
@@ -31,6 +33,7 @@ class Contribution {
     }
 
     static async findAll(page) {
+
         try {
             const contrib = await knex.select('c.id', 'c.created_at', 'c.updated_at', 'occurrence', 'victims', 'risk_damage', 'published',
                 'c.desc', knex.raw('st_asText(local) as local'), 'cat.name as category_name', 'coll.name as collaborator_name', 'coll.surname as collaborator_surname',
@@ -50,7 +53,7 @@ class Contribution {
                 c.annexes = await knex.select('id', 'uri').from('annex').where({ id_contribution: c.id });
             }
 
-            return { success: true, contribution: contrib };
+            return contrib.data[0]? { success: true, contribution: contrib } : { success: false, message: 'Contribuições inexistentes!' };;
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar as contribuições' };
@@ -58,13 +61,14 @@ class Contribution {
     }
 
     static async listAll() {
+
         try {
             const contrib = await knex.select('contribution.id as id', 'name as category')
                 .from('contribution')
                 .join('category', 'contribution.id_category', 'category.id')
                 .where({ published: 'A' });
 
-            return contrib[0] ? { success: true, contribution: contrib } : { success: false, message: 'Não foi possível recuperar as contribuições / Contribuições inexistentes!' };
+            return { success: true, contribution: contrib };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar as contribuições!' };
@@ -72,6 +76,7 @@ class Contribution {
     }
 
     static async create(data, files = null) {
+
         try {
             return await knex.transaction(async trx => {
                 const [id_contribution] = await trx('contribution').insert(data).returning('id');
@@ -94,6 +99,7 @@ class Contribution {
     }
 
     static async update(data) {
+
         try {
             const id = data.id;
             delete data['id'];

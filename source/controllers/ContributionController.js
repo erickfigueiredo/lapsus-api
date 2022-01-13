@@ -10,7 +10,9 @@ const multer = require('multer');
 const multerConfig = require('../config/Multer');
 
 class ContributionController {
+
     static async show(req, res) {
+
         const id = req.params.id;
 
         if (isNaN(parseInt(id))) {
@@ -22,6 +24,7 @@ class ContributionController {
     }
 
     static async index(req, res) {
+        
         let page = req.query.page;
 
         if (isNaN(parseInt(page))) { page = 1 };
@@ -40,13 +43,17 @@ class ContributionController {
     }
 
     static async create(req, res) {
+
+        let qttAnnexes = parseInt(process.env.ANNEX_QUANTITY);
+        if(isNaN(qttAnnexes)) qttAnnexes = 5;
+
         const fileProps = { 
             allowedMimes: ['image/png', 'image/jpeg', 'application/pdf', 'audio/mpeg', 'video/mp4'], 
-            numFiles: 5,
+            numFiles: qttAnnexes,
             maxSize: 10 //10mb
         };
 
-        const upload = multer(multerConfig('annexes', fileProps)).array('file', 5);
+        const upload = multer(multerConfig('annexes', fileProps)).array('file', qttAnnexes);
         upload(req, res, async (fail) => {
 
             if (fail instanceof multer.MulterError) {
@@ -115,22 +122,22 @@ class ContributionController {
     }
 
     static async evaluateStatus(req, res) {
+        
         const valid = ContributionValidator.updateValidate();
         const { error } = valid.validate(req.body);
 
         if (error) {
             return res.status(400).send({ success: false, message: error.details[0].message });
         }
+        
+        const existManager = await User.findOneManager(req.locals.id);
+        if (!existManager.success) {
+            return res.status(404).send(existManager);
+        }
 
         const existContribution = await Contribution.findOne(req.body.id);
         if(!existContribution.success) {
             return res.status(404).send(existContribution);
-        }
-
-
-        const existManager = await User.findOneManager(req.locals.id);
-        if (!existManager.success) {
-            return res.status(404).send(existManager);
         }
 
         req.body.id_manager = req.locals.id;
