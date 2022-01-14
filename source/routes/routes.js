@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const {ensureAuthentication} = require('../middlewares/Authentication');
+const { ensureAuthentication } = require('../middlewares/Authentication');
 const {
     allowOwnUser,
     allowAdmin,
@@ -38,12 +38,12 @@ router.put('/admin', Administrator.update);
 router.delete('/admin/:id', Administrator.deactivate);
 
 // -> Rotas de Category -> OKAY
-router.get('/category/all/detailed',ensureAuthentication, allowManager, Category.indexDetailed);
+router.get('/category/all/detailed', ensureAuthentication, allowManager, Category.indexDetailed);
 router.get('/category/all', Category.index);
-router.get('/category/:id',ensureAuthentication, allowManager, Category.show);
-router.post('/category',ensureAuthentication, allowManager, Category.create);
-router.put('/category',ensureAuthentication, allowManager, Category.update);
-router.delete('/category/:id',ensureAuthentication, allowManager, Category.delete);
+router.get('/category/:id', ensureAuthentication, allowManager, Category.show);
+router.post('/category', ensureAuthentication, allowManager, Category.create);
+router.put('/category', ensureAuthentication, allowManager, Category.update);
+router.delete('/category/:id', ensureAuthentication, allowManager, Category.delete);
 
 // -> Rotas de Contact
 router.get('/contact/all', ensureAuthentication, allowManager, Contact.index);
@@ -116,10 +116,18 @@ router.post('/emsi', ensureAuthentication, allowManager, EMSI.create);
 // -> Rotas de Estatística
 router.get('/statistics/user/type_relationship', AccessController.userTypeRelationship);
 router.get('/statistics/user/monthly', AccessController.userByMonth);
+router.get('/statistics/category/amount', Category.categoriesAmount);
+router.get('/statistics/');
+router.get('/statistics/');
+router.get('/statistics/');
+router.get('/statistics/');
+router.get('/statistics/');
+router.get('/statistics/');
+router.get('/statistics/');
 
 // -> Rotas de Erro 404
 router.get('/ops', (_, res) => {
-    res.status(404).send({success: false, message: 'A rota solicitada não existe!'});
+    res.status(404).send({ success: false, message: 'A rota solicitada não existe!' });
 })
 
 router.get('*', (_, res) => {

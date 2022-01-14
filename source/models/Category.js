@@ -47,11 +47,22 @@ class Category {
                 .from('category')
                 .orderBy(['name', 'created_at']);
 
-            return category[0] ? 
-            { success: true, category } : { success: false, message: 'Categorias inexistentes!' };
+            return category[0] ?
+                { success: true, category } : { success: false, message: 'Categorias inexistentes!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar as categorias!' };
+        }
+    }
+
+    static async getCategoriesAmount() {
+        try {
+            const result = await knex('user').count('id');
+
+            return result[0].count ? { success: true, amount: result[0].count } : { success: true, message: 'Categorias inexistentes!' };
+        } catch (e) {
+            Message.warning(e);
+            return { success: false, message: 'Houve um erro ao recuperar a quantidade de categorias!' };
         }
     }
 

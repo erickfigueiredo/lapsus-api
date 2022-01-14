@@ -23,6 +23,11 @@ class CategoryController {
         return ctg.success ? res.send(ctg) : res.status(404).send(ctg);
     }
 
+    static async categoriesAmount(req, res) {
+        const result = await Category.getCategoriesAmount();
+        return result.success ? res.send(result) : res.status(404).send(result);
+    }
+
     static async create(req, res) {
         const valid = CategoryValidator.createValidate();
         const { error } = valid.validate(req.body);
