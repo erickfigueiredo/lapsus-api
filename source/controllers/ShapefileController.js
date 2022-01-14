@@ -29,6 +29,11 @@ class ShapefileController {
         return shps.success ? res.send(shps) : res.status(404).send(shps);
     }
 
+    static async shapefilesAmount(req, res) {
+        const result = await Shapefile.getShapefilesAmount();
+        return result.success ? res.send(result) : res.status(404).send(result);
+    }
+
     static async create(req, res) {
         const fileProps = {
             allowedMimes: ['application/zip', 'application/x-zip-compressed'],

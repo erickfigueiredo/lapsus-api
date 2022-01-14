@@ -117,7 +117,7 @@ router.post('/emsi', ensureAuthentication, allowManager, EMSI.create);
 router.get('/statistics/user/type_relationship', AccessController.userTypeRelationship);
 router.get('/statistics/user/monthly', AccessController.userByMonth);
 router.get('/statistics/category/amount', Category.categoriesAmount);
-router.get('/statistics/');
+router.get('/statistics/shapefile/amount', Shapefile.shapefilesAmount);
 router.get('/statistics/');
 router.get('/statistics/');
 router.get('/statistics/');
