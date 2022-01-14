@@ -37,10 +37,10 @@ class User {
                 .where({ id })
                 .andWhere(function () {
                     if (type.length) {
-                        this.where({type: type[0]});
+                        this.where({ type: type[0] });
 
-                        for(let i = 1; i < type.length; i++)
-                            this.orWhere({type: type[i]});
+                        for (let i = 1; i < type.length; i++)
+                            this.orWhere({ type: type[i] });
                     } else {
                         this.where({ type });
                     }
@@ -134,6 +134,29 @@ class User {
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar a contagem!' };
+        }
+    }
+
+    static async getUserTypeRelationship() {
+        try {
+            const user = await knex.raw('SELECT type, COUNT(type) AS amount FROM user GROUP BY type');
+
+            return user.rows[0] ? { success: true, user: user.rows } : { success: false, message: 'Usuários inexistentes!' };
+        } catch (e) {
+            Message.warning(e);
+            return { success: false, message: 'Houve um erro ao recuperar a qauntidade por tipo de usuário!' };
+        }
+    }
+
+    static async getUsersByMonth() {
+        try {
+            const user = await knex.raw(`SELECT date_part('month', created_at) AS month, COUNT(created_at) as users 
+            FROM user GROUP BY month, DATE_TRUNC('year', created_at) ORDER BY month DESC LIMIT 12`);
+
+            return user.rows[0] ? { success: true, user: user.rows } : { success: false, message: 'Usuários inexistentes!' };
+        } catch (e) {
+            MessageEvent.warning(e);
+            return { success: false, message: 'Houve um erro ao recuperar a relação mensal de novos usuários!' };
         }
     }
 

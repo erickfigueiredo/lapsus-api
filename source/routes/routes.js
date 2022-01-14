@@ -113,6 +113,10 @@ router.delete('/emergency_contact/:id', ensureAuthentication, allowAdmin, Emerge
 router.get('/emsi/lists', ensureAuthentication, allowManager, EMSI.getFormLists);
 router.post('/emsi', ensureAuthentication, allowManager, EMSI.create);
 
+// -> Rotas de Estatística
+router.get('/statistics/user/type_relationship', AccessController.userTypeRelationship);
+router.get('/statistics/user/monthly', AccessController.userByMonth);
+
 // -> Rotas de Erro 404
 router.get('/ops', (_, res) => {
     res.status(404).send({success: false, message: 'A rota solicitada não existe!'});

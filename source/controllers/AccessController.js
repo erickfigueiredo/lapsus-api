@@ -58,6 +58,16 @@ class AccessController {
         const result = await User.findOne(id);
         return result.success ? res.send(result) : res.status(404).send(result);
     }
+
+    static async userTypeRelationship(req, res) {
+        const result = await User.getUserTypeRelationship();
+        return result.success ? res.send(result) : res.status(404).send(result);
+    }
+
+    static async usersByMonth(req, res) {
+        const result = await User.getUsersByMonth();
+        return result.success ? res.send(result) : res.status(404).send(result);
+    }
 };
 
 module.exports = AccessController;
