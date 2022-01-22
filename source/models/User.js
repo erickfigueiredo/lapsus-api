@@ -9,7 +9,7 @@ class User {
                 .from('user')
                 .where({ id, is_active: true });
 
-            return user[0] ? { success: true, user: user[0] } : { success: false, message: 'Não foi possível recuperar o usuário / Usuário inexistente!' };
+            return user[0] ? { success: true, user: user[0] } : { success: false, message: 'Usuário inexistente!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar o usuário!' };
@@ -18,12 +18,12 @@ class User {
 
     static async findOneManager(id) {
         try {
-            const user = await knex.select('*')
+            const user = await knex.select('id', 'name', 'surname', 'email', 'type', 'id_institution')
                 .from('user')
-                .where({ id })
+                .where({ id, is_active: true })
                 .andWhere('type', '!=', 'R');
 
-            return user[0] ? { success: true, user: user[0] } : { success: false, message: 'Não foi possível recuperar o gerente / Gerente inexistente!' };
+            return user[0] ? { success: true, user: user[0] } : { success: false, message: 'Gestor inexistente!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar o gerente!' };
@@ -32,9 +32,9 @@ class User {
 
     static async findOneByType(id, type) {
         try {
-            const user = await knex.select('*')
+            const user = await knex.select('id', 'name', 'surname', 'email', 'type', 'id_institution')
                 .from('user')
-                .where({ id })
+                .where({ id, is_active: true })
                 .andWhere(function () {
                     if (type.length) {
                         this.where({ type: type[0] });
@@ -46,20 +46,26 @@ class User {
                     }
                 });
 
-            return user[0] ? { success: true, user: user[0] } : { success: false, message: 'Não foi possível recuperar o usuário / Usuário inexistente!' };
+            return user[0] ? { success: true, user: user[0] } : { success: false, message: 'Usuário inexistente!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar o usuário!' };
         }
     }
 
-    static async findByEmail(email) {
+    static async findByEmail(email, ignoreInactive = true) {
         try {
-            const user = await knex.select('*')
+            const user = await knex.select('id', 'name', 'surname', 'email', 'password', 'type', 'id_institution')
                 .from('user')
-                .where({ email })
+                .where(function () {
+                    this.where({ email });
 
-            return user[0] ? { success: true, user: user[0] } : { success: false, message: 'Não foi possível recuperar o usuário / Usuário inexistente!' }
+                    if (ignoreInactive) {
+                        this.andWhere({ is_active: true });
+                    }
+                });
+
+            return user[0] ? { success: true, user: user[0] } : { success: false, message: 'Usuário inexistente!' }
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar o usuário!' };
@@ -68,7 +74,7 @@ class User {
 
     static async findAllByInstitution(idInstitution, page) {
         try {
-            const user = await knex.select(['id', 'name', 'surname', 'email', 'created_at'])
+            const user = await knex.select('id', 'name', 'surname', 'email', 'created_at')
                 .from('user')
                 .where({ 'id_institution': idInstitution, 'is_active': true })
                 .orderBy(['name', 'created_at'])
@@ -85,6 +91,7 @@ class User {
         }
     }
 
+    // Add esquema de consulta
     static async findAll(page) {
         try {
             const user = await knex
@@ -105,6 +112,7 @@ class User {
         }
     }
 
+    // Add esquema de consulta
     static async findAllByType(type, page) {
         try {
             const user = await knex.select('*')
@@ -164,8 +172,7 @@ class User {
         try {
             const user = await knex.insert(data)
                 .table('user')
-                .returning('*');
-
+                .returning(['id', 'name', 'surname', 'email', 'type', 'id_institution']);
 
             return user[0] ? { success: true, user: user[0] } : { success: false, message: 'Não foi possível cadastrar o usuário' };
         } catch (e) {
@@ -182,7 +189,7 @@ class User {
             const user = await knex.update(data)
                 .table('user')
                 .where({ id })
-                .returning('*');
+                .returning(['id', 'name', 'surname', 'email', 'type', 'id_institution']);
 
             return user[0] ? { success: true, user: user[0] } : { success: false, message: 'Não foi possível atualizar o usuário' };
         } catch (e) {
@@ -191,13 +198,12 @@ class User {
         }
     }
 
-    static async delete(id, type) {
+    static async deactivate(id, type) {
         try {
             const active = await knex.update({ is_active: false })
                 .table('user')
                 .where({ id, type, 'is_active': true })
                 .returning('is_active');
-
 
             return active[0] ? { success: false, message: 'Usuário não deletado!' } : { success: true, message: 'Usuário deletado!' };
         } catch (e) {

@@ -1,8 +1,7 @@
 const Joi = require('joi');
 
-const createValidate = (type = 'T') => {
-
-    const params = {
+const createValidate = () => {
+    return Joi.object().keys({
         name: Joi.string().regex(/^(?!\s)(?!.*\s$)[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/).min(2).max(50).required().messages({
             'string.pattern.base': 'Nome deve conter apenas caracteres e não deve iniciar ou terminar com espaços!',
             'string.min': 'Nome deve conter no mínimo 2 caracteres!',
@@ -30,38 +29,11 @@ const createValidate = (type = 'T') => {
             'string.empty': 'Campo senha não pode ser vazio!',
             'any.required': 'Senha é obrigatória!'
         })
-    };
-
-    switch (type) {
-        case 'T': params.id_institution = Joi.number().integer().min(1).required().messages({
-            'number.integer': 'Instituição deve ser um número inteiro!',
-            'number.min': 'Instituição não pode ser menor que 1!',
-            'number.empty': 'Campo instituição não pode ser vazio!',
-            'any.required': 'Instituição é obrigatório!',
-        });
-
-        case 'R': params.added_by = Joi.number().integer().min(1).messages({
-            'number.integer': 'Adicionador deve ser um número inteiro!',
-            'number.min': 'Adicionador não pode ser menor que 1!',
-            'number.empty': 'Campo adicionador não pode ser vazio!'
-        });
-            break;
-
-        default: params.added_by = Joi.number().integer().min(1).required().messages({
-            'number.integer': 'Adicionador deve ser um número inteiro!',
-            'number.min': 'Adicionador não pode ser menor que 1!',
-            'number.empty': 'Campo adicionador não pode ser vazio!',
-            'any.required': 'Adicionador é obrigatório!'
-        });
-            break;
-    }
-
-    return Joi.object().keys(params);
+    });
 }
 
-const updateValidate = (isTech = false) => {
-
-    const params = {
+const updateValidate = () => {
+    return Joi.object().keys({
         id: Joi.number().integer().min(1).required().messages({
             'number.integer': 'Id deve ser um número inteiro!',
             'number.min': 'Id não pode ser menor que 1!',
@@ -85,22 +57,36 @@ const updateValidate = (isTech = false) => {
             'string.max': 'E-mail não pode ter mais de 100 caracteres!',
             'string.empty': 'Campo e-mail não pode ser vazio!'
         }),
-        password: Joi.string().regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#!])[0-9a-zA-Z$*&@#!]{8,}$/).min(8).max(30).messages({
+        password: Joi.string().regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/).min(8).max(30).messages({
             'string.pattern.base': 'A senha deve conter pelo menos uma letra minúscula, uma maiúscula, um dígito e um caractere especial!',
             'string.min': 'Senha deve conter no mínimo 8 caracteres!',
             'string.max': 'Senha deve conter no máximo 30 caracteres!',
             'string.empty': 'Campo senha não pode ser vazio!'
         }),
-    };
-
-    if (isTech)
-        params.id_institution = Joi.number().integer().min(1).messages({
-            'number.integer': 'Instituição deve ser um número inteiro!',
-            'number.min': 'Instituição não pode ser menor que 1!',
-            'number.empty': 'O campo instituição não pode ser vazio!'
-        });
-
-    return Joi.object().keys(params);
+        new_password: Joi.string().regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/).min(8).max(30).messages({
+            'string.pattern.base': 'A nova senha deve conter pelo menos uma letra minúscula, uma maiúscula, um dígito e um caractere especial!',
+            'string.min': 'Nova senha deve conter no mínimo 8 caracteres!',
+            'string.max': 'Nova senha deve conter no máximo 30 caracteres!',
+            'string.empty': 'Campo nova senha não pode ser vazio!'
+        })
+    }).and('password', 'new_password').messages({
+        'object.and': 'Senha e nova senha devem ser informadas juntas!'
+    });
 }
 
-module.exports = { createValidate, updateValidate };
+const deactivateValidate = () => {
+    return Joi.object().keys({
+        id: Joi.number().integer().min(1).required().messages({
+            'number.integer': 'Id deve ser um número inteiro!',
+            'number.min': 'Id não pode ser menor que 1!',
+            'number.empty': 'Campo id não pode ser vazio!',
+            'any.required': 'Id é obrigatório!'
+        }),
+    })
+}
+
+module.exports = {
+    createValidate,
+    updateValidate, 
+    deactivateValidate
+};

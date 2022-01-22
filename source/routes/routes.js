@@ -4,9 +4,7 @@ const { ensureAuthentication } = require('../middlewares/Authentication');
 const {
     allowOwnUser,
     allowAdmin,
-    allowTechnician,
     allowManager,
-    allowRegisteredAndModerator,
     allowManagerAndModerator
 } = require('../middlewares/Authorization');
 
@@ -24,11 +22,18 @@ const OrgInformation = require('../controllers/OrgInformationController');
 const EmergencyContact = require('../controllers/EmergencyContactController');
 const Legend = require('../controllers/LegendController');
 
+const User = require('../controllers/UserController');
+
 const EMSI = require('../controllers/EMSIController');
 
 // -> Rotas de Access
-router.get('/me', ensureAuthentication, Access.getUserInfo);
 router.post('/login', Access.login);
+
+// -> Rotas de Usuário
+router.get('/me', ensureAuthentication, User.show);
+router.post('/user', User.create);
+router.put('/user', ensureAuthentication, allowOwnUser, User.update);
+router.patch('/user', ensureAuthentication, allowOwnUser, User.deactivate);
 
 // -> Rotas de Administrator
 router.get('/admin/all', Administrator.index);
@@ -114,16 +119,19 @@ router.get('/emsi/lists', ensureAuthentication, allowManager, EMSI.getFormLists)
 router.post('/emsi', ensureAuthentication, allowManager, EMSI.create);
 
 // -> Rotas de Estatística
-router.get('/statistics/user/type_relationship', AccessController.userTypeRelationship);
-router.get('/statistics/user/monthly', AccessController.userByMonth);
-router.get('/statistics/category/amount', Category.categoriesAmount);
-router.get('/statistics/shapefile/amount', Shapefile.shapefilesAmount);
-router.get('/statistics/');
-router.get('/statistics/');
-router.get('/statistics/');
-router.get('/statistics/');
-router.get('/statistics/');
-router.get('/statistics/');
+/*
+router.get('/statistics/user/type_relationship', ensureAuthentication, allowManager, Access.userTypeRelationship);
+router.get('/statistics/user/monthly', ensureAuthentication, allowAdmin, Access.userByMonth);
+router.get('/statistics/category/amount', ensureAuthentication, allowManager, Category.categoriesAmount);
+router.get('/statistics/shapefile/amount', ensureAuthentication, allowAdmin, Shapefile.shapefilesAmount);
+router.get('/statistics/institution/amount', ensureAuthentication, allowAdmin, Institution.instituionAmount);
+router.get('/statistics/institution/user_amount', Institution);
+router.get('/statistics/contact/read_relationship', Contact);
+router.get('/statistics/contribution/publish_relationship', Contribution);
+router.get('/statistics/contribution/', Contribution);
+router.get('/statistics/contribution/', Contribution);
+router.get('/statistics/emsi/', EMSI);
+router.get('/statistics/emsi/', EMSI);*/
 
 // -> Rotas de Erro 404
 router.get('/ops', (_, res) => {

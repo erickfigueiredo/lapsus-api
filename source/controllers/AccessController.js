@@ -1,4 +1,4 @@
-User = require('../models/User');
+const User = require('../models/User');
 const LoginValidator = require('../validators/LoginValidator');
 
 const bcrypt = require('bcrypt');
@@ -50,23 +50,6 @@ class AccessController {
             }
         }
         return res.status(404).send({ success: false, message: 'Email ou senha incorretos!' });
-    }
-
-    static async getUserInfo(req, res) {
-        const id = req.locals.id;
-
-        const result = await User.findOne(id);
-        return result.success ? res.send(result) : res.status(404).send(result);
-    }
-
-    static async userTypeRelationship(req, res) {
-        const result = await User.getUserTypeRelationship();
-        return result.success ? res.send(result) : res.status(404).send(result);
-    }
-
-    static async usersByMonth(req, res) {
-        const result = await User.getUsersByMonth();
-        return result.success ? res.send(result) : res.status(404).send(result);
     }
 };
 
