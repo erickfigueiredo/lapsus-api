@@ -88,12 +88,12 @@ const createValidate = () => {
                 'date.max': 'Momento da declaração de vítimas não pode ser no futuro!',
                 'date.empty': 'Momento da declaração de vítimas não pode ser vazio'
             }),
-            type: Joi.string().regex(/^[A-Z]{1,10}$/).messages({
+            type: Joi.string().regex(/^[A-Z]{1,10}$/).required().messages({
                 'string.pattern.base': 'Código de tipo inválido!',
                 'string.empty': 'Tipo não pode ser vazio',
                 'any.required': 'Tipo é obrigatório!'
             }),
-            subtype: Joi.string().regex(/^[A-Z]{1,10}$/).messages({
+            subtype: Joi.string().regex(/^[A-Z]{1,10}$/).required().messages({
                 'string.pattern.base': 'Código de subtipo inválido!',
                 'string.empty': 'Subtipo não pode ser vazio!',
                 'any.required': 'Subtipo é obrigatório!'
@@ -109,11 +109,8 @@ const createValidate = () => {
             then: Joi.required().messages({
                 'any.required': 'Egeo é obrigatório quando Weathers é informado!'
             })
-        }).and('type', 'subtype').messages({
-            'object.min': 'Egeo deve conter no mínimo 1 atributo!',
-            'object.and': 'Tipo e Subtipo da área devem ser informados juntos!'
         }),
-
+        
         casualties: Joi.array().min(1).items(
             Joi.object().keys({
                 context: Joi.string().regex(/^[A-Z_]{1,15}$/).required().messages({
