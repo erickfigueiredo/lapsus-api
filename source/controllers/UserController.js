@@ -113,17 +113,16 @@ class UserController {
         const existUser = await User.findOneByType(req.body.id, req.locals.type);
         if (existUser.success) {
             if (existUser.user.type === 'A') {
-                const count = await User.countByType('A');
-                if (count < 1) {
+                const count = parseInt(await User.countByType('A'));
+
+                if (count === 1) {
                     return res.status(409).send({ success: false, message: 'O sistema precisa possuir ao menos um Administrador!' });
                 }
-
-                const result = await User.deactivate(req.body.id, req.locals.type);
-                return result.success ? res.send(result) : res.status(400).send(result);
             }
-
-            return res.status(404).send(existUser);
+            const result = await User.deactivate(req.body.id, req.locals.type);
+            return result.success ? res.send(result) : res.status(400).send(result);
         }
+        return res.status(404).send(existUser);
     }
 }
 
