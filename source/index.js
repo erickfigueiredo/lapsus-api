@@ -9,8 +9,10 @@ const helmet = require('helmet');
 
 const app = express();
 const router = require('./routes/routes');
+const requestLimiter = require('./middlewares/Limiter');
 
-app.use(cors({origin: true, credentials: true}));
+app.use(cors({ origin: true, credentials: true }));
+app.use(requestLimiter);
 //app.use(cors({ origin: 'http://localhost:8080' }));
 
 // Diretórios estáticos expostos
