@@ -1,10 +1,10 @@
 const User = require('../models/User');
-const UserValidator = require('../validators/UserValidator');
+const UserManagingValidator = require('../validators/UserManagingValidator');
 
 const bcrypt = require('bcrypt');
 const saltRounds = parseInt(process.env.BCRYPT_SALT);
 
-class ModeratorController {
+class moderatorController {
     static async show(req, res) {
         const id = req.params.id;
 
@@ -21,12 +21,25 @@ class ModeratorController {
 
         if (isNaN(parseInt(page))) { page = 1 };
 
-        const moderators = await User.findAllByType('M', page);
-        return moderators.success ? res.send(moderators) : res.status(404).send(moderators);
+        const filters = {};
+        if (req.query.search) {
+            filters.search = req.query.search;
+        }
+
+        if (req.query.order && (['asc', 'desc'].includes(req.query.order))) {
+            filters.order = req.query.order;
+        }
+
+        if (req.query.who && (['both', 'active', 'inactive'].includes(req.query.who))) {
+            filters.who = req.query.who;
+        }
+
+        const moderator = await User.findAllByType('M', page, filters);
+        return moderator.success ? res.send(moderator) : res.status(404).send(moderator);
     }
 
     static async create(req, res) {
-        const valid = UserValidator.createValidate('M');
+        const valid = UserManagingValidator.createValidate('M');
         const { error } = valid.validate(req.body);
 
         if (error) {
@@ -34,15 +47,16 @@ class ModeratorController {
         }
 
         const moderator = req.body;
+        const existEmail = await User.findByEmail(moderator.email, false);
+        if (existEmail.success) {
+            return res.status(409).send({ success: false, message: 'E-mail já cadastrado!' });
+        }
+
+        moderator.added_by = req.locals.id;
 
         const existAdder = await User.findOneByType(moderator.added_by, 'A');
         if (!existAdder.success) {
-            return res.status(404).send({ success: false, message: 'Usuário adicionador inexistente! ' });
-        }
-
-        const existEmail = await User.findByEmail(moderator.email);
-        if (existEmail.success) {
-            return res.status(409).send({ success: false, message: 'E-mail já cadastrado!' });
+            return res.status(404).send({ success: false, message: 'Usuário adicionador inexistente!' });
         }
 
         const salt = bcrypt.genSaltSync(saltRounds);
@@ -55,7 +69,7 @@ class ModeratorController {
     }
 
     static async update(req, res) {
-        const valid = UserValidator.updateValidate();
+        const valid = UserManagingValidator.updateValidate('M');
         const { error } = valid.validate(req.body);
 
         if (error) {
@@ -65,23 +79,24 @@ class ModeratorController {
         const form = req.body;
 
         const moderator = await User.findOneByType(form.id, 'M');
-
-        if (moderator.success && moderator.user.is_active) {
+        if (moderator.success) {
             const toUpdate = {};
 
             if (form.email && moderator.user.email !== form.email) {
 
-                const existEmail = await User.findByEmail(form.email);
-                if (existEmail.success) {
+                const existEmail = await User.findByEmail(form.email, false);
+                if (existEmail.success){
                     return res.status(409).send({ success: false, message: 'E-mail já cadastrado!' });
                 }
 
                 toUpdate.email = form.email;
             }
 
-            if (form.name && moderator.user.name !== form.name) { toUpdate.name = form.name };
+            if (form.name && moderator.user.name !== form.name) toUpdate.name = form.name;
 
-            if (form.surname && moderator.user.surname !== form.surname) { toUpdate.surname = form.surname };
+            if (form.surname && moderator.user.surname !== form.surname) toUpdate.surname = form.surname;
+
+            if (form.type && moderator.user.type !== form.type) toUpdate.type = form.type;
 
             if (form.password) {
                 const salt = bcrypt.genSaltSync(saltRounds);
@@ -90,7 +105,6 @@ class ModeratorController {
 
             if (Object.keys(toUpdate).length) {
                 toUpdate.id = form.id;
-                toUpdate.type = 'M';
 
                 const result = await User.update(toUpdate);
                 return result.success ? res.send(result) : res.status(400).send(result);
@@ -100,21 +114,24 @@ class ModeratorController {
         return res.status(404).send({ success: false, message: 'Usuário inexistente!' });
     }
 
-    static async deactivate(req, res) {
-        const id = req.params.id;
+    static async toggleStatus(req, res) {
+        const valid = UserManagingValidator.toggleValidate();
+        const { error } = valid.validate(req.body);
 
-        if (isNaN(parseInt(id))) {
-            return res.status(400).send({ success: false, message: 'Id inválido!' });
+        if (error) {
+            return res.status(400).send({ success: false, message: error.details[0].message });
         }
 
-        const moderator = await User.findOneByType(id, 'M');
-        if (!(moderator.success && moderator.user.is_active)) {
-            return res.status(404).send({ success: false, message: 'Usuário inexistente!' });
-        }
+        const id = req.body.id;
 
-        const result = await User.delete(id, 'M');
+        const moderator = await User.findOneByType(id, 'M', false);
+        if (!moderator.success)
+            return res.status(404).send(moderator.message);
+
+        const is_active = !moderator.user.is_active;
+        const result = await User.update({ id, is_active });
         return result.success ? res.send(result) : res.status(400).send(result);
     }
 }
 
-module.exports = ModeratorController;
+module.exports = moderatorController;

@@ -37,13 +37,6 @@ class UserController {
             return res.status(409).send({ success: false, message: 'E-mail já cadastrado!' });
         }
 
-        if (registered.added_by) {
-            const existAdder = await User.findOneByType(registered.added_by, 'A');
-            if (!existAdder.success) {
-                return res.status(404).send({ success: false, message: 'Usuário adicionador inexistente!' });
-            }
-        }
-
         const salt = bcrypt.genSaltSync(saltRounds);
         registered.password = bcrypt.hashSync(registered.password, salt);
 

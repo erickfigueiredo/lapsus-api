@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const UserValidator = require('../validators/UserValidator');
+const UserManagingValidator = require('../validators/UserManagingValidator');
 
 const bcrypt = require('bcrypt');
 const saltRounds = parseInt(process.env.BCRYPT_SALT);
@@ -21,12 +21,25 @@ class RegisteredController {
 
         if (isNaN(parseInt(page))) { page = 1 };
 
-        const registereds = await User.findAllByType('R', page);
-        return registereds.success ? res.send(registereds) : res.status(404).send(registereds);
+        const filters = {};
+        if (req.query.search) {
+            filters.search = req.query.search;
+        }
+
+        if (req.query.order && (['asc', 'desc'].includes(req.query.order))) {
+            filters.order = req.query.order;
+        }
+
+        if (req.query.who && (['both', 'active', 'inactive'].includes(req.query.who))) {
+            filters.who = req.query.who;
+        }
+
+        const registered = await User.findAllByType('R', page, filters);
+        return registered.success ? res.send(registered) : res.status(404).send(registered);
     }
 
     static async create(req, res) {
-        const valid = UserValidator.createValidate('R');
+        const valid = UserManagingValidator.createValidate('R');
         const { error } = valid.validate(req.body);
 
         if (error) {
@@ -34,17 +47,16 @@ class RegisteredController {
         }
 
         const registered = req.body;
-
-        const existEmail = await User.findByEmail(registered.email);
+        const existEmail = await User.findByEmail(registered.email, false);
         if (existEmail.success) {
             return res.status(409).send({ success: false, message: 'E-mail já cadastrado!' });
         }
 
-        if (registered.added_by) {
-            const existAdder = await User.findOneByType(registered.added_by, 'A');
-            if (!existAdder.success) {
-                return res.status(404).send({ success: false, message: 'Usuário adicionador inexistente!' });
-            }
+        registered.added_by = req.locals.id;
+
+        const existAdder = await User.findOneByType(registered.added_by, 'A');
+        if (!existAdder.success) {
+            return res.status(404).send({ success: false, message: 'Usuário adicionador inexistente!' });
         }
 
         const salt = bcrypt.genSaltSync(saltRounds);
@@ -57,26 +69,25 @@ class RegisteredController {
     }
 
     static async update(req, res) {
-        const valid = UserValidator.updateValidate();
+        const valid = UserManagingValidator.updateValidate('R');
         const { error } = valid.validate(req.body);
 
-        if (error)
+        if (error) {
             return res.status(400).send({ success: false, message: error.details[0].message });
-
+        }
 
         const form = req.body;
 
         const registered = await User.findOneByType(form.id, 'R');
-
-        if (registered.success && registered.user.is_active) {
+        if (registered.success) {
             const toUpdate = {};
 
             if (form.email && registered.user.email !== form.email) {
 
-                const existEmail = await User.findByEmail(form.email);
-                if (existEmail.success)
+                const existEmail = await User.findByEmail(form.email, false);
+                if (existEmail.success){
                     return res.status(409).send({ success: false, message: 'E-mail já cadastrado!' });
-
+                }
 
                 toUpdate.email = form.email;
             }
@@ -85,6 +96,8 @@ class RegisteredController {
 
             if (form.surname && registered.user.surname !== form.surname) toUpdate.surname = form.surname;
 
+            if (form.type && registered.user.type !== form.type) toUpdate.type = form.type;
+
             if (form.password) {
                 const salt = bcrypt.genSaltSync(saltRounds);
                 toUpdate.password = bcrypt.hashSync(form.password, salt);
@@ -92,8 +105,6 @@ class RegisteredController {
 
             if (Object.keys(toUpdate).length) {
                 toUpdate.id = form.id;
-                toUpdate.type = 'R';
-
 
                 const result = await User.update(toUpdate);
                 return result.success ? res.send(result) : res.status(400).send(result);
@@ -103,19 +114,22 @@ class RegisteredController {
         return res.status(404).send({ success: false, message: 'Usuário inexistente!' });
     }
 
-    static async deactivate(req, res) {
-        const id = req.params.id;
+    static async toggleStatus(req, res) {
+        const valid = UserManagingValidator.toggleValidate();
+        const { error } = valid.validate(req.body);
 
-        if (isNaN(parseInt(id)))
-            return res.status(400).send({ success: false, message: 'Id inválido!' });
+        if (error) {
+            return res.status(400).send({ success: false, message: error.details[0].message });
+        }
 
+        const id = req.body.id;
 
-        const registered = await User.findOneByType(id, 'R');
-        if (!(registered.success && registered.user.is_active))
-            return res.status(404).send({ success: false, message: 'Usuário inexistente!' });
+        const registered = await User.findOneByType(id, 'R', false);
+        if (!registered.success)
+            return res.status(404).send(registered.message);
 
-
-        const result = await User.delete(id, 'R');
+        const is_active = !registered.user.is_active;
+        const result = await User.update({ id, is_active });
         return result.success ? res.send(result) : res.status(400).send(result);
     }
 }
