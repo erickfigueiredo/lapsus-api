@@ -16,25 +16,16 @@ class User {
         }
     }
 
-    static async findOneManager(id) {
+    static async findOneByType(id, type, ignoreInactive = true) {
         try {
-            const user = await knex.select('id', 'name', 'surname', 'email', 'type', 'id_institution')
+            const user = await knex.select('id', 'name', 'surname', 'email', 'type', 'id_institution', 'is_active')
                 .from('user')
-                .where({ id, is_active: true })
-                .andWhere('type', '!=', 'R');
-
-            return user[0] ? { success: true, user: user[0] } : { success: false, message: 'Gestor inexistente!' };
-        } catch (e) {
-            Message.warning(e);
-            return { success: false, message: 'Houve um erro ao recuperar o gerente!' };
-        }
-    }
-
-    static async findOneByType(id, type) {
-        try {
-            const user = await knex.select('id', 'name', 'surname', 'email', 'type', 'id_institution')
-                .from('user')
-                .where({ id, is_active: true })
+                .where({ id })
+                .andWhere(function () {
+                    if (ignoreInactive) {
+                        this.where({ is_active: true });
+                    }
+                })
                 .andWhere(function () {
                     if (type.length) {
                         this.where({ type: type[0] });
@@ -84,50 +75,53 @@ class User {
                     isLengthAware: true
                 });
 
-            return user.data[0] ? { success: true, user } : { success: false, message: 'Não foi possível recuperar os usuários / Usuários inexistentes!' }
+            return user.data[0] ? { success: true, user } : { success: false, message: 'Usuários inexistentes!' }
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar os usuários!' };
         }
     }
 
-    // Add esquema de consulta
-    static async findAll(page) {
+    static async findAllByType(type, page, filters) {
         try {
-            const user = await knex
-                .select('*')
+            const user = await knex.select('id', 'name', 'surname', 'type', 'email', 'id_institution', knex.raw("to_char(created_at, 'DD/MM/YYYY') as created_at"), 'is_active')
                 .from('user')
-                .where({ 'is_active': true })
-                .orderBy(['type', 'institution', 'name'])
+                .where({ type })
+                .andWhere(function () {
+                    if (filters.search) {
+                        this.andWhereRaw(`
+                            unaccent(name) ilike unaccent(:search) or
+                            unaccent(surname) ilike unaccent(:search) or
+                            unaccent(email) ilike unaccent(:search) or
+                            unaccent(to_char(created_at, 'DD/MM/YYYY')) ilike unaccent(:search)
+                        `, {
+                            search: `%${filters.search}%`
+                        });
+                    }
+                })
+                .andWhere(function () {
+                    if (filters.who && filters.who !== 'both') {
+                        if (filters.who === 'active') this.where({ is_active: true });
+                        else this.where({ is_active: false });
+                    }
+                })
+                .andWhere(function () {
+                    if (filters.id_institution) {
+                        this.where({ id_institution: filters.id_institution });
+                    }
+                })
+                .orderBy([
+                    { column: 'name', order: filters.order || 'asc' },
+                    { column: 'surname', order: filters.order || 'asc' },
+                    'created_at'
+                ])
                 .paginate({
-                    perPage: 25,
-                    currentPage: page
+                    perPage: 30,
+                    currentPage: page,
+                    isLengthAware: true
                 });
 
-
-            return user.data[0] ? { sucess: true, user } : { success: false, message: 'Não foi possível recuperar os usuários / Usuários inexistentes!' };
-        } catch (e) {
-            Message.warning(e);
-            return { success: false, message: 'Houve um erro ao recuperar os usuários!' };
-        }
-    }
-
-    // Add esquema de consulta
-    static async findAllByType(type, page) {
-        try {
-            const user = await knex.select('*')
-                .from('user')
-                .where({ type, 'is_active': true })
-                .orderBy(['name', 'created_at'])
-                .paginate({
-                    perPage: 25,
-                    currentPage: page
-                });
-
-            console.log(user.data)
-
-
-            return user.data[0] ? { success: true, user } : { success: false, message: 'Não foi possível recuperar os usuários / Usuários inexistentes!' }
+            return user.data[0] ? { success: true, user } : { success: false, message: 'Usuários inexistentes!' }
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar o usuário!' };
@@ -172,7 +166,7 @@ class User {
         try {
             const user = await knex.insert(data)
                 .table('user')
-                .returning(['id', 'name', 'surname', 'email', 'type', 'id_institution']);
+                .returning(['id', 'name', 'surname', 'type', 'email', 'id_institution', knex.raw("to_char(created_at, 'DD/MM/YYYY') as created_at"), 'is_active']);
 
             return user[0] ? { success: true, user: user[0] } : { success: false, message: 'Não foi possível cadastrar o usuário' };
         } catch (e) {
@@ -189,7 +183,7 @@ class User {
             const user = await knex.update(data)
                 .table('user')
                 .where({ id })
-                .returning(['id', 'name', 'surname', 'email', 'type', 'id_institution']);
+                .returning(['id', 'name', 'surname', 'type', 'email', 'id_institution', knex.raw("to_char(created_at, 'DD/MM/YYYY') as created_at"), 'is_active']);
 
             return user[0] ? { success: true, user: user[0] } : { success: false, message: 'Não foi possível atualizar o usuário' };
         } catch (e) {

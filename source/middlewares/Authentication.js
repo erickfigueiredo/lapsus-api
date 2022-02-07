@@ -29,6 +29,4 @@ const ensureAuthentication = (req, res, next) => {
     }
 }
 
-module.exports = {
-    ensureAuthentication
-};
+module.exports = ensureAuthentication;

@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const { ensureAuthentication } = require('../middlewares/Authentication');
+const ensureAuthentication = require('../middlewares/Authentication');
 const {
     allowOwnUser,
     allowAdmin,
@@ -8,23 +8,26 @@ const {
     allowManagerAndModerator
 } = require('../middlewares/Authorization');
 
-const Administrator = require('../controllers/AdminController');
-const Category = require('../controllers/CategoryController');
-const Contact = require('../controllers/ContactController');
-const Contribution = require('../controllers/ContributionController');
-const Institution = require('../controllers/InstitutionController');
 const Access = require('../controllers/AccessController');
+
+const Administrator = require('../controllers/AdminController');
 const Moderator = require('../controllers/ModeratorController');
 const Registered = require('../controllers/RegisteredController');
-const Shapefile = require('../controllers/ShapefileController');
 const Technician = require('../controllers/TechnicianController');
-const OrgInformation = require('../controllers/OrgInformationController');
-const EmergencyContact = require('../controllers/EmergencyContactController');
-const Legend = require('../controllers/LegendController');
-
 const User = require('../controllers/UserController');
 
+const Contribution = require('../controllers/ContributionController');
 const EMSI = require('../controllers/EMSIController');
+const Legend = require('../controllers/LegendController');
+
+const Category = require('../controllers/CategoryController');
+const Contact = require('../controllers/ContactController');
+const EmergencyContact = require('../controllers/EmergencyContactController');
+const Institution = require('../controllers/InstitutionController');
+const Shapefile = require('../controllers/ShapefileController');
+const OrgInformation = require('../controllers/OrgInformationController');
+
+
 
 // -> Rotas de Access
 router.post('/login', Access.login);
@@ -36,13 +39,33 @@ router.put('/user', ensureAuthentication, allowOwnUser, User.update);
 router.patch('/user', ensureAuthentication, allowOwnUser, User.deactivate);
 
 // -> Rotas de Administrator
-router.get('/admin/all', Administrator.index);
-router.get('/admin/:id', Administrator.show);
-router.post('/admin', Administrator.create);
-router.put('/admin', Administrator.update);
-router.delete('/admin/:id', Administrator.deactivate);
+router.get('/admin/all', ensureAuthentication, allowAdmin, Administrator.index);
+router.get('/admin/:id', ensureAuthentication, allowAdmin, Administrator.show);
+router.post('/admin', ensureAuthentication, allowAdmin, Administrator.create);
 
-// -> Rotas de Category -> OKAY
+// -> Rotas de Registered
+router.get('/registered/all', ensureAuthentication, allowAdmin, Registered.index);
+router.get('/registered/:id', ensureAuthentication, allowAdmin, Registered.show);
+router.post('/registered', ensureAuthentication, allowAdmin, Registered.create);
+router.put('/registered', ensureAuthentication, allowAdmin, Registered.update);
+router.patch('/registered', ensureAuthentication, allowAdmin, Registered.toggleStatus);
+
+// -> Rotas de Moderator
+router.get('/moderator/all', ensureAuthentication, allowAdmin, Moderator.index);
+router.get('/moderator/:id', ensureAuthentication, allowAdmin, Moderator.show);
+router.post('/moderator', ensureAuthentication, allowAdmin, Moderator.create);
+router.put('/moderator', ensureAuthentication, allowAdmin, Moderator.update);
+router.patch('/moderator', ensureAuthentication, allowAdmin, Moderator.toggleStatus);
+
+// -> Rotas de Technician
+router.get('/technician/institution/:id_institution',ensureAuthentication, allowAdmin, Technician.indexByInstitution);
+router.get('/technician/all', ensureAuthentication, allowAdmin, Technician.index);
+router.get('/technician/:id', ensureAuthentication, allowAdmin, Technician.show);
+router.post('/technician', ensureAuthentication, allowAdmin, Technician.create);
+router.put('/technician', ensureAuthentication, allowAdmin, Technician.update);
+router.patch('/technician', ensureAuthentication, allowAdmin, Technician.toggleStatus);
+
+// -> Rotas de Category
 router.get('/category/all/detailed', ensureAuthentication, allowManager, Category.indexDetailed);
 router.get('/category/all', Category.index);
 router.get('/category/:id', ensureAuthentication, allowManager, Category.show);
@@ -56,28 +79,6 @@ router.get('/contact/:id', ensureAuthentication, allowManager, Contact.show);
 router.post('/contact', Contact.create);
 router.patch('/contact/toggle_check', ensureAuthentication, allowManager, Contact.toggleVisualize);
 router.delete('/contact/:id', ensureAuthentication, allowManager, Contact.delete);
-
-// -> Rotas de Registered
-router.get('/registered/all', Registered.index);
-router.get('/registered/:id', Registered.show);
-router.post('/registered', Registered.create);
-router.put('/registered', Registered.update);
-router.delete('/registered/:id', Registered.deactivate);
-
-// -> Rotas de Moderator
-router.get('/moderator/all', Moderator.index);
-router.get('/moderator/:id', Moderator.show);
-router.post('/moderator', Moderator.create);
-router.put('/moderator', Moderator.update);
-router.delete('/moderator/:id', Moderator.deactivate);
-
-// -> Rotas de Technician
-router.get('/technician/all', Technician.index);
-router.get('/technician/institution/:id_institution', Technician.indexByInstitution);
-router.get('/technician/:id', Technician.show);
-router.post('/technician', Technician.create);
-router.put('/technician', Technician.update);
-router.delete('/technician/:id', Technician.deactivate);
 
 // -> Rotas de Institution
 router.get('/institution/all/detailed', ensureAuthentication, allowAdmin, Institution.indexDetailed);
