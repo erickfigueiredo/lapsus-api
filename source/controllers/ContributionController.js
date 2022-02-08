@@ -130,7 +130,7 @@ class ContributionController {
             return res.status(400).send({ success: false, message: error.details[0].message });
         }
         
-        const existManager = await User.findOneManager(req.locals.id);
+        const existManager = await User.findOneByType(req.locals.id, ['A', 'T', 'M']);
         if (!existManager.success) {
             return res.status(404).send(existManager);
         }

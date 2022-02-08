@@ -126,7 +126,7 @@ class EMSIController {
                 return res.status(400).send({ success: false, message: error.details[0].message });
             }
 
-            const existManager = await User.findOneManager(req.locals.id);
+            const existManager = await User.findOneByType(req.locals.id, ['A', 'T', 'M']);
             if (!existManager.success) {
                 if (req.files.length) remFiles(req.files);
                 return res.status(404).send(existManager.message);
