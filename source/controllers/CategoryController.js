@@ -23,7 +23,7 @@ class CategoryController {
         return ctg.success ? res.send(ctg) : res.status(404).send(ctg);
     }
 
-    static async categoriesAmount(req, res) {
+    static async getAmount(req, res) {
         const result = await Category.getCategoriesAmount();
         return result.success ? res.send(result) : res.status(404).send(result);
     }

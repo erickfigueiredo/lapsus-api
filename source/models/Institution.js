@@ -72,6 +72,17 @@ class Institution {
         }
     }
 
+    static async getInstitutionsAmount() {
+        try {
+            const result = await knex('institution').count('id');
+
+            return result[0].count ? { success: true, amount: result[0].count } : { success: false, message: 'Instituições inexistentes!' };
+        } catch (e) {
+            Message.warning(e);
+            return { success: false, message: 'Houve um erro ao recuperar a quantidade de Instituições!' };
+        }
+    }
+
     static async create(data) {
         try {
             const institution = await knex.insert(data)

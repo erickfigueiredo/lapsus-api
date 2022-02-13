@@ -34,6 +34,8 @@ router.post('/login', Access.login);
 
 // -> Rotas de Usuário
 router.get('/me', ensureAuthentication, User.show);
+router.get('/user/type_relationship', ensureAuthentication, allowManager, User.userTypeRelationship);
+router.get('/user/monthly', ensureAuthentication, allowAdmin, User.usersByMonth);
 router.post('/user', User.create);
 router.put('/user', ensureAuthentication, allowOwnUser, User.update);
 router.patch('/user', ensureAuthentication, allowOwnUser, User.deactivate);
@@ -68,6 +70,7 @@ router.patch('/technician', ensureAuthentication, allowAdmin, Technician.toggleS
 // -> Rotas de Category
 router.get('/category/all/detailed', ensureAuthentication, allowManager, Category.indexDetailed);
 router.get('/category/all', Category.index);
+router.get('/category/amount', ensureAuthentication, allowManager, Category.getAmount);
 router.get('/category/:id', ensureAuthentication, allowManager, Category.show);
 router.post('/category', ensureAuthentication, allowManager, Category.create);
 router.put('/category', ensureAuthentication, allowManager, Category.update);
@@ -83,6 +86,7 @@ router.delete('/contact/:id', ensureAuthentication, allowManager, Contact.delete
 // -> Rotas de Institution
 router.get('/institution/all/detailed', ensureAuthentication, allowAdmin, Institution.indexDetailed);
 router.get('/institution/all', ensureAuthentication, allowAdmin, Institution.index);
+router.get('/institution/amount', ensureAuthentication, allowManager, Institution.getAmount);
 router.get('/institution/:id', ensureAuthentication, allowManager, Institution.show);
 router.post('/institution', ensureAuthentication, allowAdmin, Institution.create);
 router.put('/institution', ensureAuthentication, allowAdmin, Institution.update);
@@ -90,6 +94,7 @@ router.delete('/institution/:id', ensureAuthentication, allowAdmin, Institution.
 
 // -> Rotas de Shapefile
 router.get('/shapefile/all', Shapefile.index);
+router.get('/shapefile/amount', ensureAuthentication, allowManager, Shapefile.getAmount);
 router.get('/shapefile/:id', Shapefile.show);
 router.post('/shapefile', ensureAuthentication, allowAdmin, Shapefile.create);
 router.put('/shapefile', ensureAuthentication, allowAdmin, Shapefile.update);
@@ -121,13 +126,8 @@ router.post('/emsi', ensureAuthentication, allowManager, EMSI.create);
 
 // -> Rotas de Estatística
 /*
-router.get('/statistics/user/type_relationship', ensureAuthentication, allowManager, Access.userTypeRelationship);
-router.get('/statistics/user/monthly', ensureAuthentication, allowAdmin, Access.userByMonth);
-router.get('/statistics/category/amount', ensureAuthentication, allowManager, Category.categoriesAmount);
-router.get('/statistics/shapefile/amount', ensureAuthentication, allowAdmin, Shapefile.shapefilesAmount);
-router.get('/statistics/institution/amount', ensureAuthentication, allowAdmin, Institution.instituionAmount);
-router.get('/statistics/institution/user_amount', Institution);
-router.get('/statistics/contact/read_relationship', Contact);
+router.get('/institution/user_amount', Institution);
+router.get('/contact/read_relationship', Contact);
 router.get('/statistics/contribution/publish_relationship', Contribution);
 router.get('/statistics/contribution/', Contribution);
 router.get('/statistics/contribution/', Contribution);

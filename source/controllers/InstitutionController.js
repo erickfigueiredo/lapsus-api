@@ -28,6 +28,11 @@ class InstitutionController {
         return result.success ? res.send(result) : res.status(404).send(result);
     }
 
+    static async getAmount(req, res) {
+        const result = await Institution.getInstitutionsAmount();
+        return result.success ? res.send(result) : res.status(404).send(result);
+    }
+
     static async create(req, res) {
         const valid = InstitutionValidator.createValidate();
         const { error } = valid.validate(req.body);

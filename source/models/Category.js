@@ -59,7 +59,7 @@ class Category {
         try {
             const result = await knex('user').count('id');
 
-            return result[0].count ? { success: true, amount: result[0].count } : { success: true, message: 'Categorias inexistentes!' };
+            return result[0].count ? { success: true, amount: result[0].count } : { success: false, message: 'Categorias inexistentes!' };
         } catch (e) {
             Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar a quantidade de categorias!' };

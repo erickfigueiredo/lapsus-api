@@ -29,7 +29,7 @@ class ShapefileController {
         return shps.success ? res.send(shps) : res.status(404).send(shps);
     }
 
-    static async shapefilesAmount(req, res) {
+    static async getAmount(req, res) {
         const result = await Shapefile.getShapefilesAmount();
         return result.success ? res.send(result) : res.status(404).send(result);
     }
