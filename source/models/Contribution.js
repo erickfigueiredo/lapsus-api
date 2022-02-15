@@ -4,7 +4,6 @@ const Message = require('../utils/Message');
 class Contribution {
     
     static async findOne(id) {
-
         try {
             const contrib = await knex.select('c.id', 'c.created_at', 'c.updated_at', 'occurrence', 'victims', 'risk_damage', 'published',
             'c.desc', knex.raw('st_asText(local) as local'), 'cat.name as category_name', 'coll.name as collaborator_name', 'coll.surname as collaborator_surname',
@@ -33,7 +32,6 @@ class Contribution {
     }
 
     static async findAll(page) {
-
         try {
             const contrib = await knex.select('c.id', 'c.created_at', 'c.updated_at', 'occurrence', 'victims', 'risk_damage', 'published',
                 'c.desc', knex.raw('st_asText(local) as local'), 'cat.name as category_name', 'coll.name as collaborator_name', 'coll.surname as collaborator_surname',
@@ -61,7 +59,6 @@ class Contribution {
     }
 
     static async listAll() {
-
         try {
             const contrib = await knex.select('contribution.id as id', 'name as category')
                 .from('contribution')
@@ -76,8 +73,29 @@ class Contribution {
         }
     }
 
-    static async create(data, files = null) {
+    static async getPublishRelationshipByUser(id_collaborator) {
+        try {
+            const contrib = await knex.raw(`SELECT published AS status, COUNT(id) AS amount FROM contribution WHERE id_collaborator = ${id_collaborator}GROUP BY published`);
+            
+            return contrib.rows[0] ? { success: true, contribution: contrib.rows } : { success: false, message: 'Contribuições inexistentes!' };
+        } catch (e) {
+            Message.warning(e);
+            return { success: false, message: 'Houve um erro ao recuperar a relação de publicação das contribuições!' };
+        }
+    }
 
+    static async getPublishRelationship() {
+        try {
+            const contrib = await knex.raw('SELECT published AS status, COUNT(id) AS amount FROM contribution GROUP BY published');
+            
+            return contrib.rows[0] ? { success: true, contribution: contrib.rows } : { success: false, message: 'Contribuições inexistentes!' };
+        } catch (e) {
+            Message.warning(e);
+            return { success: false, message: 'Houve um erro ao recuperar a relação de publicação das contribuições!' };
+        }
+    }
+
+    static async create(data, files = null) {
         try {
             return await knex.transaction(async trx => {
                 const [id_contribution] = await trx('contribution').insert(data).returning('id');
@@ -100,7 +118,6 @@ class Contribution {
     }
 
     static async update(data) {
-
         try {
             const id = data.id;
             delete data['id'];

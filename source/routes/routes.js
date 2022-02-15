@@ -28,13 +28,12 @@ const Shapefile = require('../controllers/ShapefileController');
 const OrgInformation = require('../controllers/OrgInformationController');
 
 
-
 // -> Rotas de Access
 router.post('/login', Access.login);
 
 // -> Rotas de Usuário
 router.get('/me', ensureAuthentication, User.show);
-router.get('/user/type_relationship', ensureAuthentication, allowManager, User.userTypeRelationship);
+router.get('/user/type_relationship', ensureAuthentication, allowAdmin, User.userTypeRelationship);
 router.get('/user/monthly', ensureAuthentication, allowAdmin, User.usersByMonth);
 router.post('/user', User.create);
 router.put('/user', ensureAuthentication, allowOwnUser, User.update);
@@ -77,6 +76,7 @@ router.put('/category', ensureAuthentication, allowManager, Category.update);
 router.delete('/category/:id', ensureAuthentication, allowManager, Category.delete);
 
 // -> Rotas de Contact
+router.get('/contact/read_relationship', ensureAuthentication, allowManager, Contact.readRelationship);
 router.get('/contact/all', ensureAuthentication, allowManager, Contact.index);
 router.get('/contact/:id', ensureAuthentication, allowManager, Contact.show);
 router.post('/contact', Contact.create);
@@ -101,11 +101,12 @@ router.put('/shapefile', ensureAuthentication, allowAdmin, Shapefile.update);
 router.delete('/shapefile/:id', ensureAuthentication, allowAdmin, Shapefile.delete);
 
 // -> Rotas de Contribution
+router.get('/contribution/publish_relationship/:id', ensureAuthentication, allowOwnUser, Contribution.publishRelationshipByUser);
+router.get('/contribution/publish_relationship', ensureAuthentication, allowManagerAndModerator, Contribution.publishRelationship);
 router.get('/contribution/all', ensureAuthentication, allowManagerAndModerator, Contribution.index);
 router.get('/contribution/:id', ensureAuthentication, allowManagerAndModerator, Contribution.show);
 router.post('/contribution', Contribution.create);
 router.put('/contribution', ensureAuthentication, allowManagerAndModerator, Contribution.evaluateStatus);
-
 
 // -> Rotas de Informações da organização
 router.get('/organization', OrgInformation.show);
@@ -123,16 +124,6 @@ router.delete('/emergency_contact/:id', ensureAuthentication, allowAdmin, Emerge
 // -> Rotas de EMSI
 router.get('/emsi/lists', ensureAuthentication, allowManager, EMSI.getFormLists);
 router.post('/emsi', ensureAuthentication, allowManager, EMSI.create);
-
-// -> Rotas de Estatística
-/*
-router.get('/institution/user_amount', Institution);
-router.get('/contact/read_relationship', Contact);
-router.get('/statistics/contribution/publish_relationship', Contribution);
-router.get('/statistics/contribution/', Contribution);
-router.get('/statistics/contribution/', Contribution);
-router.get('/statistics/emsi/', EMSI);
-router.get('/statistics/emsi/', EMSI);*/
 
 // -> Rotas de Erro 404
 router.get('/ops', (_, res) => {

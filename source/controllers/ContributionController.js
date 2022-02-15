@@ -23,6 +23,16 @@ class ContributionController {
         return ctb.success ? res.send(ctb) : res.status(404).send(ctb);
     }
 
+    static async publishRelationship(req, res) {
+        const result = await Contribution.getPublishRelationship();
+        return result.success ? res.send(result) : res.status(404).send(result);
+    }
+
+    static async publishRelationshipByUser(req, res) {
+        const result = await Contribution.getPublishRelationshipByUser(req.locals.id);
+        return result.success ? res.send(result) : res.status(404).send(result);
+    }
+    
     static async index(req, res) {
         
         let page = req.query.page;

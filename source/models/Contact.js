@@ -33,6 +33,17 @@ class Contact {
         }
     }
 
+    static async getReadRelationship() {
+        try {
+            const contact = await knex.raw('SELECT is_visualized AS read, COUNT(id) AS amount FROM contact GROUP BY is_visualized');
+            
+            return contact.rows[0] ? { success: true, contact: contact.rows } : { success: false, message: 'Mensagens inexistentes!' };
+        } catch (e) {
+            Message.warning(e);
+            return { success: false, message: 'Houve um erro ao recuperar a relação de mensagens lidas!' };
+        }
+    }
+
     static async create(data) {
         try {
             const contact = await knex.insert(data)

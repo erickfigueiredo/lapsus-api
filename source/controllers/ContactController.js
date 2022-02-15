@@ -13,6 +13,11 @@ class ContactController {
         return ctt.success ? res.send(ctt) : res.status(404).send(ctt);
     }
 
+    static async readRelationship(req, res) {
+        const result = await Contact.getReadRelationship();
+        return result.success ? res.send(result) : res.status(404).send(result);
+    }
+
     static async index(req, res) {
         let page = req.query.page;
 
