@@ -141,7 +141,7 @@ class User {
 
     static async getUserTypeRelationship() {
         try {
-            const user = await knex.raw('SELECT type, COUNT(type) AS amount FROM user GROUP BY type');
+            const user = await knex.raw('SELECT type, COUNT(type) AS amount FROM "user" GROUP BY type ORDER BY type');
 
             return user.rows[0] ? { success: true, user: user.rows } : { success: false, message: 'Usuários inexistentes!' };
         } catch (e) {
@@ -152,12 +152,12 @@ class User {
 
     static async getUsersByMonth() {
         try {
-            const user = await knex.raw(`SELECT date_part('month', created_at) AS month, COUNT(created_at) as users 
-            FROM user GROUP BY month, DATE_TRUNC('year', created_at) ORDER BY month DESC LIMIT 12`);
+            const user = await knex.raw(`SELECT date_part('month', created_at) AS month, date_part('year', created_at) AS year, 
+            COUNT(created_at) as users FROM "user" GROUP BY month, year ORDER BY year, month LIMIT 12`);
 
             return user.rows[0] ? { success: true, user: user.rows } : { success: false, message: 'Usuários inexistentes!' };
         } catch (e) {
-            MessageEvent.warning(e);
+            Message.warning(e);
             return { success: false, message: 'Houve um erro ao recuperar a relação mensal de novos usuários!' };
         }
     }
