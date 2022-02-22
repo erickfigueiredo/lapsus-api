@@ -7,6 +7,7 @@
     "start": "nodemon index.js",
     "migrate": "npx knex migrate:latest",
     "sow": "npx knex seed:run",
+    "migrate-and-sow": "npx knex migrate:latest && npx knex seed:run",
     "rollback": "npx knex migrate:rollback"
   },
   "repository": {
@@ -33,6 +34,7 @@
     "express": "^4.17.1",
     "express-rate-limit": "^6.2.0",
     "fs": "^0.0.1-security",
+    "handlebars": "^4.7.7",
     "helmet": "^4.4.1",
     "joi": "^17.4.0",
     "js2xmlparser": "^4.0.1",
