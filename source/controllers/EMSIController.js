@@ -87,6 +87,23 @@ class EMSIController {
         });
     }
 
+    static async index(req, res) {
+        if (isNaN(parseFloat(req.query.x)) || isNaN(parseFloat(req.query.y))) {
+            return res.status(400).send({ success: false, message: 'Centro inválido!' });
+        }
+
+        let degrees;
+        if (isNaN(parseFloat(req.query.distance))) {
+            degrees = 0.13500135001350;
+        } else {
+            // Converte km em graus (1 grau - 111,11 km)
+            degrees = (Math.abs(parseFloat(req.query.distance))/111.11).toFixed(14);
+        }
+
+        const result = await EMSI.findAll({x: req.query.x, y: req.query.y}, degrees);
+        return result.success ? res.send(result) : res.status(404).send(result);
+    }
+
     static async create(req, res) {
 
         let qttAnnexes = parseInt(process.env.ANNEX_QUANTITY);

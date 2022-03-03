@@ -126,6 +126,7 @@ router.delete('/emergency_contact/:id', ensureAuthentication, allowAdmin, Emerge
 
 // -> Rotas de EMSI
 router.get('/emsi/lists', ensureAuthentication, allowManager, EMSI.getFormLists);
+router.get('/emsi/all', EMSI.index);
 router.post('/emsi', ensureAuthentication, allowManager, EMSI.create);
 
 // -> Rotas de Erro 404

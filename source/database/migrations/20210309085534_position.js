@@ -6,7 +6,7 @@ exports.up = async function (knex) {
     await knex.schema.createTable(tableName, function (table) {
         table.increments('id_loc').notNullable().primary();
         table.string('name', 80);
-        table.specificType('coord', 'Geometry');
+        //table.specificType('coord', 'Geometry');
         table.integer('id_egeo').unsigned().notNullable().references('id').inTable('egeo');
         table.timestamps(false, true);
     });
