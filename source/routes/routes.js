@@ -30,6 +30,9 @@ const OrgInformation = require('../controllers/OrgInformationController');
 
 // -> Rotas de Access
 router.post('/login', Access.login);
+router.get('/reset_password/check/:token', Access.checkToken);
+router.post('/reset_password/token', Access.sendTokenResetPassword);
+router.post('/reset_password', Access.resetPassword);
 
 // -> Rotas de Usuário
 router.get('/me', ensureAuthentication, User.show);

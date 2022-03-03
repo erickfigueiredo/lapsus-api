@@ -47,9 +47,10 @@ class Mailer {
             try {
                 const mailCompiled = handlebars.compile(template);
 
+                const link = `${process.env.APP_URL}/redefinir-senha?token=${token}`;
                 mailContent.html = mailCompiled({
                     name: user.name,
-                    token,
+                    link,
                     ip_address: ip,
                     instance: org,
                     instance_url: process.env.APP_URL

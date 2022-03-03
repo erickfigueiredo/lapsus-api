@@ -9,5 +9,14 @@ const generateToken = payload => new Promise((resolve, reject) => {
     );
 });
 
+const generateResetToken = payload => new Promise((resolve, reject) => {
+    JWT.sign(payload, process.env.JWT_TKN_RST_SECRET, { algorithm: process.env.JWT_TKN_ALGORITHM, expiresIn: '1d' },
+        (error, token) => {
+            if (error) reject(error);
+            else resolve(token);
+        }
+    );
+});
 
-module.exports = { generateToken };
+
+module.exports = { generateToken, generateResetToken };
