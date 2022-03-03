@@ -1,5 +1,9 @@
 require('dotenv').config();
 
+// Rotinas
+require('./schedules/ResetTokenSchedule')();
+// Fim da invocação de rotinas
+
 const Message = require('./utils/Message');
 
 const express = require('express');
