@@ -106,6 +106,7 @@ router.delete('/shapefile/:id', ensureAuthentication, allowAdmin, Shapefile.dele
 // -> Rotas de Contribution
 router.get('/contribution/publish_relationship/:id', ensureAuthentication, allowOwnUser, Contribution.publishRelationshipByUser);
 router.get('/contribution/publish_relationship', ensureAuthentication, allowManagerAndModerator, Contribution.publishRelationship);
+router.get('/contribution/all/detailed', Contribution.indexDetailed);
 router.get('/contribution/all', ensureAuthentication, allowManagerAndModerator, Contribution.index);
 router.get('/contribution/:id', ensureAuthentication, allowManagerAndModerator, Contribution.show);
 router.post('/contribution', Contribution.create);
@@ -126,13 +127,13 @@ router.delete('/emergency_contact/:id', ensureAuthentication, allowAdmin, Emerge
 
 // -> Rotas de EMSI
 router.get('/emsi/lists', ensureAuthentication, allowManager, EMSI.getFormLists);
-router.get('/emsi/all', EMSI.index);
+router.get('/emsi/all', EMSI.indexDetailed);
 router.post('/emsi', ensureAuthentication, allowManager, EMSI.create);
 
 // -> Rotas de Erro 404
 router.get('/ops', (_, res) => {
     res.status(404).send({ success: false, message: 'A rota solicitada não existe!' });
-})
+});
 
 router.get('*', (_, res) => {
     res.redirect('/ops');
