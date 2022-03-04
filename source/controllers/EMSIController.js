@@ -87,7 +87,7 @@ class EMSIController {
         });
     }
 
-    static async index(req, res) {
+    static async indexDetailed(req, res) {
         if (isNaN(parseFloat(req.query.x)) || isNaN(parseFloat(req.query.y))) {
             return res.status(400).send({ success: false, message: 'Centro inválido!' });
         }

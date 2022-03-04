@@ -54,7 +54,25 @@ class Contribution {
             return contrib.data[0]? { success: true, contribution: contrib } : { success: false, message: 'Contribuições inexistentes!' };;
         } catch (e) {
             Message.warning(e);
-            return { success: false, message: 'Houve um erro ao recuperar as contribuições' };
+            return { success: false, message: 'Houve um erro ao recuperar as contribuições!' };
+        }
+    }
+
+    static async findAllDetailed(center, degrees) {
+        try {
+            const contrib = await knex.select('c.id', 'c.created_at', 'c.updated_at', 'occurrence', 'victims', 'risk_damage', 'published',
+            'c.desc', knex.raw('st_asText(local) as local'), 'cat.name as category_name')
+            .from('contribution as c')
+            .join('category as cat', 'cat.id', 'c.id_category')
+            .where({published: 'A'})
+            .andWhere(function() {
+                this.whereRaw(`st_dwithin(c.local, ST_SetSRID(ST_Point(${center.x}, ${center.y}), 4326), ${degrees})`);
+            });
+            
+            return contrib[0]? { success: true, contribution: contrib } : { success: false, message: 'Contribuições inexistentes!' };
+        } catch (e) {
+            Message.warning(e);
+            return { success: false, message: 'Houve um erro ao recuperar as contribuições!' };
         }
     }
 
