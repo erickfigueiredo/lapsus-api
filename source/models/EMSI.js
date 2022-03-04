@@ -5,7 +5,7 @@ class EMSI {
     static async findAll(center, degrees) {
         try {
             const emsi = await knex.raw(
-                `SELECT con.id, con.created_at, con.freetext, con.urgency, 
+                `SELECT con.id, to_char(con.created_at, 'DD/MM/YYYY') as created_at, con.freetext, con.urgency, 
                     ori.name, ori.id_org,
                     ext_i.id, ext_i.freetext, ext_i.uri, 
                     ext_t.type, ext_t.desc,

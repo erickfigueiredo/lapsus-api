@@ -43,7 +43,7 @@ class Category {
 
     static async findAllDetailed() {
         try {
-            const category = await knex.select(['id', 'name', 'desc', 'created_at'])
+            const category = await knex.select('id', 'name', 'desc', knex.raw("to_char(created_at, 'DD/MM/YYYY') as created_at"))
                 .from('category')
                 .orderBy(['name', 'created_at']);
 
@@ -70,7 +70,7 @@ class Category {
         try {
             const category = await knex.insert(data)
                 .table('category')
-                .returning(['id', 'name', 'desc', 'created_at']);
+                .returning(['id', 'name', 'desc', knex.raw("to_char(created_at, 'DD/MM/YYYY') as created_at")]);
 
             return category[0] ? { success: true, category: category[0] } : { success: false, message: 'Não foi possível cadastrar a categoria!' };
         } catch (e) {
@@ -87,7 +87,7 @@ class Category {
             const category = await knex.update(data)
                 .table('category')
                 .where({ id })
-                .returning(['id', 'name', 'desc', 'created_at']);
+                .returning(['id', 'name', 'desc', knex.raw("to_char(created_at, 'DD/MM/YYYY') as created_at")]);
 
             return category[0] ? { success: true, category: category[0] } : { success: false, message: 'Não foi possível atualizar a categoria!' };
         } catch (e) {

@@ -65,7 +65,7 @@ class User {
 
     static async findAllByInstitution(idInstitution, page) {
         try {
-            const user = await knex.select('id', 'name', 'surname', 'email', 'created_at')
+            const user = await knex.select('id', 'name', 'surname', 'email', knex.raw("to_char(created_at, 'DD/MM/YYYY') as created_at"))
                 .from('user')
                 .where({ 'id_institution': idInstitution, 'is_active': true })
                 .orderBy(['name', 'created_at'])

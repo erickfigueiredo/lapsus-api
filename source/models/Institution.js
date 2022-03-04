@@ -4,7 +4,7 @@ const Message = require('../utils/Message');
 class Institution {
     static async findOne(id) {
         try {
-            const institution = await knex.select('id', 'name', 'email', 'phone', 'street', 'neighborhood', 'zipcode', 'state', 'city', 'number', 'created_at')
+            const institution = await knex.select('id', 'name', 'email', 'phone', 'street', 'neighborhood', 'zipcode', 'state', 'city', 'number', knex.raw("to_char(created_at, 'DD/MM/YYYY') as created_at"))
                 .from('institution')
                 .where({ id });
 
@@ -30,7 +30,7 @@ class Institution {
 
     static async findAllDetailed(page) {
         try {
-            const institution = await knex.select('id', 'name', 'email', 'phone', 'created_at')
+            const institution = await knex.select('id', 'name', 'email', 'phone', knex.raw("to_char(created_at, 'DD/MM/YYYY') as created_at"))
                 .from('institution')
                 .orderBy(['name', 'created_at'])
                 .paginate({
@@ -48,7 +48,7 @@ class Institution {
 
     static async findByEmail(email) {
         try {
-            const institution = await knex.select('id', 'name', 'email', 'phone', 'street', 'neighborhood', 'zipcode', 'state', 'city', 'number', 'created_at')
+            const institution = await knex.select('id', 'name', 'email', 'phone', 'street', 'neighborhood', 'zipcode', 'state', 'city', 'number', knex.raw("to_char(created_at, 'DD/MM/YYYY') as created_at"))
                 .from('institution')
                 .where({ email });
 
@@ -61,7 +61,7 @@ class Institution {
 
     static async findByPhone(phone) {
         try {
-            const institution = await knex.select('id', 'name', 'email', 'phone', 'street', 'neighborhood', 'zipcode', 'state', 'city', 'number', 'created_at')
+            const institution = await knex.select('id', 'name', 'email', 'phone', 'street', 'neighborhood', 'zipcode', 'state', 'city', 'number', knex.raw("to_char(created_at, 'DD/MM/YYYY') as created_at"))
                 .from('institution')
                 .where({ phone });
 
@@ -87,7 +87,7 @@ class Institution {
         try {
             const institution = await knex.insert(data)
                 .table('institution')
-                .returning(['id', 'name', 'email', 'phone', 'street', 'neighborhood', 'zipcode', 'state', 'city', 'number', 'created_at']);
+                .returning(['id', 'name', 'email', 'phone', 'street', 'neighborhood', 'zipcode', 'state', 'city', 'number', knex.raw("to_char(created_at, 'DD/MM/YYYY') as created_at")]);
 
             return institution[0] ? { success: true, institution: institution[0] } : { success: false, message: 'Não foi possível cadastrar a instituição' };
         } catch (e) {
@@ -104,7 +104,7 @@ class Institution {
             const institution = await knex.update(data)
                 .table('institution')
                 .where({ id })
-                .returning(['id', 'name', 'email', 'phone', 'street', 'neighborhood', 'zipcode', 'state', 'city', 'number', 'created_at']);
+                .returning(['id', 'name', 'email', 'phone', 'street', 'neighborhood', 'zipcode', 'state', 'city', 'number', knex.raw("to_char(created_at, 'DD/MM/YYYY') as created_at")]);
 
             return institution[0] ? { success: true, institution: institution[0] } : { success: false, message: 'Não foi possível atualizar a instituição!' };
         } catch (e) {
