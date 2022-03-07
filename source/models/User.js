@@ -153,7 +153,7 @@ class User {
     static async getUsersByMonth() {
         try {
             const user = await knex.raw(`SELECT date_part('month', created_at) AS month, date_part('year', created_at) AS year, 
-            COUNT(created_at) as users FROM "user" GROUP BY month, year ORDER BY year, month LIMIT 12`);
+            COUNT(created_at) as amount FROM "user" GROUP BY month, year ORDER BY year, month LIMIT 12`);
 
             return user.rows[0] ? { success: true, user: user.rows } : { success: false, message: 'Usuários inexistentes!' };
         } catch (e) {

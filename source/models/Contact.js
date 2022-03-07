@@ -37,7 +37,7 @@ class Contact {
 
     static async getReadRelationship() {
         try {
-            const contact = await knex.raw('SELECT is_visualized AS read, COUNT(id) AS amount FROM contact GROUP BY is_visualized');
+            const contact = await knex.raw('SELECT is_visualized AS read, COUNT(id) AS amount FROM contact GROUP BY is_visualized ORDER BY is_visualized DESC');
 
             return contact.rows[0] ? { success: true, contact: contact.rows } : { success: false, message: 'Mensagens inexistentes!' };
         } catch (e) {

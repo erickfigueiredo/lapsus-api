@@ -105,7 +105,7 @@ class Contribution {
 
     static async getPublishRelationship() {
         try {
-            const contrib = await knex.raw('SELECT published AS status, COUNT(id) AS amount FROM contribution GROUP BY published');
+            const contrib = await knex.raw('SELECT published AS status, COUNT(id) AS amount FROM contribution GROUP BY published ORDER BY status');
 
             return contrib.rows[0] ? { success: true, contribution: contrib.rows } : { success: false, message: 'Contribuições inexistentes!' };
         } catch (e) {
