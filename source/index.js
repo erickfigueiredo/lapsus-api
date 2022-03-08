@@ -16,8 +16,8 @@ const router = require('./routes/routes');
 const requestLimiter = require('./middlewares/Limiter');
 
 app.use(cors({ origin: true, credentials: true }));
-app.use(requestLimiter);
 //app.use(cors({ origin: 'http://localhost:8080' }));
+app.use(requestLimiter);
 
 // Diretórios estáticos expostos
 app.use('/legend', express.static('../upload/legend_items'));
@@ -33,7 +33,7 @@ app.use(morgan('dev'));
 app.use('/', router);
 
 app.listen(process.env.APP_PORT, (error) => {
-    Message.release('\nVersão: 0.0.1')
+    Message.release('\nVersão: 1.0.1')
     Message.success(`\nServidor rodando na porta ${process.env.APP_PORT}\n`);
     if (error) Message.error('Servidor encerrado!\n');
 });
