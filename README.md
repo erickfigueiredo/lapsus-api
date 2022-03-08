@@ -71,6 +71,7 @@ Cadastre um usuário como registrado no Banco de Dados e modifique o type de __R
 - [x] Middlewares
 - [x] Migrations e Seeds
 - [x] Validators
+- [x] Rotas de consumo de recursos
 - [x] Tarefas Agendadas
 - [ ] ...
 
