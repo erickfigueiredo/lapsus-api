@@ -25,7 +25,7 @@ class EMSI {
                     eg_tp.type, eg_tp.desc,
                     eg_sb.subweather, eg_sb.desc, 
                     eg_w.weather, eg_w.desc, 
-                    pos.id_loc, pos.name, ST_ASTEXT(pos.coord),
+                    pos.id_loc, pos.name, ST_ASTEXT(pos.coord) as coord,
                     adr.id, adr.address, 
                     et_ev.env, et_ev.desc, 
                     et_sc.subcategory, et_sc.desc,
@@ -74,7 +74,7 @@ class EMSI {
                     LEFT JOIN etype_actornv2 et_a2 on et_a2.actornv2 = et_ha.actornv2 and et_a2.actor = et_ha.actor
                     LEFT JOIN etype_actor et_a1 on et_a1.actor = et_ha.actor
 
-                    WHERE st_dwithin(pos.coord, ST_SetSRID(ST_Point(${center.x}, ${center.y}), 4326), ${degrees});
+                    WHERE pos.coord IS NOT NULL AND st_dwithin(pos.coord, ST_SetSRID(ST_Point(${center.x}, ${center.y}), 4326), ${degrees});
                 `
             );
 
