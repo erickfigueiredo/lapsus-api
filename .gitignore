@@ -1,10 +1,14 @@
-tmp/
-!tmp/.gitkeep
-
 .vscode
+
+complement/
+
+tmp/*
+!tmp/.gitkeep
 
 upload/annexes/*
 !upload/annexes/.gitkeep
 
 upload/shapefiles/*
 !upload/shapefiles/.gitkeep
+
+source/.env
