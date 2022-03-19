@@ -10,7 +10,7 @@ const Contribution = require('../models/Contribution');
 const Risk = require('../models/event/Risk');
 const Scale = require('../models/event/Scale');
 const Loctype = require('../models/etype/Loctype');
-const Status = require('../models/egeo/Status');
+const Status = require('../models/event/Status');
 const Type = require('../models/egeo/Type');
 const Weather = require('../models/egeo/Weather');
 
