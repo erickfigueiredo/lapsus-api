@@ -5,7 +5,7 @@ class EgeoStatus {
     static async listAll() {
         try {
             const status = await knex.select('status', 'desc')
-            .from('egeo_status')
+            .from('event_status')
             .orderBy('desc');
 
             return status[0] ? {success: true, status} : {success: false, message: 'Opções de status inexistentes!'};
