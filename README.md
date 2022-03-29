@@ -42,10 +42,16 @@ app.use(cors({ origin: true, credentials: true }));
 
 Preenchidas as variáveis de ambiente, rode os comandos abaixo:
 
-Para baixar as dependências:
+Para baixar as dependências (Inclusive de desenvolvimento):
 
 ```
 npm install
+```
+
+Para baixar as dependências (Apenas de produção):
+
+```
+npm install --production
 ```
 
 Para criar e popular o banco de dados inicialmente:
