@@ -30,9 +30,69 @@ LapsusVGI - API para Gerenciamento de informações de Desastres ligados à desl
 
 ---
 
-### Comandos básicos e Instalação ✔️
+## Comandos básicos e Instalação ✔️
 
-Dentro da pasta source, complete as informações requisitadas nas variáveis de ambiente contidas no arquivo _.env_.
+### Variáveis de Ambiente
+
+Dentro da pasta source, complete as informações requisitadas nas variáveis de ambiente contidas no arquivo _.env_ de acordo com a explicação a seguir:
+
+```
+# -> Pode não ser necessário a depender do ambiente de implantação (nesse caso remova)
+APP_PORT = "3001"
+
+# -> Endereço do Frontend do sistema
+APP_URL = "http://localhost:8080"
+
+# -> Dados de acesso ao Banco de Dados
+DB_TYPE = "pg"
+DB_NAME = ""
+DB_USER = ""
+DB_PASS = ""
+DB_HOST = ""
+DB_PORT = "5433"
+
+# -> Configurações de SMTP do e-mail do sistema
+HOST_MAIL = ""
+PORT_MAIL =  465
+SYSTEM_MAIL = ""
+PASS_MAIL = ""
+
+# -> BCrypt
+BCRYPT_SALT = 10
+
+# -> Json Web Token, as duas variáveis SECRET abaixo buscam aumentar a segurança na comunicação, a partir de "senhas" (hashes), formas de gerá-las são exemplificadas abaixo (cada secret deve ter a sua própria)
+JWT_TKN_ALGORITHM = "HS256"
+JWT_TKN_SECRET = ""
+JWT_TKN_RST_SECRET = ""
+
+# -> Limite de número de anexos permitidos nas colaborações
+ANNEX_QUANTITY = 3
+
+# -> Limitador de Requisições (número de pedidos que um ip pode fazer por minuto)
+RATE_MINUTE = 0.066
+RATE_LIMIT = 60
+```
+
+### Formas de Gerar Hashes
+
+Os exemplos demostrados a seguir são sugestões, fica a cargo do responsável escolher e estabelecer a melhor abordagem para seu cenário.
+
+- Via Node.js: Tendo o Node.js instalado, com o terminal aberto execute o node e copie o seguinte comando para gerar um hash e cole o resultado sem aspas simples dentro da variável de ambiente.
+
+```
+crypto.randomBytes(64).toString("hex");
+```
+
+- Via OpenSSL: Tendo o OpenSSL instalado (vem instalado junto com o Git), com o terminal aberto na raiz do projeto copie o seguinte comando para gerar um hash, será criado um arquivo com o nome `openssl-secret.txt`, abra o arquivo copie o hash gerado, cole na variável de ambiente desejada e depois delete o arquivo.
+
+```
+openssl rand -out openssl-secret.txt -hex 64
+```
+
+**Importante**: A depender do ambiente onde será feita a implantação, o arquivo _.env_ dará lugar ao preenchimento das variáveis na própria plataforma onde o deploy será realizado, as informações a serem preenchidas serão as mesmas, porém podem requerer serem preenchidas de outra forma.
+
+---
+
 No arquivo _index.js_ contido na raiz do diretório source. Comente a linha abaixo e descomente a linha comentada e informe o endereço do frontend para que consiga consumir a API:
 
 ```
@@ -66,7 +126,7 @@ Iniciar o servidor:
 npm start
 ```
 
-Cadastre um usuário como registrado no Banco de Dados e modifique o type de __R__ para __A__, para que haja um Administrador no sistema.
+Cadastre um usuário como registrado no Banco de Dados e modifique o type de **R** para **A**, para que haja um Administrador no sistema.
 
 ---
 
@@ -85,32 +145,32 @@ Cadastre um usuário como registrado no Banco de Dados e modifique o type de __R
 
 ### Status de Requisição 💻
 
-- __200 OK__:
+- **200 OK**:
   Estas requisição foi bem sucedida. O significado do sucesso varia de acordo com o método HTTP:
 
-- __201 Created__:
+- **201 Created**:
   A requisição foi bem sucedida e um novo recurso foi criado como resultado. Esta é uma tipica resposta enviada após uma requisição POST.
 
-- __202 Accepted__:
+- **202 Accepted**:
   A requisição foi recebida mas nenhuma ação foi tomada sobre ela. Isto é uma requisição não-comprometedora, o que significa que não há nenhuma maneira no HTTP para enviar uma resposta assíncrona indicando o resultado do processamento da solicitação. Isto é indicado para casos onde outro processo ou servidor lida com a requisição, ou para processamento em lote.
 
-- __203 Non-Authoritative Information__:
+- **203 Non-Authoritative Information**:
   Esse código de resposta significa que o conjunto de meta-informações retornadas não é o conjunto exato disponível no servidor de origem, mas coletado de uma cópia local ou de terceiros. Exceto essa condição, a resposta de 200 OK deve ser preferida em vez dessa resposta.
 
-- __400 Bad Request__:
+- **400 Bad Request**:
   Essa resposta significa que o servidor não entendeu a requisição pois está com uma sintaxe inválida.
 
-- __401 Unauthorized__:
+- **401 Unauthorized**:
   Embora o padrão HTTP especifique "unauthorized", semanticamente, essa resposta significa "unauthenticated". Ou seja, o cliente deve se autenticar para obter a resposta solicitada.
 
-- __403 Forbidden__:
+- **403 Forbidden**:
   Embora o servidor tenha recebido e entendido a requisição o acesso foi negado.
 
-- __404 Not Found__:
+- **404 Not Found**:
   O servidor não pode encontrar o recurso solicitado. Este código de resposta talvez seja o mais famoso devido à frequência com que acontece na web.
 
-- __409 Conflict__:
+- **409 Conflict**:
   Esta resposta será enviada quando uma requisição conflitar com o estado atual do servidor.
 
-- __500 Internal Server Error__:
+- **500 Internal Server Error**:
   Esta resposta será enviada quando ocorrer um error não especificado no servidor.
