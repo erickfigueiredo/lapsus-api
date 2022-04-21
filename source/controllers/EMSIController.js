@@ -88,7 +88,7 @@ class EMSIController {
     }
 
     static async indexDetailed(req, res) {
-        if (isNaN(parseFloat(req.query.x)) || isNaN(parseFloat(req.query.y))) {
+        if (isNaN(parseFloat(req.query.lat)) || isNaN(parseFloat(req.query.long))) {
             return res.status(400).send({ success: false, message: 'Centro inválido!' });
         }
 
@@ -100,7 +100,7 @@ class EMSIController {
             degrees = (Math.abs(parseFloat(req.query.distance))/111.11).toFixed(14);
         }
 
-        const result = await EMSI.findAll({x: req.query.x, y: req.query.y}, degrees);
+        const result = await EMSI.findAll({x: req.query.lat, y: req.query.long}, degrees);
         return result.success ? res.send(result) : res.status(404).send(result);
     }
 

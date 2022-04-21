@@ -53,19 +53,19 @@ class ContributionController {
     }
 
     static async indexDetailed(req, res) {
-        if (isNaN(parseFloat(req.query.x)) || isNaN(parseFloat(req.query.y))) {
+        if (isNaN(parseFloat(req.query.lat)) || isNaN(parseFloat(req.query.long))) {
             return res.status(400).send({ success: false, message: 'Centro inválido!' });
         }
 
         let degrees;
         if (isNaN(parseFloat(req.query.distance))) {
-            degrees = 0.13500135001350;
+            degrees = 0.13500135001350; // 15 KM
         } else {
             // Converte km em graus (1 grau - 111,11 km)
             degrees = (Math.abs(parseFloat(req.query.distance))/111.11).toFixed(14);
         }
 
-        const result = await Contribution.findAllDetailed({x: req.query.x, y: req.query.y}, degrees);
+        const result = await Contribution.findAllDetailed({x: req.query.lat, y: req.query.long}, degrees);
         return result.success ? res.send(result) : res.status(404).send(result);
     }
 
