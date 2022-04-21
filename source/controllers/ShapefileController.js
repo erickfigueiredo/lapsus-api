@@ -17,6 +17,8 @@ class ShapefileController {
         }
 
         const shp = await Shapefile.findOne(id);
+        delete shp.shapefile.path;
+        
         return shp.success ? res.send(shp) : res.status(404).send(shp);
     }
 
