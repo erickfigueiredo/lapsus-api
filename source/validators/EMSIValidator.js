@@ -33,7 +33,7 @@ const createValidate = () => {
                 'date.empty': 'O campo momento da identificação não pode ser vazio!'
             }),
             //momento da occorência
-            occ_time: Joi.date().min(minDateLimit).max('now').messages({
+            occ_datime: Joi.date().min(minDateLimit).max('now').messages({
                 'date.min': 'Momento da ocorrência não pode ser mais antigo que 100 anos!',
                 'date.max': 'Momento da ocorrência não pode ser no futuro!',
                 'date.empty': 'O campo momento da ocorrência não pode ser vazio!'
