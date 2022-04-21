@@ -18,7 +18,7 @@ const createValidate = () => {
 }
 
 const updateValidate = () => {
-    return Joi.object().keys({
+    return Joi.object().min(2).keys({
         id: Joi.number().integer().min(1).required().messages({
             'number.integer': 'Id deve ser um número inteiro!',
             'number.min': 'Id não pode ser menor que 1!',
@@ -35,6 +35,8 @@ const updateValidate = () => {
             'string.pattern.base': 'Telefone deve ter de 3 à 11 caracteres numéricos!',
             'string.empty': 'Campo telefone não pode ser vazio!'
         }),
+    }).messages({
+        'object.min': 'É necessário informar o id e algum atributo!'
     })
 }
 

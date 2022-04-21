@@ -33,7 +33,7 @@ const createValidate = () => {
 }
 
 const updateValidate = () => {
-    return Joi.object().keys({
+    return Joi.object().min(2).keys({
         id: Joi.number().integer().min(1).required().messages({
             'number.integer': 'Id deve ser um número inteiro!',
             'number.min': 'Id não pode ser menor que 1!',
@@ -71,6 +71,8 @@ const updateValidate = () => {
         })
     }).and('password', 'new_password').messages({
         'object.and': 'Senha e nova senha devem ser informadas juntas!'
+    }).messages({
+        'object.min': 'É necessário informar o id e algum atributo!'
     });
 }
 

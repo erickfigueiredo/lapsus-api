@@ -92,7 +92,9 @@ const updateValidate = (type = 'T') => {
         });
     }
 
-    return Joi.object().keys(params);
+    return Joi.object().keys(params).min(2).messages({
+        'object.min': 'É necessário informar o id e algum atributo!'
+    });
 }
 
 const toggleValidate = () => {

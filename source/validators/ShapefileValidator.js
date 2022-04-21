@@ -19,7 +19,7 @@ const createValidate = () => {
 }
 
 const updateValidate = () => {
-    return Joi.object().keys({
+    return Joi.object().min(2).keys({
         id: Joi.number().integer().min(1).required().messages({
             'number.integer': 'Id deve ser um número inteiro!',
             'number.min': 'Id não pode ser menor que 1!',
@@ -37,6 +37,8 @@ const updateValidate = () => {
             'string.min': 'Descrição deve conter no mínimo 3 caracteres!',
             'string.max': 'Descrição deve conter no máximo 100 caracteres!'
         })
+    }).messages({
+        'object.min': 'É necessário informar o id e algum atributo!'
     })
 }
 

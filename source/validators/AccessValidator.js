@@ -22,7 +22,7 @@ const resetPassword = () => {
             'number.empty': 'Campo id não pode ser vazio!',
             'any.required': 'Id é obrigatório!'
         }),
-        token: Joi.string().regex(/^(?:[\w-]*\.){2}[\w-]*$/).messages({
+        token: Joi.string().regex(/^(?:[\w-]*\.){2}[\w-]*$/).required().messages({
             'string.pattern.base': '',
             'string.empty': 'Token não pode ser vazio',
             'any.required': 'Token é obrigatório!'
