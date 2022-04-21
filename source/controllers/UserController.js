@@ -9,6 +9,8 @@ class UserController {
         const id = req.locals.id;
 
         const result = await User.findOne(id);
+        delete result.user.password;
+        
         return result.success ? res.send(result) : res.status(404).send(result);
     }
 

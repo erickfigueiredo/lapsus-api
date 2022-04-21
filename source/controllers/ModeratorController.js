@@ -126,7 +126,7 @@ class moderatorController {
 
         const moderator = await User.findOneByType(id, 'M', false);
         if (!moderator.success)
-            return res.status(404).send(moderator.message);
+            return res.status(404).send(moderator);
 
         const is_active = !moderator.user.is_active;
         const result = await User.update({ id, is_active });

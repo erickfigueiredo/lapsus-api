@@ -5,7 +5,7 @@ class User {
 
     static async findOne(id) {
         try {
-            const user = await knex.select('id', 'name', 'surname', 'email', 'type', 'id_institution')
+            const user = await knex.select('id', 'name', 'surname', 'email', 'type', 'id_institution', 'password')
                 .from('user')
                 .where({ id, is_active: true });
 

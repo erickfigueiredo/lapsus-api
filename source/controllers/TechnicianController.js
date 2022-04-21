@@ -161,7 +161,7 @@ class TechnicianController {
 
         const tech = await User.findOneByType(id, 'T', false);
         if (!tech.success)
-            return res.status(404).send(tech.message);
+            return res.status(404).send(tech);
 
         const is_active = !tech.user.is_active;
         const result = await User.update({ id, is_active });

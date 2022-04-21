@@ -126,7 +126,7 @@ class RegisteredController {
 
         const registered = await User.findOneByType(id, 'R', false);
         if (!registered.success)
-            return res.status(404).send(registered.message);
+            return res.status(404).send(registered);
 
         const is_active = !registered.user.is_active;
         const result = await User.update({ id, is_active });
