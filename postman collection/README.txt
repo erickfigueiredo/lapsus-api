@@ -1,0 +1,1 @@
+Importe o arquivo json no software postman para ter acesso à documentação da API.
