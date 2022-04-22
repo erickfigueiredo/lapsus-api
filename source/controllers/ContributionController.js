@@ -32,17 +32,17 @@ class ContributionController {
         const result = await Contribution.getPublishRelationshipByUser(req.locals.id);
         return result.success ? res.send(result) : res.status(404).send(result);
     }
-    
+
     static async index(req, res) {
-        
+
         let page = req.query.page;
 
         if (isNaN(parseInt(page))) { page = 1 };
 
         const ctbs = await Contribution.findAll(page);
 
-        if(ctbs.success) {
-            for(const c of ctbs.contribution.data){
+        if (ctbs.success) {
+            for (const c of ctbs.contribution.data) {
                 c.local = coordsHandler(c.local);
             }
 
@@ -53,8 +53,14 @@ class ContributionController {
     }
 
     static async indexDetailed(req, res) {
-        if (isNaN(parseFloat(req.query.lat)) || isNaN(parseFloat(req.query.long))) {
+        req.query.lat = parseFloat(req.query.lat);
+        req.query.long = parseFloat(req.query.long);
+
+        if (isNaN(req.query.lat) || isNaN(req.query.long)) {
             return res.status(400).send({ success: false, message: 'Centro inválido!' });
+        } else if ((-90 > req.query.lat || req.query.lat > 90)
+        || (-180 > req.query.long || req.query.long > 180)) {
+            return res.status(400).send({ success: false, message: 'Coordenada inválida!' });
         }
 
         let degrees;
@@ -62,20 +68,20 @@ class ContributionController {
             degrees = 0.13500135001350; // 15 KM
         } else {
             // Converte km em graus (1 grau - 111,11 km)
-            degrees = (Math.abs(parseFloat(req.query.distance))/111.11).toFixed(14);
+            degrees = (Math.abs(parseFloat(req.query.distance)) / 111.11).toFixed(14);
         }
 
-        const result = await Contribution.findAllDetailed({x: req.query.lat, y: req.query.long}, degrees);
+        const result = await Contribution.findAllDetailed({ x: req.query.lat, y: req.query.long }, degrees);
         return result.success ? res.send(result) : res.status(404).send(result);
     }
 
     static async create(req, res) {
 
         let qttAnnexes = parseInt(process.env.ANNEX_QUANTITY);
-        if(isNaN(qttAnnexes)) qttAnnexes = 5;
+        if (isNaN(qttAnnexes)) qttAnnexes = 5;
 
-        const fileProps = { 
-            allowedMimes: ['image/png', 'image/jpeg', 'application/pdf', 'audio/mpeg', 'video/mp4'], 
+        const fileProps = {
+            allowedMimes: ['image/png', 'image/jpeg', 'application/pdf', 'audio/mpeg', 'video/mp4'],
             numFiles: qttAnnexes,
             maxSize: 10 //10mb
         };
@@ -85,12 +91,12 @@ class ContributionController {
 
             if (fail instanceof multer.MulterError) {
                 let message;
-                if(fail.code === 'LIMIT_FILE_SIZE')
+                if (fail.code === 'LIMIT_FILE_SIZE')
                     message = `Um ou mais arquivos excedem o limite de ${fileProps.maxSize} mb!`;
-                
-                else if(fail.code === 'LIMIT_FILE_COUNT')
+
+                else if (fail.code === 'LIMIT_FILE_COUNT')
                     message = `O número de arquivos excede o limite de ${fileProps.numFiles}!`;
-                
+
                 else message = 'Um ou mais arquivos possuem extensão inválida!';
 
                 return res.status(400).send({ success: false, message });
@@ -126,13 +132,13 @@ class ContributionController {
 
             let result = null;
             if (req.files.length) {
-                const files = req.files.map(file => { 
-                    return { 
+                const files = req.files.map(file => {
+                    return {
                         uri: `/annexes/${file.key}`,
-                        path: file.path 
-                    } 
+                        path: file.path
+                    }
                 });
-                
+
                 result = await Contribution.create(req.body, files);
             } else {
                 result = await Contribution.create(req.body);
@@ -149,21 +155,21 @@ class ContributionController {
     }
 
     static async evaluateStatus(req, res) {
-        
+
         const valid = ContributionValidator.updateValidate();
         const { error } = valid.validate(req.body);
 
         if (error) {
             return res.status(400).send({ success: false, message: error.details[0].message });
         }
-        
+
         const existManager = await User.findOneByType(req.locals.id, ['A', 'T', 'M']);
         if (!existManager.success) {
             return res.status(404).send(existManager);
         }
 
         const existContribution = await Contribution.findOne(req.body.id);
-        if(!existContribution.success) {
+        if (!existContribution.success) {
             return res.status(404).send(existContribution);
         }
 

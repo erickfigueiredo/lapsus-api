@@ -88,8 +88,14 @@ class EMSIController {
     }
 
     static async indexDetailed(req, res) {
-        if (isNaN(parseFloat(req.query.lat)) || isNaN(parseFloat(req.query.long))) {
+        req.query.lat = parseFloat(req.query.lat);
+        req.query.long = parseFloat(req.query.long);
+
+        if (isNaN(req.query.lat) || isNaN(req.query.long)) {
             return res.status(400).send({ success: false, message: 'Centro inválido!' });
+        } else if ((-90 > req.query.lat || req.query.lat > 90)
+        || (-180 > req.query.long || req.query.long > 180)) {
+            return res.status(400).send({ success: false, message: 'Coordenada inválida!' });
         }
 
         let degrees;
