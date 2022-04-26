@@ -174,3 +174,7 @@ Cadastre um usuário como registrado no Banco de Dados e modifique o type de **R
 
 - **500 Internal Server Error**:
   Esta resposta será enviada quando ocorrer um error não especificado no servidor.
+
+---
+
+**Documentação**: <https://documenter.getpostman.com/view/10158635/UyrADwTk>
