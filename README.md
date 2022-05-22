@@ -2,7 +2,7 @@
 
 LapsusVGI - API para Gerenciamento de informações de Desastres ligados à deslizamentos de terra.
 
-> API desenvolvida por [Erick Figueiredo](https://github.com/erickfigueiredo) como parte da Iniciação Científica (IC) vinculada ao Departamento de Informática da Universidade Federal de Viçosa (UFV).
+> API desenvolvida por [Erick Figueiredo](https://github.com/erickfigueiredo) como parte da Iniciação Científica (IC) vinculada ao Departamento de Informática, com orientação do Prof. Jugurta Lisboa Filho, durante o curso de Graduação na Universidade Federal de Viçosa (UFV).
 
 ---
 
