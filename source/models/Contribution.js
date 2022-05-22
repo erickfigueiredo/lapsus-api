@@ -41,7 +41,7 @@ class Contribution {
                 .join('category as cat', 'cat.id', 'c.id_category')
                 .leftJoin('user as coll', 'id_collaborator', 'coll.id')
                 .leftJoin('user as mng', 'id_manager', 'mng.id')
-                .orderByRaw("published='P' DESC, created_at ASC")
+                .orderByRaw("published='P' DESC, c.created_at ASC")
                 .paginate({
                     perPage: 25,
                     currentPage: page,

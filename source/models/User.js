@@ -68,7 +68,7 @@ class User {
             const user = await knex.select('id', 'name', 'surname', 'email', knex.raw("to_char(created_at, 'DD/MM/YYYY') as created_at"))
                 .from('user')
                 .where({ 'id_institution': idInstitution, 'is_active': true })
-                .orderBy(['name', 'created_at'])
+                .orderBy(['name', 'user.created_at'])
                 .paginate({
                     perPage: 25,
                     currentPage: page,
@@ -113,7 +113,7 @@ class User {
                 .orderBy([
                     { column: 'name', order: filters.order || 'asc' },
                     { column: 'surname', order: filters.order || 'asc' },
-                    'created_at'
+                    'user.created_at'
                 ])
                 .paginate({
                     perPage: 30,

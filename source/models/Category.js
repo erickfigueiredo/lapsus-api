@@ -45,7 +45,7 @@ class Category {
         try {
             const category = await knex.select('id', 'name', 'desc', knex.raw("to_char(created_at, 'DD/MM/YYYY') as created_at"))
                 .from('category')
-                .orderBy(['name', 'created_at']);
+                .orderBy(['name', 'category.created_at']);
 
             return category[0] ?
                 { success: true, category } : { success: false, message: 'Categorias inexistentes!' };
