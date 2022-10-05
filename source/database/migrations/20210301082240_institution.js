@@ -14,8 +14,6 @@ exports.up = async function (knex) {
         table.string('state', 2).notNullable();
         table.string('zipcode', 8).notNullable();
         table.string('number', 8).notNullable();
-
-        // Alterar a forma de representar o endereço para obter informações mais interessantes sobre esse 
         table.timestamps(false, true);
     });
 
