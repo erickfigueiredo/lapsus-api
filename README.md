@@ -178,3 +178,11 @@ Cadastre um usuário como registrado no Banco de Dados e modifique o type de **R
 ---
 
 **Documentação**: <https://documenter.getpostman.com/view/10158635/UyrADwTk>
+
+---
+
+Esse projeto combina com a interface [Lapsus Web](https://github.com/erickfigueiredo/lapsus-web)! Acesse, use e contribua!
+
+---
+
+API desenvolvida por Erick Figueiredo sob a [Licença MIT](LICENSE).
