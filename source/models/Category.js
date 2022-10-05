@@ -57,7 +57,7 @@ class Category {
 
     static async getCategoriesAmount() {
         try {
-            const result = await knex('user').count('id');
+            const result = await knex('category').count('id');
 
             return result[0].count ? { success: true, amount: result[0].count } : { success: false, message: 'Categorias inexistentes!' };
         } catch (e) {
